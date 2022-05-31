@@ -1,1 +1,2 @@
 # StreamSocket
+StreamSocket is a video-sharing web app that can automatically generate subtitles and translate speech to different languages. The three main components of the project are frontend UI, backend logic like database management and user authentication, and neural network models for speech-to-text, text-to-text and text-to-speech tasks. 
