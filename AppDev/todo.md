@@ -1,0 +1,1 @@
+setup vite and django
