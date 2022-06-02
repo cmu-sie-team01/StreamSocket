@@ -10,6 +10,6 @@ Run django develop server
 
 `python manage.py runserver`
 
-You can add port number after this command to specify port
+You can add IP address or port number after this command to specify them
 
-`python manage.py runserver 8080`
+`python manage.py runserver 0.0.0.0:8080`
