@@ -1,4 +1,5 @@
 import datetime
+import os
 
 from django.shortcuts import render
 from rest_framework.views import APIView
@@ -7,6 +8,7 @@ from random import randint
 from .models import SMSCode
 from django.utils import timezone
 from twilio.rest import Client
+from dotenv import load_dotenv
 
 
 # Create your views here.
@@ -17,8 +19,9 @@ class SMSCodeView(APIView):
         sms_code = SMSCode.create(mobile, timezone.now() + datetime.timedelta(seconds=60), sms_code_number)
         sms_code.save()
 
-        account_sid = 'ACb4f3e13fdb86bd9a472d141ed68bf90e'
-        auth_token = 'ccc3ba984e1f902ba403454f51a04769'
+        load_dotenv()
+        account_sid = os.environ['TWILIO_ACCOUNT_SID']
+        auth_token = os.environ['TWILIO_AUTH_TOKEN']
         client = Client(account_sid, auth_token)
 
         message = client.messages.create(
