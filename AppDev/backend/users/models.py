@@ -12,7 +12,7 @@ class User(AbstractUser):
 
 
 class SMSCode(models.Model):
-    mobile_number = models.BigIntegerField()
+    mobile_number = models.BigIntegerField(primary_key=True)
     exp_time = models.DateTimeField()
     sms_code_number = models.IntegerField()
 

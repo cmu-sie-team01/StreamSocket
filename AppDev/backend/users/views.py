@@ -16,7 +16,8 @@ class SMSCodeView(APIView):
     # text message auth code
     def get(self, request, mobile):
         sms_code_number = '%06d' % randint(0, 999999)
-        sms_code = SMSCode.create(mobile, timezone.now() + datetime.timedelta(seconds=60), sms_code_number)
+
+        sms_code = SMSCode.create(mobile, timezone.now() + datetime.timedelta(seconds=300), sms_code_number)
         sms_code.save()
 
         load_dotenv()
@@ -25,7 +26,7 @@ class SMSCodeView(APIView):
         client = Client(account_sid, auth_token)
 
         message = client.messages.create(
-            body=f'[StreamSocket]Your verification code is {sms_code_number} and is valid for 60 seconds.',
+            body=f'[StreamSocket]Your verification code is {sms_code_number} and is valid for 5 minutes.',
             from_='+18644289731',
             to=f'+1{mobile}'
         )
