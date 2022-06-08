@@ -3,11 +3,12 @@ import ReactDOM from 'react-dom';
 import './index.css';
 
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
+
 import reportWebVitals from './reportWebVitals';
-import SignUp from './component/SignUp';
+import App from './App';
 
 const rootElement = document.getElementById('root');
-ReactDOM.render(<SignUp />, rootElement);
+ReactDOM.render(<App />, rootElement);
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

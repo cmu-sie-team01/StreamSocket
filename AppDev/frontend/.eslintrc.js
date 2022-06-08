@@ -19,4 +19,5 @@ module.exports = {
   ],
   rules: {
   },
+  ignorePatterns: ['service-worker.js', 'serviceWorkerRegistration.js', 'reportWebVitals.js'],
 };
