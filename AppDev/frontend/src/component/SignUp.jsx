@@ -48,7 +48,15 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignUp() {
   const classes = useStyles();
-
+  function getSmsCode() {
+    fetch('http://127.0.0.1:8000/users/sms_code/6692643381', {
+      method: 'GET',
+    }).then((res) => res.json()).then(
+      (result) => {
+        console.log(result);
+      },
+    );
+  }
   return (
     <Container
       component="main"
@@ -65,7 +73,7 @@ export default function SignUp() {
         <Typography component="h1" variant="h5">
           Sign up
         </Typography>
-        <form className={classes.form} noValidate>
+        <form className={classes.form} noValidate onSubmit={getSmsCode}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <TextField
@@ -114,6 +122,19 @@ export default function SignUp() {
               />
             </Grid>
             <Grid item xs={12}>
+              <TextField
+                variant="outlined"
+                required
+                fullWidth
+                name="phonenumber"
+                label="phonenumber"
+                type="phonenumber"
+                id="phonenumber"
+                autoComplete="current-phonenumber"
+              />
+            </Grid>
+            <Grid item xs={12}>
+
               <FormControlLabel
                 control={<Checkbox value="allowExtraEmails" color="primary" />}
                 label="I agree to the User Agreement"
