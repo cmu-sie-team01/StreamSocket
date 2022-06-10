@@ -13,8 +13,8 @@ import {
   Link,
 } from 'react-router-dom';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-import SignUp from './component/SignUp';
 import SignIn from './component/SignIn';
+import SignUp from './component/SignUp';
 import Page404 from './component/404';
 
 const useStyles = makeStyles({
@@ -48,7 +48,7 @@ export default function App() {
             icon={<FavoriteIcon />}
             component={Link}
             to="/404"
-            value="signin"
+            value="discover"
           />
           <BottomNavigationAction
             value="folder"

@@ -10,12 +10,15 @@ import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import LockOpenRoundedIcon from '@material-ui/icons/LockOpenRounded';
+import FingerprintOutlinedIcon from '@material-ui/icons/FingerprintOutlined';
+import Link from '@material-ui/core/Link';
 
 function MadeWithLove() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
-      {'StreamSocket Team '}
+      <Link color="inherit" href="https://github.com/tianyachen/StreamSocket">
+        Built by StreamSocket Team
+      </Link>
     </Typography>
   );
 }
@@ -67,7 +70,7 @@ export default function SignUp() {
         className={classes.paper}
       >
         <Avatar className={classes.avatar}>
-          <LockOpenRoundedIcon />
+          <FingerprintOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
           Sign up
@@ -114,7 +117,7 @@ export default function SignUp() {
 
               <FormControlLabel
                 control={<Checkbox value="allowExtraEmails" color="primary" />}
-                label="I am older than 13 years old and agree with the agreement"
+                label="I am older than 13 years old"
               />
 
             </Grid>
