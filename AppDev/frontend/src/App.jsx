@@ -3,18 +3,19 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import BottomNavigation from '@material-ui/core/BottomNavigation';
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
-import FolderIcon from '@material-ui/icons/Folder';
-import RestoreIcon from '@material-ui/icons/Restore';
 import FavoriteIcon from '@material-ui/icons/Favorite';
-import LocationOnIcon from '@material-ui/icons/LocationOn';
+import MailOutlineIcon from '@material-ui/icons/MailOutline';
+import HomeIcon from '@material-ui/icons/Home';
 import {
   BrowserRouter as Router,
   Routes,
   Route,
   Link,
 } from 'react-router-dom';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import SignUp from './component/SignUp';
 import SignIn from './component/SignIn';
+import Page404 from './component/404';
 
 const useStyles = makeStyles({
   root: {
@@ -37,20 +38,30 @@ export default function App() {
       <div>
         <BottomNavigation value={value} onChange={handleChange} className={classes.root}>
           <BottomNavigationAction
+            value="nearby"
             component={Link}
-            to="/signin"
-            value="signin"
-            icon={<RestoreIcon />}
+            to="/404"
+            icon={<HomeIcon />}
           />
 
           <BottomNavigationAction
-            component={Link}
-            to="/signup"
-            value="signup"
             icon={<FavoriteIcon />}
+            component={Link}
+            to="/404"
+            value="signin"
           />
-          <BottomNavigationAction label="Nearby" value="nearby" icon={<LocationOnIcon />} />
-          <BottomNavigationAction label="Folder" value="folder" icon={<FolderIcon />} />
+          <BottomNavigationAction
+            value="folder"
+            component={Link}
+            to="/404"
+            icon={<MailOutlineIcon />}
+          />
+          <BottomNavigationAction
+            component={Link}
+            to="/signin"
+            value="signin"
+            icon={<AccountCircleIcon />}
+          />
         </BottomNavigation>
 
         {/* A <Switch> looks through its children <Route>s and
@@ -58,6 +69,8 @@ export default function App() {
         <Routes>
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
+          <Route path="/404" element={<Page404 />} />
+
         </Routes>
       </div>
     </Router>
