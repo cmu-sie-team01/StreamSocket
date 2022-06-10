@@ -49,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
 export default function SignUp() {
   const classes = useStyles();
   function getSmsCode() {
-    fetch('http://127.0.0.1:8000/users/sms_code/6692643381', {
+    fetch('http://127.0.0.1:8000/users', {
       method: 'GET',
     }).then((res) => res.json()).then(
       (result) => {
