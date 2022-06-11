@@ -4,7 +4,7 @@ from django.contrib.auth.models import AbstractUser
 
 # Create your models here.
 class User(AbstractUser):
-    mobile = models.CharField(max_length=10, unique=True, verbose_name='Mobile Number')
+    mobile = models.BigIntegerField(unique=True, verbose_name='Mobile Number')
 
     class Meta:
         db_table = 'tb_users'
@@ -14,7 +14,7 @@ class User(AbstractUser):
 class SMSCode(models.Model):
     mobile_number = models.BigIntegerField(primary_key=True)
     exp_time = models.DateTimeField()
-    sms_code_number = models.IntegerField()
+    sms_code_number = models.CharField(max_length=6)
 
     @classmethod
     def create(cls, mobile_number, exp_time, sms_code_number):
