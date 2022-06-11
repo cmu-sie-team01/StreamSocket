@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -50,15 +50,33 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignUp() {
   const classes = useStyles();
-  function getSmsCode() {
-    fetch('http://127.0.0.1:8000/users', {
+
+  const email = useRef(null);
+  const username = useRef(null);
+  const password = useRef(null);
+
+  const handleLogIn = async () => {
+    console.log(email.current?.value); // expect the password value but undefined get
+    console.log(username.current?.value); // expect the password value but undefined get
+    console.log(password.current?.value); // expect the password value but undefined get
+
+    fetch(`http:/206.12.64.197:8000/all?email=${email}&username=${username}&password=${password}`, {
       method: 'GET',
-    }).then((res) => res.json()).then(
-      (result) => {
-        console.log(result);
-      },
-    );
-  }
+    }).then((res) => {
+      res.json();
+    }).then((result) => {
+      console.log(result);
+    });
+  };
+  // function getSmsCode() {
+  //   fetch('http://127.0.0.1:8000/users', {
+  //     method: 'GET',
+  //   }).then((res) => res.json()).then(
+  //     (result) => {
+  //       console.log(result);
+  //     },
+  //   );
+  // }
   return (
     <Container
       component="main"
@@ -75,7 +93,7 @@ export default function SignUp() {
         <Typography component="h1" variant="h5">
           Sign up
         </Typography>
-        <form className={classes.form} noValidate onSubmit={getSmsCode}>
+        <form className={classes.form} noValidate onSubmit={handleLogIn}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField
@@ -86,6 +104,7 @@ export default function SignUp() {
                 label="Email Address or Phone Number"
                 name="email"
                 autoComplete="email"
+                inputRef={email}
               />
             </Grid>
             <Grid item xs={12}>
@@ -97,6 +116,7 @@ export default function SignUp() {
                 label="User Name"
                 name="userName"
                 autoComplete="uname"
+                inputRef={username}
               />
             </Grid>
 
@@ -110,6 +130,7 @@ export default function SignUp() {
                 type="password"
                 id="password"
                 autoComplete="current-password"
+                inputRef={password}
               />
             </Grid>
 
@@ -117,7 +138,7 @@ export default function SignUp() {
 
               <FormControlLabel
                 control={<Checkbox value="allowExtraEmails" color="primary" />}
-                label="I am older than 13 years old"
+                label="I am older than 13 years old."
               />
 
             </Grid>
