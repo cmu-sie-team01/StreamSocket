@@ -125,8 +125,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'users.User'
 
 CORS_ORIGIN_WHITELIST = (
-    'https://127.0.0.1:8080',
-    'https://localhost:8080',
+     'http://127.0.0.1:8080',
+     'http://localhost:8080',
+
 )
 
 REST_FRAMEWORK = {
