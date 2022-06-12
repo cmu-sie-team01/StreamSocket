@@ -1,3 +1,6 @@
+// TODO:https://react-hook-form.com/ and add Gmail Sign in https://www.youtube.com/watch?v=HtJKUQXmtok&ab_channel=CooperCodes
+// TODO: Refactor the code from function to class, research
+
 import React from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -9,18 +12,16 @@ import Link from '@material-ui/core/Link';
 import Paper from '@material-ui/core/Paper';
 import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
+import FingerprintOutlinedIcon from '@material-ui/icons/FingerprintOutlined';
 
 function MadeWithLove() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
-      {'Built by the '}
       <Link color="inherit" href="https://github.com/tianyachen/StreamSocket">
-        StreamSocket
+        Built by StreamSocket Team
       </Link>
-      {' Team'}
     </Typography>
   );
 }
@@ -66,19 +67,19 @@ function SignInSide() {
       <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
         <div className={classes.paper}>
           <Avatar className={classes.avatar}>
-            <LockOutlinedIcon />
+            <FingerprintOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
-          <form className={classes.form} noValidate>
+          <form className={classes.form} onInvalid={() => { console.log(); }}>
             <TextField
               variant="outlined"
               margin="normal"
               required
               fullWidth
               id="email"
-              label="Email Address"
+              label="Email Address or Phone Number"
               name="email"
               autoComplete="email"
               autoFocus
