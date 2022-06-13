@@ -76,6 +76,15 @@ class MobileExistedView(APIView):
         }
         return Response(data)
 
+class EmailExistedView(APIView):
+    def get(self, request, email):
+        is_existed = User.objects.filter(email=email).exists()
+        data = {
+            'email': email,
+            'is_existed': is_existed
+        }
+        return Response(data)
+
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
