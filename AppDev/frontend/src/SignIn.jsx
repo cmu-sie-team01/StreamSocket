@@ -36,19 +36,31 @@ export default function SignIn() {
       email: data.get('email'),
       password: data.get('password'),
     });
+    const email = data.get('email');
+    const password = data.get('password');
+    fetch('http://127.0.0.1:8000/users/token/', {
+      method: 'POST',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        username: email, password,
+      }),
+    })
+      .then((r) => r.json())
+      .then((res) => {
+        if (res) {
+          console.log(res);
+          alert('request sent');
+        }
+      });
   };
 
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
-        <nav style={{ borderBottom: 'solid 1px', paddingBottom: '1rem' }}>
-          <Link to="/signup">Invoices</Link>
-          {' '}
-          |
-          {' '}
-          <Link to="/expenses">Expenses</Link>
-        </nav>
         <Box
           sx={{
             marginTop: 8,

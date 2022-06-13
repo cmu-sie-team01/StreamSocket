@@ -4,7 +4,7 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import SignUpPhone from './SignUpPhone';
+import SignIn from './SignIn';
 import SignUpEmail from './SignUpEmail';
 
 function TabPanel(props) {
@@ -65,10 +65,10 @@ export default function BasicTabs() {
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
-        <SignUpEmail />
+        <SignIn />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <SignUpPhone />
+        <SignUpEmail />
       </TabPanel>
     </Box>
 

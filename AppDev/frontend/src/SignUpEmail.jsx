@@ -62,14 +62,35 @@ export default function SignUpEmail() {
   const [isEmailValid, setIsEmailValid] = useState(false);
   const [isUsernameValid, setIsUsernameValid] = useState(false);
   const [isPasswordValid, setIsPasswordValid] = useState(false);
+  const [isEmailExist, setIsEmailExist] = useState(false);
+  const ExistEmail = async (email) => {
+    fetch(`http://127.0.0.1:8000/users/emails/${email}`, {
+      method: 'GET',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json',
+      },
 
-  const handleSubmit = (event) => {
+    })
+      .then((r) => r.json())
+      .then((res) => {
+        console.log(res);
+
+        if (res?.is_existed) {
+          setIsEmailExist(true);
+        } else {
+          setIsEmailExist(false);
+        }
+      });
+  };
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const email = data.get('email');
     const username = data.get('userName');
     const password = data.get('password');
-    console.log(validEmail(email));
+    // const code = data.get('code');
+
     // email validation
     if (!validEmail(email)) {
       setIsEmailValid(true);
@@ -88,25 +109,30 @@ export default function SignUpEmail() {
     } else {
       setIsPasswordValid(false);
     }
-    console.log(isUsernameValid, isEmailValid, isPasswordValid);
-    if (validEmail(email) && validUserName(username) && validPw(password)) {
-      console.log('fetch!');
-      fetch('http://127.0.0.1:8000/users/token/', {
-        method: 'POST',
-        mode: 'cors',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ username, password }),
-      })
-        .then((r) => r.json())
-        .then((res) => {
-          if (res) {
-            console.log(res);
-            alert('request sent');
-          }
-        });
-    }
+
+    await ExistEmail(email).then(
+      () => {
+        console.log(isEmailExist);
+        if (!isEmailExist && validEmail(email) && validUserName(username) && validPw(password)) {
+          fetch('http://127.0.0.1:8000/users/user/', {
+            method: 'POST',
+            mode: 'cors',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              username, password, email,
+            }),
+          })
+            .then((r) => r.json())
+            .then((res) => {
+              if (res) {
+                console.log(res);
+              }
+            });
+        }
+      },
+    );
   };
 
   return (
@@ -138,10 +164,11 @@ export default function SignUpEmail() {
                   name="email"
                   autoComplete="email"
                   autoFocus
-                  error={isEmailValid}
-                  helperText={isEmailValid && 'Invalid email.(example@email.com)'}
+                  error={isEmailValid || isEmailExist}
+                  helperText={(isEmailValid && 'Invalid email.(example@email.com)') || (isEmailExist && 'Email Exists')}
                 />
               </Grid>
+
               <Grid item xs={12}>
                 <TextField
                   required
