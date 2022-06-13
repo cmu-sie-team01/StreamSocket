@@ -1,10 +1,12 @@
 import * as React from 'react';
 import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
-import FolderIcon from '@mui/icons-material/Folder';
-import RestoreIcon from '@mui/icons-material/Restore';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import LocationOnIcon from '@mui/icons-material/LocationOn';
+import HomeIcon from '@mui/icons-material/Home';
+import AccountBoxIcon from '@mui/icons-material/AccountBox';
+import CommentIcon from '@mui/icons-material/Comment';
+import { Link } from 'react-router-dom';
+import AddIcon from '@mui/icons-material/Add';
 
 export default function LabelBottomNavigation() {
   const [value, setValue] = React.useState('recents');
@@ -16,21 +18,31 @@ export default function LabelBottomNavigation() {
   return (
     <BottomNavigation sx={{ width: '100%', position: 'absolute', bottom: 0 }} value={value} onChange={handleChange}>
       <BottomNavigationAction
-        label="Recents"
-        value="recents"
-        icon={<RestoreIcon />}
+        value="home"
+        icon={<HomeIcon />}
+        component={Link}
+        to="/"
+
       />
       <BottomNavigationAction
-        label="Favorites"
-        value="favorites"
+        value="discover"
         icon={<FavoriteIcon />}
       />
       <BottomNavigationAction
-        label="Nearby"
-        value="nearby"
-        icon={<LocationOnIcon />}
+        value="add"
+        icon={<AddIcon />}
       />
-      <BottomNavigationAction label="Folder" value="folder" icon={<FolderIcon />} />
+      <BottomNavigationAction
+        value="message"
+        icon={<CommentIcon />}
+      />
+
+      <BottomNavigationAction
+        value="userprofile"
+        icon={<AccountBoxIcon />}
+        component={Link}
+        to="/signin"
+      />
     </BottomNavigation>
   );
 }
