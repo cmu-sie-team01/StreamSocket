@@ -54,9 +54,9 @@ export default function BasicTabs() {
   return (
 
     <Box
-      sx={{ width: '100%' }}
+      sx={{ alignItems: 'center' }}
     >
-      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+      <Box width="100%" sx={{ borderBottom: 1, borderColor: 'divider', alignItems: 'center' }}>
         <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
           {/* eslint-disable-next-line react/jsx-props-no-spreading */}
           <Tab sx={{ width: '50%' }} label="Email" {...a11yProps(0)} />

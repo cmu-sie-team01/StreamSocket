@@ -13,6 +13,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function Copyright(props) {
   return (
@@ -31,16 +32,14 @@ function Copyright(props) {
 
 const theme = createTheme();
 
-const validEmail = (email) => {
-  const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  return re.test(String(email).toLowerCase());
-};
-
 const validUserName = (un) => {
   if (un === '') return false;
   return true;
 };
-
+const validEmail = (email) => {
+  const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return re.test(String(email).toLowerCase());
+};
 const validPw = (pw) => {
   if (pw.length < 4) { return false; }
   return true;
@@ -59,9 +58,12 @@ const validPw = (pw) => {
 // };
 
 export default function SignUpEmail() {
+  const navigate = useNavigate();
+
   const [isEmailValid, setIsEmailValid] = useState(false);
-  const [isUsernameValid, setIsUsernameValid] = useState(false);
   const [isPasswordValid, setIsPasswordValid] = useState(false);
+
+  const [isUsernameValid, setIsUsernameValid] = useState(false);
   const [isEmailExist, setIsEmailExist] = useState(false);
   const ExistEmail = async (email) => {
     fetch(`http://127.0.0.1:8000/users/emails/${email}`, {
@@ -87,8 +89,9 @@ export default function SignUpEmail() {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const email = data.get('email');
-    const username = data.get('userName');
     const password = data.get('password');
+    const username = data.get('userName');
+
     // const code = data.get('code');
 
     // email validation
@@ -97,17 +100,17 @@ export default function SignUpEmail() {
     } else {
       setIsEmailValid(false);
     }
-    // username validation
-    if (!validUserName(username)) {
-      setIsUsernameValid(true);
-    } else {
-      setIsUsernameValid(false);
-    }
     // pw validation
     if (!validPw(password)) {
       setIsPasswordValid(true);
     } else {
       setIsPasswordValid(false);
+    }
+    // username validation
+    if (!validUserName(username)) {
+      setIsUsernameValid(true);
+    } else {
+      setIsUsernameValid(false);
     }
 
     await ExistEmail(email).then(
@@ -128,6 +131,7 @@ export default function SignUpEmail() {
             .then((res) => {
               if (res) {
                 console.log(res);
+                navigate('/');
               }
             });
         }

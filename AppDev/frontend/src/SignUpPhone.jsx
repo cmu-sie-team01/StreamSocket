@@ -92,7 +92,6 @@ export default function SignUpPhone() {
     });
     console.log(validPhone(phone));
     if (validPhone(phone) && validCode(code)) {
-      alert('request sent');
       fetch('http://127.0.0.1:8000/users/sms_codes/669264338/', {
         method: 'GET',
         mode: 'cors',
@@ -100,7 +99,11 @@ export default function SignUpPhone() {
       })
         .then((res) => res.json())
         .then((result) => {
-          console.log(result);
+          if (result?.id) {
+            console.log('success', result);
+          } else {
+            console.log('fail to sign up');
+          }
         });
     }
   };
@@ -137,7 +140,7 @@ export default function SignUpPhone() {
                   label="Phone Number"
                   name="phone"
                   autoComplete="phone"
-                  error={isPhoneValid && isPhoneExist}
+                  error={isPhoneValid || isPhoneExist}
                 />
               </Grid>
 

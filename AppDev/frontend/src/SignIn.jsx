@@ -10,6 +10,8 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 
 function Copyright(props) {
   return (
@@ -28,16 +30,43 @@ function Copyright(props) {
 
 const theme = createTheme();
 
+const validEmail = (email) => {
+  const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return re.test(String(email).toLowerCase());
+};
+
+const validPw = (pw) => {
+  if (pw.length < 4) { return false; }
+  return true;
+};
+
 export default function SignIn() {
+  const navigate = useNavigate();
+  const [isEmailValid, setIsEmailValid] = useState(false);
+  const [isPasswordValid, setIsPasswordValid] = useState(false);
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
+    const email = data.get('email');
+    const password = data.get('password');
+    // email validation
+    if (!validEmail(email)) {
+      setIsEmailValid(true);
+    } else {
+      setIsEmailValid(false);
+    }
+    // pw validation
+    if (!validPw(password)) {
+      setIsPasswordValid(true);
+    } else {
+      setIsPasswordValid(false);
+    }
     console.log({
       email: data.get('email'),
       password: data.get('password'),
     });
-    const email = data.get('email');
-    const password = data.get('password');
+
     fetch('http://127.0.0.1:8000/users/token/', {
       method: 'POST',
       mode: 'cors',
@@ -50,9 +79,11 @@ export default function SignIn() {
     })
       .then((r) => r.json())
       .then((res) => {
-        if (res) {
+        if (res.access) {
+          navigate('/');
           console.log(res);
-          alert('request sent');
+        } else {
+          console.log('login fail');
         }
       });
   };
@@ -85,6 +116,8 @@ export default function SignIn() {
               name="email"
               autoComplete="email"
               autoFocus
+              error={isEmailValid}
+              helperText={(isEmailValid && 'Invalid email.(example@email.com)')}
             />
             <TextField
               margin="normal"
@@ -95,6 +128,8 @@ export default function SignIn() {
               type="password"
               id="password"
               autoComplete="current-password"
+              error={isPasswordValid}
+              helperText={isPasswordValid && 'Invalid password. (length>=4)'}
             />
 
             <Button
