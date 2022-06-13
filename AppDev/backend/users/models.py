@@ -4,7 +4,7 @@ from django.contrib.auth.models import AbstractUser
 
 # Create your models here.
 class User(AbstractUser):
-    mobile = models.BigIntegerField(unique=True, verbose_name='Mobile Number', null=True)
+    mobile = models.CharField(max_length=10, unique=True, verbose_name='Mobile Number', null=True)
 
     class Meta:
         db_table = 'tb_users'
