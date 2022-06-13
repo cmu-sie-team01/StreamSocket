@@ -44,6 +44,7 @@ export default function SignIn() {
   const navigate = useNavigate();
   const [isEmailValid, setIsEmailValid] = useState(false);
   const [isPasswordValid, setIsPasswordValid] = useState(false);
+  const [isPasswordWrong, setIsPasswordWrong] = useState(false);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -83,6 +84,7 @@ export default function SignIn() {
           navigate('/');
           console.log(res);
         } else {
+          setIsPasswordWrong(true);
           console.log('login fail');
         }
       });
@@ -128,8 +130,8 @@ export default function SignIn() {
               type="password"
               id="password"
               autoComplete="current-password"
-              error={isPasswordValid}
-              helperText={isPasswordValid && 'Invalid password. (length>=4)'}
+              error={isPasswordValid || isPasswordWrong}
+              helperText={(isPasswordValid && 'password is invalid. (length >= 4)') || (isPasswordWrong && 'Wrong password.')}
             />
 
             <Button
