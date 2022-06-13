@@ -132,6 +132,8 @@ dmypy.json
 db.sqlite3
 migrations
 .DS_Store
+settings.py
 
 # Pycharm
 .idea/
+

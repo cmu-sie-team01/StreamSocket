@@ -127,7 +127,6 @@ AUTH_USER_MODEL = 'users.User'
 CORS_ORIGIN_WHITELIST = (
      'http://127.0.0.1:8080',
      'http://localhost:8080',
-
 )
 
 REST_FRAMEWORK = {
@@ -143,3 +142,15 @@ CORS_ALLOW_CREDENTIALS = True
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': datetime.timedelta(days=1),
 }
+
+AUTHENTICATION_BACKENDS = [
+    'users.views.EmailMobileAuthBackend',
+]
+
+# send email
+EMAIL_HOST = "smtp.office365.com"
+EMAIL_PORT = "587"
+EMAIL_HOST_USER = "streamsocket@outlook.com"
+EMAIL_HOST_PASSWORD = "cmusieteam01"
+EMAIL_USE_TLS = True
+EMAIL_FROM = "streamsocket@outlook.com"
