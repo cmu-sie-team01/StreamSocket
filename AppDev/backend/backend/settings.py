@@ -9,7 +9,8 @@ https://docs.djangoproject.com/en/4.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
-import datetime
+import datetime, os
+from dotenv import load_dotenv
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -147,10 +148,11 @@ AUTHENTICATION_BACKENDS = [
     'users.views.EmailMobileAuthBackend',
 ]
 
+load_dotenv()
 # send email
 EMAIL_HOST = "smtp.office365.com"
 EMAIL_PORT = "587"
 EMAIL_HOST_USER = "streamsocket@outlook.com"
-EMAIL_HOST_PASSWORD = "cmusieteam01"
+EMAIL_HOST_PASSWORD = os.environ['EMAIL_HOST_PASSWORD']
 EMAIL_USE_TLS = True
 EMAIL_FROM = "streamsocket@outlook.com"
