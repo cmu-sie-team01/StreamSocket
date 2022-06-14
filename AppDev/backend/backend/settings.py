@@ -145,7 +145,7 @@ SIMPLE_JWT = {
 }
 
 AUTHENTICATION_BACKENDS = [
-    'users.views.EmailMobileAuthBackend',
+    'users.views.EmailUsernameAuthBackend',
 ]
 
 load_dotenv()

@@ -76,6 +76,7 @@ class MobileExistedView(APIView):
         }
         return Response(data)
 
+
 class EmailExistedView(APIView):
     def get(self, request, email):
         is_existed = User.objects.filter(email=email).exists()
@@ -100,20 +101,20 @@ class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
 
 
-def get_user_by_email_or_mobile(account):
+def get_user_by_email_or_username(account):
     try:
-        if re.match(r'\d{10}$', account):
-            user = User.objects.get(mobile=account)
-        else:
+        if re.match(r'(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)', account):
             user = User.objects.get(email=account)
+        else:
+            user = User.objects.get(username=account)
     except User.DoesNotExist:
         return None
     else:
         return user
 
 
-class EmailMobileAuthBackend(ModelBackend):
+class EmailUsernameAuthBackend(ModelBackend):
     def authenticate(self, request, username=None, password=None, **kwargs):
-        user = get_user_by_email_or_mobile(username)
+        user = get_user_by_email_or_username(username)
         if user and user.check_password(password):
             return user
