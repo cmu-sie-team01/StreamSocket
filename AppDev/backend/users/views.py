@@ -108,16 +108,20 @@ def get_user_by_email_or_mobile(account, password):
             if user.check_password(password):
                 return user
         else:
-            user = User.objects.get(username=account)
-            verification_code = VerificationCode.objects.get(mobile=account)
+            user = User.objects.get(mobile=account)
+            verification_code = VerificationCode.objects.get(account=account)
             if verification_code is None:
+                print(1)
                 return None
             if verification_code.code_number != password:
+                print(2)
                 return None
             if verification_code.exp_time < timezone.now():
+                print(3)
                 return None
             return user
     except User.DoesNotExist:
+        print(4)
         return None
 
     return None
