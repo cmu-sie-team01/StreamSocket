@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'users',
     'corsheaders',
     'rest_framework_simplejwt',
+    'videos',
 ]
 
 MIDDLEWARE = [
