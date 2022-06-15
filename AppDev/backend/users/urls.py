@@ -46,7 +46,7 @@ method: post
 description: get jwt
 request body (json):
 {
-    "username": mobile or email
-    "password": password
+    "username": email       mobile
+    "password": password    verification code
 }
 """

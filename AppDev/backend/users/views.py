@@ -92,7 +92,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     def get_token(cls, user):
         token = super().get_token(user)
         # Add custom claims
-        token['username'] = user.username
+        # token['username'] = user.username
 
         return token
 
@@ -101,20 +101,29 @@ class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
 
 
-def get_user_by_email_or_username(account):
+def get_user_by_email_or_mobile(account, password):
     try:
         if re.match(r'(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)', account):
             user = User.objects.get(email=account)
+            if user.check_password(password):
+                return user
         else:
             user = User.objects.get(username=account)
+            verification_code = VerificationCode.objects.get(mobile=account)
+            if verification_code is None:
+                return None
+            if verification_code.code_number != password:
+                return None
+            if verification_code.exp_time < timezone.now():
+                return None
+            return user
     except User.DoesNotExist:
         return None
-    else:
-        return user
+
+    return None
 
 
 class EmailUsernameAuthBackend(ModelBackend):
     def authenticate(self, request, username=None, password=None, **kwargs):
-        user = get_user_by_email_or_username(username)
-        if user and user.check_password(password):
-            return user
+        user = get_user_by_email_or_mobile(username, password);
+        return user
