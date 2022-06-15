@@ -7,7 +7,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 
 
 class CreateUserSerializer(serializers.ModelSerializer):
-    verification_code = serializers.CharField(max_length=6, label='Verification Code', write_only=True)
+    verification = serializers.CharField(max_length=6, label='Verification Code', write_only=True)
     access = serializers.CharField(label='access', read_only=True)
     refresh = serializers.CharField(label='refresh', read_only=True)
 
