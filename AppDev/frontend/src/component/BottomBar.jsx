@@ -1,11 +1,13 @@
 import * as React from 'react';
 import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
-import FavoriteIcon from '@mui/icons-material/Favorite';
+import ExploreIcon from '@mui/icons-material/Explore';
 import HomeIcon from '@mui/icons-material/Home';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import CommentIcon from '@mui/icons-material/Comment';
-import { Link } from 'react-router-dom';
+import {
+  Link,
+} from 'react-router-dom';
 import AddIcon from '@mui/icons-material/Add';
 
 export default function LabelBottomNavigation() {
@@ -16,17 +18,22 @@ export default function LabelBottomNavigation() {
   };
 
   return (
-    <BottomNavigation sx={{ width: '100%', position: 'absolute', bottom: 0 }} value={value} onChange={handleChange}>
+    <BottomNavigation
+      sx={{
+        width: '100%', position: 'absolute', bottom: 0, left: 0, right: 0,
+      }}
+      value={value}
+      onChange={handleChange}
+    >
       <BottomNavigationAction
         value="home"
         icon={<HomeIcon />}
         component={Link}
         to="/"
-
       />
       <BottomNavigationAction
         value="discover"
-        icon={<FavoriteIcon />}
+        icon={<ExploreIcon />}
       />
       <BottomNavigationAction
         value="add"
@@ -35,6 +42,8 @@ export default function LabelBottomNavigation() {
       <BottomNavigationAction
         value="message"
         icon={<CommentIcon />}
+        component={Link}
+        to="/userprofile"
       />
 
       <BottomNavigationAction
@@ -44,5 +53,6 @@ export default function LabelBottomNavigation() {
         to="/signin"
       />
     </BottomNavigation>
+
   );
 }

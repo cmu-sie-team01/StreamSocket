@@ -11,8 +11,9 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { useState } from 'react';
-import CountrySelect from './CountrySelect';
+import { useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import CountrySelect from '../component/CountrySelect';
 
 function Copyright(props) {
   return (
@@ -31,21 +32,16 @@ function Copyright(props) {
 
 const theme = createTheme();
 
-const validPhone = (phone) => {
-  if (phone.length < 9) {
-    return false;
-  }
-  return true;
-};
+const ValidatePhone = (value) => value.match(/\d/g).length === 10;
 
 const checkPhoneExist = (phone) => {
-  if (phone === '123456789') {
+  if (phone === '123456781') {
     return true;
   }
   return false;
 };
 const validCode = (code) => {
-  if (code === '1234') {
+  if (code === '123456') {
     return true;
   }
   return false;
@@ -55,14 +51,18 @@ export default function SignUpPhone() {
   // count down
 
   const [isPhoneValid, setIsPhoneValid] = useState(false);
-  const [isPhoneExist, setIsPhoneExist] = useState(false);
+  const [isPhoneExist, setIsPhoneExist] = useState(true);
   const [isCodeValid, setIsCodeValid] = useState(false);
-
+  const [isCodeSent, setIsCodeSent] = useState(false);
+  const CodevalueRef = useRef(''); // creating a refernce for TextField Component
+  const PhoneValueRef = useRef('');
+  const navigate = useNavigate();
+  console.log(isPhoneExist);
   const validate = (values) => {
     const phone = values.get('phone');
     const code = values.get('code');
 
-    if (!validPhone(phone)) {
+    if (!ValidatePhone(phone)) {
       setIsPhoneValid(true);
     } else {
       setIsPhoneValid(false);
@@ -81,33 +81,61 @@ export default function SignUpPhone() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-
+    setIsCodeSent(true);
     const data = new FormData(event.currentTarget);
     validate(data);
     const phone = data.get('phone');
     const code = data.get('code');
+    console.log(code);
     console.log({
       code: data.get('code'),
       phone: data.get('phone'),
     });
-    console.log(validPhone(phone));
-    if (validPhone(phone) && validCode(code)) {
-      fetch('http://127.0.0.1:8000/users/sms_codes/669264338/', {
+    if (ValidatePhone(phone)) {
+      console.log('code sent');
+      fetch(`http://127.0.0.1:8000/users/verifications/${phone}/`, {
         method: 'GET',
         mode: 'cors',
-
+        headers: {
+          'Content-Type': 'application/json',
+        },
       })
-        .then((res) => res.json())
-        .then((result) => {
-          if (result?.id) {
-            console.log('success', result);
-          } else {
-            console.log('fail to sign up');
+        .then((r) => r.json())
+        .then((res) => {
+          console.log(res);
+          if (res.message === 'ok') {
+            setIsPhoneValid(false);
+          }
+        });
+      // 6692643381
+    }
+  };
+
+  const handleCodeOnchange = () => {
+    if (CodevalueRef.current.value.length === 6) {
+      // validate the Code
+      console.log('req', JSON.stringify({
+        mobile: PhoneValueRef.current.value, verification: CodevalueRef.current.value,
+      }));
+      fetch('http://127.0.0.1:8000/users/user/', {
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          mobile: PhoneValueRef.current.value, verification: CodevalueRef.current.value,
+        }),
+      })
+        .then((r) => r.json())
+        .then((res) => {
+          console.log(res);
+          if (res.access) {
+            navigate('/userprofile');
           }
         });
     }
   };
-
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
@@ -140,32 +168,54 @@ export default function SignUpPhone() {
                   label="Phone Number"
                   name="phone"
                   autoComplete="phone"
-                  error={isPhoneValid || isPhoneExist}
+                  error={isPhoneValid}
+                  inputRef={PhoneValueRef}
                 />
               </Grid>
 
-              <Grid item xs={12} sm={12}>
-                <TextField
-                  required
-                  fullWidth
-                  name="code"
-                  label="6-digit Code"
-                  type="code"
-                  id="code"
-                  autoComplete="new-code"
-                  error={isCodeValid}
-                />
-              </Grid>
+              { isCodeSent
+                && (
+                <Grid item xs={12} sm={12}>
+                  <TextField
+                    required
+                    fullWidth
+                    name="code"
+                    label="6-digit Code"
+                    type="code"
+                    id="code"
+                    autoComplete="new-code"
+                    error={isCodeValid}
+                    inputRef={CodevalueRef}
+                    onChange={handleCodeOnchange}
+                  />
+                </Grid>
+                )}
 
             </Grid>
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-            >
-              Send Code
-            </Button>
+            {
+              (!isCodeSent
+              && (
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
+              >
+                Send Code
+              </Button>
+              )) || (isCodeSent
+              && (
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
+              >
+                Resend Code
+              </Button>
+              ))
+            }
+
             <Grid container justifyContent="flex-end">
               <Grid item>
                 {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}

@@ -34,15 +34,32 @@ const validEmail = (email) => {
   const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return re.test(String(email).toLowerCase());
 };
-
+const checkEmailExist = (email) => {
+  fetch(`http://127.0.0.1:8000/mobiles/${email}`, {
+    method: 'GET',
+    mode: 'cors',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+    .then((r) => r.json())
+    .then((res) => {
+      console.log(res);
+    });
+  if (email === '00000@gmail.com') {
+    return true;
+  }
+  return false;
+};
 const validPw = (pw) => {
   if (pw.length < 4) { return false; }
   return true;
 };
 
-export default function SignIn() {
+export default function SignInEmail() {
   const navigate = useNavigate();
   const [isEmailValid, setIsEmailValid] = useState(false);
+  const [isEmailExist, setIsEmailExist] = useState(false);
   const [isPasswordValid, setIsPasswordValid] = useState(false);
   const [isPasswordWrong, setIsPasswordWrong] = useState(false);
 
@@ -57,6 +74,12 @@ export default function SignIn() {
     } else {
       setIsEmailValid(false);
     }
+    if (!checkEmailExist(email)) {
+      setIsEmailExist(true);
+    } else {
+      setIsEmailExist(false);
+    }
+
     // pw validation
     if (!validPw(password)) {
       setIsPasswordValid(true);
@@ -67,7 +90,7 @@ export default function SignIn() {
       email: data.get('email'),
       password: data.get('password'),
     });
-
+    console.log('user entered a email, fecth using http://127.0.0.1:8000/users/token/');
     fetch('http://127.0.0.1:8000/users/token/', {
       method: 'POST',
       mode: 'cors',
@@ -81,7 +104,7 @@ export default function SignIn() {
       .then((r) => r.json())
       .then((res) => {
         if (res.access) {
-          navigate('/');
+          navigate('/userprofile');
           console.log(res);
         } else {
           setIsPasswordWrong(true);
@@ -118,7 +141,7 @@ export default function SignIn() {
               name="email"
               autoComplete="email"
               autoFocus
-              error={isEmailValid}
+              error={isEmailValid || isEmailExist}
               helperText={(isEmailValid && 'Invalid email.(example@email.com)')}
             />
             <TextField
