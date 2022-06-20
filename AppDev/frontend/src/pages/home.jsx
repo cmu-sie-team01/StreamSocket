@@ -1,81 +1,29 @@
-import React, { useRef, useState } from 'react';
+import React from 'react';
+//  Mobile browser autoplay: webkit-playsinline="true" playsInline
 import Swiper from 'react-id-swiper';
+import './home.css';
 import Box from '@mui/material/Box';
-import Videojs from '../component/VideoBlock';
-import video2 from '../2.MP4';
-import video1 from '../1.MP4';
+import CssBaseline from '@mui/material/CssBaseline';
 
-const videoJsOptions = {
-  autoplay: false,
-  playbackRates: [0.5, 1, 1.25, 1.5, 2],
-  width: 720,
-  height: 300,
-  controls: true,
-  sources: [
-    {
-      src: '//vjs.zencdn.net/v/oceans.mp4',
-      type: 'video/mp4',
-    },
-  ],
-};
-
-function VideoHolder() {
-  const videoRef = useRef(null);
-  const [play, setPlay] = useState(false);
-  const onVideoPress = () => {
-    if (play) {
-      videoRef.current.pause();
-      setPlay(false);
-    } else {
-      videoRef.current.play();
-      setPlay(true);
-    }
-  };
+export default function () {
   return (
-    <Box sx={{
-      height: '92.5vh',
-      width: '100vw',
-      display: 'flex',
-      flex: 'auto',
-    }}
+    <Box
+      className="video_holder"
     >
-      {/* eslint-disable-next-line jsx-a11y/media-has-caption,react/jsx-props-no-spreading */}
-      <Videojs {...videoJsOptions}>321</Videojs>
-
+      <CssBaseline />
       <Swiper>
-        {/* eslint-disable-next-line jsx-a11y/media-has-caption,react/jsx-props-no-spreading */}
-        <Videojs {...videoJsOptions}>321</Videojs>
-        {/* eslint-disable-next-line jsx-a11y/media-has-caption,react/jsx-props-no-spreading */}
-        <video
-          height="100vh"
-          loop
-          onClick={onVideoPress}
-          ref={videoRef}
-          src={video1}
-          autoPlay
-        />
-        {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
-        <video
-          height="100vh"
-          loop
-          onClick={onVideoPress}
-          ref={videoRef}
-          src={video2}
-          autoPlay
-        />
+        <video controls className="video_card" autoPlay muted webkit-playsinline="true" playsInline>
+          <source src="https://streamsocketvideo.s3.us-west-1.amazonaws.com/video/1.mp4" type="video/mp4" />
+        </video>
+        <video className="video_card" autoPlay muted webkit-playsinline="true" playsInline>
+          <source src="https://streamsocketvideo.s3.us-west-1.amazonaws.com/video/3.mp4" type="video/mp4" />
+        </video>
+        <video className="video_card" autoPlay muted webkit-playsinline="true" playsInline>
+          <source src="https://streamsocketvideo.s3.us-west-1.amazonaws.com/video/1.mp4" type="video/mp4" />
+        </video>
 
-        {/* <CardMedia */}
-        {/*  component="video" */}
-        {/*  image="https://www.learningcontainer.com/wp-content/uploads/2020/05/sample-mp4-file.mp4" */}
-        {/*  autoPlay */}
-        {/*  controls */}
-        {/*  sx={ */}
-        {/*        { height: '90vh' } */}
-        {/*    } */}
-        {/* /> */}
       </Swiper>
-    </Box>
 
+    </Box>
   );
 }
-export default VideoHolder;

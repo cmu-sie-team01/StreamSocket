@@ -10,9 +10,29 @@ import * as React from 'react';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import PropTypes from 'prop-types';
-import { deepOrange } from '@mui/material/colors';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import VideoLibraryIcon from '@mui/icons-material/VideoLibrary';
+import { useNavigate } from 'react-router-dom';
+
+function stringToColor(string) {
+  let hash = 0;
+  let i;
+
+  /* eslint-disable no-bitwise */
+  for (i = 0; i < string.length; i += 1) {
+    hash = string.charCodeAt(i) + ((hash << 5) - hash);
+  }
+
+  let color = '#';
+
+  for (i = 0; i < 3; i += 1) {
+    const value = (hash >> (i * 8)) & 0xff;
+    color += `00${value.toString(16)}`.slice(-2);
+  }
+  /* eslint-enable no-bitwise */
+
+  return color;
+}
 
 function TabPanel(props) {
   const {
@@ -49,8 +69,10 @@ function a11yProps(index) {
     'aria-controls': `simple-tabpanel-${index}`,
   };
 }
-export default function userProfile() {
+
+export default function userProfile({ userName }) {
   const theme = createTheme();
+  const navigate = useNavigate();
 
   const [value, setValue] = React.useState(0);
 
@@ -68,14 +90,13 @@ export default function userProfile() {
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-
           }}
         >
           <Avatar sx={{
-            width: 90, height: 90, m: 1, bgcolor: deepOrange[500],
+            width: 90, height: 90, m: 1, bgcolor: stringToColor(userName),
           }}
           >
-            0
+            {userName.charAt(0)}
           </Avatar>
 
           <Grid container>
@@ -83,26 +104,83 @@ export default function userProfile() {
               item
               xs={12}
               justify="center"
+              style={{ padding: '5%' }}
             >
-              <Typography component="h1" variant="h5" align="center">
-                @00000
-              </Typography>
-            </Grid>
-            <Grid xs={9} />
-            <Grid item xs={4}>
-              <Typography component="h1" variant="h6">
-                Following 0
+              <Typography component="h1" variant="h6" align="center">
+                {userName}
               </Typography>
             </Grid>
             <Grid item xs={4}>
-              <Typography component="h1" variant="h6">
-                Follower 0
-              </Typography>
+              <Box
+                sx={{
+                  width: '100%',
+                  height: '100%',
+                }}
+              >
+                <Typography component="h1" variant="body1" align="center">
+                  0
+                </Typography>
+              </Box>
             </Grid>
             <Grid item xs={4}>
-              <Typography component="h1" variant="h6">
-                Likes 0
-              </Typography>
+              <Box
+                sx={{
+                  width: '100%',
+                  height: '100%',
+                }}
+              >
+                <Typography component="h1" variant="body1" align="center">
+                  1
+                </Typography>
+              </Box>
+            </Grid>
+            <Grid item xs={4}>
+              <Box
+                sx={{
+                  width: '100%',
+                  height: '100%',
+                }}
+              >
+                <Typography component="h1" variant="body1" align="center">
+                  2
+                </Typography>
+              </Box>
+            </Grid>
+            <Grid item xs={4} onClick={() => navigate('/following')}>
+              <Box
+                sx={{
+                  width: '100%',
+                  height: '100%',
+                }}
+              >
+                <Typography component="h1" variant="body1" align="center">
+                  Following
+                </Typography>
+              </Box>
+            </Grid>
+            <Grid item xs={4} onClick={() => navigate('/following')}>
+              <Box
+                sx={{
+                  width: '100%',
+                  height: '100%',
+                }}
+              >
+                <Typography component="h1" variant="body1" align="center">
+                  Follower
+                </Typography>
+              </Box>
+            </Grid>
+            <Grid item xs={4}>
+              <Box
+                sx={{
+                  width: '100%',
+                  height: '100%',
+                }}
+              >
+                <Typography component="h1" variant="body1" align="center">
+                  Likes
+                </Typography>
+              </Box>
             </Grid>
             <Grid item xs={12}>
               <Button
@@ -130,9 +208,31 @@ export default function userProfile() {
           </Box>
           <TabPanel value={value} index={0}>
             Your Videos
+            <Box
+              sx={{
+                width: 300,
+                height: 300,
+                maxHeight: 300,
+              }}
+            >
+              <video controls className="video_card" autoPlay muted webkit-playsinline="true" playsInline>
+                <source src="https://streamsocketvideo.s3.us-west-1.amazonaws.com/video/1.mp4" type="video/mp4" />
+              </video>
+            </Box>
+
           </TabPanel>
           <TabPanel value={value} index={1}>
             Your liked Videos
+            <Box
+              sx={{
+                width: 300,
+                height: 300,
+              }}
+            >
+              <video controls className="video_card" autoPlay muted webkit-playsinline="true" playsInline>
+                <source src="https://streamsocketvideo.s3.us-west-1.amazonaws.com/video/3.mp4" type="video/mp4" />
+              </video>
+            </Box>
           </TabPanel>
 
         </Box>
