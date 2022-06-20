@@ -38,6 +38,8 @@ export default function LabelBottomNavigation() {
       <BottomNavigationAction
         value="add"
         icon={<AddIcon />}
+        component={Link}
+        to="/videoupload"
       />
       <BottomNavigationAction
         value="message"
