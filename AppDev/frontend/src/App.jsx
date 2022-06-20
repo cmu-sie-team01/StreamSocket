@@ -9,6 +9,7 @@ import SignInTab from './pages/SignInTabs';
 import UserProfile from './component/UserProfile';
 import BottomBar from './component/BottomBar';
 import FollowPage from './pages/FollowPage';
+import VideoUpload from './pages/viedoupload';
 // eslint-disable-next-line react/prop-types
 function ChildComponent({ userName }) {
   return (
@@ -30,7 +31,7 @@ function App() {
         <Route path="signin" element={<SignInTab />} />
         <Route path="userprofile" element={<ChildComponent userName={userName2} />} />
         <Route path="following" element={<FollowPage />} />
-
+        <Route path="videoupload" element={<VideoUpload />} />
       </Routes>
       <BottomBar />
     </BrowserRouter>
