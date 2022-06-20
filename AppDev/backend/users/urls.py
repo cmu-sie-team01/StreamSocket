@@ -11,6 +11,7 @@ urlpatterns = [
     path('emails/<str:email>/', views.EmailExistedView.as_view()),   # get whether the email existed
     path('token/', views.MyTokenObtainPairView.as_view(), name='token_obtain_pair'),    # post
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),   #
+    # path(''),
 ]
 
 """

@@ -2,8 +2,8 @@ import React, { useRef, useState } from 'react';
 import Swiper from 'react-id-swiper';
 import Box from '@mui/material/Box';
 import Videojs from '../component/VideoBlock';
-import video2 from '../2.MP4';
-import video1 from '../1.MP4';
+// import video2 from '../2.MP4';
+// import video1 from '../1.MP4';
 
 const videoJsOptions = {
   autoplay: false,
@@ -51,7 +51,7 @@ function VideoHolder() {
           loop
           onClick={onVideoPress}
           ref={videoRef}
-          src={video1}
+          src="https://streamsocketvideo.s3.us-west-1.amazonaws.com/video/2.mp4"
           autoPlay
         />
         {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
@@ -60,7 +60,7 @@ function VideoHolder() {
           loop
           onClick={onVideoPress}
           ref={videoRef}
-          src={video2}
+          src="https://streamsocketvideo.s3.us-west-1.amazonaws.com/video/1.mp4"
           autoPlay
         />
 
