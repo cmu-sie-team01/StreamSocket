@@ -123,7 +123,7 @@ def get_user_by_email_or_mobile(account, password):
     return None
 
 
-class EmailUsernameAuthBackend(ModelBackend):
+class EmailMobileAuthBackend(ModelBackend):
     def authenticate(self, request, username=None, password=None, **kwargs):
         user = get_user_by_email_or_mobile(username, password);
         return user
