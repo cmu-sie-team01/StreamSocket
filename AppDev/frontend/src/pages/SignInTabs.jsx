@@ -57,7 +57,7 @@ export default function BasicTabs() {
       sx={{ alignItems: 'center' }}
     >
       <Box width="100%" sx={{ borderBottom: 1, borderColor: 'divider', alignItems: 'center' }}>
-        <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
+        <Tabs centered value={value} onChange={handleChange} aria-label="basic tabs example">
           {/* eslint-disable-next-line react/jsx-props-no-spreading */}
           <Tab sx={{ width: '50%' }} label="Email" {...a11yProps(0)} />
           {/* eslint-disable-next-line react/jsx-props-no-spreading */}
@@ -71,6 +71,5 @@ export default function BasicTabs() {
         <SignInPhone />
       </TabPanel>
     </Box>
-
   );
 }

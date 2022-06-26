@@ -1,4 +1,3 @@
-import './App.css';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import React from 'react';
 
@@ -9,7 +8,8 @@ import SignInTab from './pages/SignInTabs';
 import UserProfile from './component/UserProfile';
 import BottomBar from './component/BottomBar';
 import FollowPage from './pages/FollowPage';
-import VideoUpload from './pages/viedoupload';
+import NewHomePage from './pages/NewHomePage';
+
 // eslint-disable-next-line react/prop-types
 function ChildComponent({ userName }) {
   return (
@@ -31,7 +31,7 @@ function App() {
         <Route path="signin" element={<SignInTab />} />
         <Route path="userprofile" element={<ChildComponent userName={userName2} />} />
         <Route path="following" element={<FollowPage />} />
-        <Route path="videoupload" element={<VideoUpload />} />
+        <Route path="videoupload" element={<NewHomePage />} />
       </Routes>
       <BottomBar />
     </BrowserRouter>
