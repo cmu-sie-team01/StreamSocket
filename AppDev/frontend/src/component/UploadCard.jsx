@@ -22,7 +22,7 @@ export default function UploadButtons() {
       <Container maxWidth="xs" sx={{ marginTop: '5%' }}>
         <Box sx={{
           bgcolor: '#DCDCDC',
-          height: '85vh',
+          height: '80vh',
           borderStyle: 'dashed',
           borderWidth: 3,
           borderRadius: '8px',

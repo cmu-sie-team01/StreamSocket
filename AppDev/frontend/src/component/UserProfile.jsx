@@ -208,31 +208,60 @@ export default function userProfile({ userName }) {
           </Box>
           <TabPanel value={value} index={0}>
             Your Videos
-            <Box
-              sx={{
-                width: 300,
-                height: 300,
-                maxHeight: 300,
-              }}
-            >
-              <video controls className="video_card" autoPlay muted webkit-playsinline="true" playsInline>
-                <source src="https://streamsocketvideo.s3.us-west-1.amazonaws.com/video/1.mp4" type="video/mp4" />
-              </video>
-            </Box>
+            <Container maxWidth="xs" sx={{ padding: 0, height: '100vh' }}>
+              <CssBaseline />
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'flex-start',
+                }}
+              >
+
+                <video
+                  style={{
+                    left: 0, height: '20vh', width: '10vw', borderRadius: '12px',
+                  }}
+                  controls
+                  className="video_card"
+                  autoPlay
+                  muted
+                  webkit-playsinline="true"
+                  playsInline
+                >
+                  <source src="https://streamsocketvideo.s3.us-west-1.amazonaws.com/video/1.mp4" type="video/mp4" />
+                </video>
+              </Box>
+            </Container>
 
           </TabPanel>
           <TabPanel value={value} index={1}>
             Your liked Videos
-            <Box
-              sx={{
-                width: 300,
-                height: 300,
-              }}
-            >
-              <video controls className="video_card" autoPlay muted webkit-playsinline="true" playsInline>
-                <source src="https://streamsocketvideo.s3.us-west-1.amazonaws.com/video/3.mp4" type="video/mp4" />
-              </video>
-            </Box>
+            <Container maxWidth="xs" sx={{ padding: 0, height: '100vh' }}>
+              <CssBaseline />
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'flex-start',
+                }}
+              >
+
+                <video
+                  style={{
+                    left: 0, height: '20vh', width: '10vw', borderRadius: '12px',
+                  }}
+                  controls
+                  className="video_card"
+                  autoPlay
+                  muted
+                  webkit-playsinline="true"
+                  playsInline
+                >
+                  <source src="https://streamsocketvideo.s3.us-west-1.amazonaws.com/video/1.mp4" type="video/mp4" />
+                </video>
+              </Box>
+            </Container>
           </TabPanel>
 
         </Box>

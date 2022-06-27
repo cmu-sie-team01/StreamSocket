@@ -8,8 +8,8 @@ import SignInTab from './pages/SignInTabs';
 import UserProfile from './component/UserProfile';
 import BottomBar from './component/BottomBar';
 import FollowPage from './pages/FollowPage';
-import NewHomePage from './pages/NewHomePage';
-
+import UploadCard from './component/UploadCard';
+import PrimarySearchAppBar from './pages/NewHome';
 // eslint-disable-next-line react/prop-types
 function ChildComponent({ userName }) {
   return (
@@ -31,7 +31,8 @@ function App() {
         <Route path="signin" element={<SignInTab />} />
         <Route path="userprofile" element={<ChildComponent userName={userName2} />} />
         <Route path="following" element={<FollowPage />} />
-        <Route path="videoupload" element={<NewHomePage />} />
+        <Route path="videoupload" element={<UploadCard />} />
+        <Route path="newhome" element={<PrimarySearchAppBar />} />
       </Routes>
       <BottomBar />
     </BrowserRouter>
