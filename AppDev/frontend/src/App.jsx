@@ -8,8 +8,9 @@ import SignInTab from './pages/SignInTabs';
 import UserProfile from './component/UserProfile';
 import BottomBar from './component/BottomBar';
 import FollowPage from './pages/FollowPage';
-import NewHomePage from './pages/NewHomePage';
-import VideoUpload from "./pages/viedoupload";
+//import NewHomePage from './pages/NewHomePage';
+//import VideoUpload from "./pages/viedoupload";
+import UploadCard from './component/UploadCard'
 import { Amplify, Auth } from 'aws-amplify';
 import awsconfig from './aws-exports';
 Amplify.configure(awsconfig);
@@ -36,7 +37,7 @@ function App() {
         <Route path="signin" element={<SignInTab />} />
         <Route path="userprofile" element={<ChildComponent userName={userName2} />} />
         <Route path="following" element={<FollowPage />} />
-        <Route path="videoupload" element={<VideoUpload />} />
+          <Route path="videoupload" element={<UploadCard />} />
       </Routes>
       <BottomBar />
     </BrowserRouter>

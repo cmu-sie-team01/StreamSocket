@@ -11,11 +11,15 @@ import Typography from '@mui/material/Typography';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import Avatar from '@mui/material/Avatar';
 import BottomBar from './BottomBar';
+import {Storage} from "aws-amplify";
 
 const Input = styled('input')({
   display: 'none',
 });
 export default function UploadButtons() {
+  const onFileChange = async (file) => {
+    const result = await Storage.put(`${file.name}`, file);
+  }
   return (
     <div>
 
@@ -101,7 +105,7 @@ export default function UploadButtons() {
             >
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="contained-button-file">
-                <Input accept="video/*" id="contained-button-file" multiple type="file" />
+                <Input accept="video/*" id="contained-button-file" multiple type="file" onChange={(e)=>onFileChange(e.target.files[0])}/>
                 <Button variant="contained" component="span">
                   Upload
                 </Button>
