@@ -70,6 +70,7 @@ export default function BasicTabs() {
       <TabPanel value={value} index={1}>
         <SignUpPhone />
       </TabPanel>
+
     </Box>
 
   );

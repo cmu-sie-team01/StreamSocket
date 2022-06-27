@@ -103,7 +103,10 @@ export default function MiniDrawer() {
   const handleDrawerClose = () => {
     setOpen(false);
   };
-
+  let newVideoSrc = '';
+  if (localStorage.getItem('video')) {
+    newVideoSrc = `https://streamsocketvideos191545-dev.s3.us-west-1.amazonaws.com/public/${localStorage.getItem('video')}`;
+  }
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
@@ -230,7 +233,7 @@ export default function MiniDrawer() {
           webkit-playsinline="true"
           playsInline
         >
-          <source src="https://streamsocketvideo.s3.us-west-1.amazonaws.com/video/1.mp4" type="video/mp4" />
+          <source src="https://streamsocketvideo.s3.us-west-1.amazonaws.com/video/1.mp4" />
         </video>
         <video
           style={{
@@ -243,7 +246,7 @@ export default function MiniDrawer() {
           webkit-playsinline="true"
           playsInline
         >
-          <source src="https://streamsocketvideo.s3.us-west-1.amazonaws.com/video/1.mp4" type="video/mp4" />
+          <source src="https://streamsocketvideo.s3.us-west-1.amazonaws.com/video/4.mp4" type="video/mp4" />
         </video>
         <video
           style={{
@@ -256,9 +259,21 @@ export default function MiniDrawer() {
           webkit-playsinline="true"
           playsInline
         >
-          <source src="https://streamsocketvideo.s3.us-west-1.amazonaws.com/video/1.mp4" type="video/mp4" />
+          <source src="https://streamsocketvideo.s3.us-west-1.amazonaws.com/video/3.mp4" type="video/mp4" />
         </video>
-
+        <video
+          style={{
+            width: '100%', borderRadius: '16px',
+          }}
+          controls
+          className="video_card"
+          autoPlay
+          muted
+          webkit-playsinline="true"
+          playsInline
+        >
+          <source src={newVideoSrc} />
+        </video>
       </Box>
     </Box>
   );

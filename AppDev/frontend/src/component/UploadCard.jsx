@@ -10,16 +10,22 @@ import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import Avatar from '@mui/material/Avatar';
+import { Storage } from 'aws-amplify';
+import { v4 as uuidv4 } from 'uuid';
 import BottomBar from './BottomBar';
-import {Storage} from "aws-amplify";
 
 const Input = styled('input')({
   display: 'none',
 });
 export default function UploadButtons() {
   const onFileChange = async (file) => {
-    const result = await Storage.put(`${file.name}`, file);
-  }
+    const fileName = uuidv4();
+    const result = await Storage.put(`${fileName}.mp4`, file);
+    console.log(result);
+    if (result.key) {
+      localStorage.setItem('video', result.key);
+    }
+  };
   return (
     <div>
 
@@ -105,7 +111,7 @@ export default function UploadButtons() {
             >
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="contained-button-file">
-                <Input accept="video/*" id="contained-button-file" multiple type="file" onChange={(e)=>onFileChange(e.target.files[0])}/>
+                <Input accept="video/*" id="contained-button-file" multiple type="file" onChange={(e) => onFileChange(e.target.files[0])} />
                 <Button variant="contained" component="span">
                   Upload
                 </Button>

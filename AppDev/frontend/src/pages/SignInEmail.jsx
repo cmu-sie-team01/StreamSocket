@@ -68,6 +68,8 @@ export default function SignInEmail() {
     const data = new FormData(event.currentTarget);
     const email = data.get('email');
     const password = data.get('password');
+
+    // initialize username, videos
     localStorage.setItem('username', email);
 
     // email validation
