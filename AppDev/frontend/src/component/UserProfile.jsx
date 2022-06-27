@@ -13,30 +13,7 @@ import PropTypes from 'prop-types';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import VideoLibraryIcon from '@mui/icons-material/VideoLibrary';
 import { useNavigate } from 'react-router-dom';
-import { v4 as uuidv4 } from 'uuid';
 import BottomBar from './BottomBar';
-
-const stringToColor = () => {
-  const string = uuidv4();
-
-  let hash = 0;
-  let i;
-
-  /* eslint-disable no-bitwise */
-  for (i = 0; i < string.length; i += 1) {
-    hash = string.charCodeAt(i) + ((hash << 5) - hash);
-  }
-
-  let color = '#';
-
-  for (i = 0; i < 3; i += 1) {
-    const value = (hash >> (i * 8)) & 0xff;
-    color += `00${value.toString(16)}`.slice(-2);
-  }
-  /* eslint-enable no-bitwise */
-
-  return color;
-};
 
 function TabPanel(props) {
   const {
@@ -97,10 +74,10 @@ export default function userProfile({ userName }) {
           }}
         >
           <Avatar sx={{
-            width: 90, height: 90, m: 1, bgcolor: () => stringToColor,
+            width: 90, height: 90, m: 1,
           }}
           >
-            {userName.charAt(0) == null ? 'default' : userName.charAt(0)}
+            {!userName ? 'default' : userName.charAt(0)}
           </Avatar>
 
           <Grid container>
@@ -111,7 +88,7 @@ export default function userProfile({ userName }) {
               style={{ padding: '5%' }}
             >
               <Typography component="span" variant="h6" align="center">
-                {userName}
+                {!userName ? 'default' : userName}
               </Typography>
             </Grid>
             <Grid item xs={4}>
