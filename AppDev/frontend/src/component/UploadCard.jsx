@@ -10,6 +10,7 @@ import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import Avatar from '@mui/material/Avatar';
+import BottomBar from './BottomBar';
 
 const Input = styled('input')({
   display: 'none',
@@ -117,6 +118,7 @@ export default function UploadButtons() {
           </Box>
         </Box>
       </Container>
+      <BottomBar />
 
     </div>
   );

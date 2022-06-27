@@ -13,8 +13,9 @@ import PropTypes from 'prop-types';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import VideoLibraryIcon from '@mui/icons-material/VideoLibrary';
 import { useNavigate } from 'react-router-dom';
+import BottomBar from './BottomBar';
 
-function stringToColor(string) {
+const stringToColor = (string) => {
   let hash = 0;
   let i;
 
@@ -32,7 +33,7 @@ function stringToColor(string) {
   /* eslint-enable no-bitwise */
 
   return color;
-}
+};
 
 function TabPanel(props) {
   const {
@@ -93,7 +94,7 @@ export default function userProfile({ userName }) {
           }}
         >
           <Avatar sx={{
-            width: 90, height: 90, m: 1, bgcolor: stringToColor(userName),
+            width: 90, height: 90, m: 1, bgcolor: () => stringToColor(userName),
           }}
           >
             {userName.charAt(0)}
@@ -266,6 +267,7 @@ export default function userProfile({ userName }) {
 
         </Box>
       </Container>
+      <BottomBar />
 
     </ThemeProvider>
   );

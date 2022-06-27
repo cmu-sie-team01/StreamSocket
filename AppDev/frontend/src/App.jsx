@@ -6,7 +6,6 @@ import HomePage from './pages/home';
 import BasicTabs from './pages/SignUpTabs';
 import SignInTab from './pages/SignInTabs';
 import UserProfile from './component/UserProfile';
-import BottomBar from './component/BottomBar';
 import FollowPage from './pages/FollowPage';
 import UploadCard from './component/UploadCard';
 import PrimarySearchAppBar from './pages/NewHome';
@@ -34,7 +33,6 @@ function App() {
         <Route path="videoupload" element={<UploadCard />} />
         <Route path="newhome" element={<PrimarySearchAppBar />} />
       </Routes>
-      <BottomBar />
     </BrowserRouter>
 
   );
