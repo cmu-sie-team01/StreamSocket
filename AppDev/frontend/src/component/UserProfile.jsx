@@ -13,9 +13,12 @@ import PropTypes from 'prop-types';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import VideoLibraryIcon from '@mui/icons-material/VideoLibrary';
 import { useNavigate } from 'react-router-dom';
+import { v4 as uuidv4 } from 'uuid';
 import BottomBar from './BottomBar';
 
-const stringToColor = (string) => {
+const stringToColor = () => {
+  const string = uuidv4();
+
   let hash = 0;
   let i;
 
@@ -51,7 +54,7 @@ function TabPanel(props) {
     >
       {value === index && (
         <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
+          <Typography component="span">{children}</Typography>
         </Box>
       )}
     </div>
@@ -94,10 +97,10 @@ export default function userProfile({ userName }) {
           }}
         >
           <Avatar sx={{
-            width: 90, height: 90, m: 1, bgcolor: () => stringToColor(userName),
+            width: 90, height: 90, m: 1, bgcolor: () => stringToColor,
           }}
           >
-            {userName.charAt(0)}
+            {userName.charAt(0) == null ? 'default' : userName.charAt(0)}
           </Avatar>
 
           <Grid container>
@@ -107,7 +110,7 @@ export default function userProfile({ userName }) {
               justify="center"
               style={{ padding: '5%' }}
             >
-              <Typography component="h1" variant="h6" align="center">
+              <Typography component="span" variant="h6" align="center">
                 {userName}
               </Typography>
             </Grid>
@@ -118,7 +121,7 @@ export default function userProfile({ userName }) {
                   height: '100%',
                 }}
               >
-                <Typography component="h1" variant="body1" align="center">
+                <Typography component="span" variant="body1" align="center">
                   0
                 </Typography>
               </Box>
@@ -130,7 +133,7 @@ export default function userProfile({ userName }) {
                   height: '100%',
                 }}
               >
-                <Typography component="h1" variant="body1" align="center">
+                <Typography component="span" variant="body1" align="center">
                   1
                 </Typography>
               </Box>
@@ -142,7 +145,7 @@ export default function userProfile({ userName }) {
                   height: '100%',
                 }}
               >
-                <Typography component="h1" variant="body1" align="center">
+                <Typography component="span" variant="body1" align="center">
                   2
                 </Typography>
               </Box>
@@ -154,7 +157,7 @@ export default function userProfile({ userName }) {
                   height: '100%',
                 }}
               >
-                <Typography component="h1" variant="body1" align="center">
+                <Typography component="span" variant="body1" align="center">
                   Following
                 </Typography>
               </Box>
@@ -166,7 +169,7 @@ export default function userProfile({ userName }) {
                   height: '100%',
                 }}
               >
-                <Typography component="h1" variant="body1" align="center">
+                <Typography component="span" variant="body1" align="center">
                   Follower
                 </Typography>
               </Box>
@@ -178,7 +181,7 @@ export default function userProfile({ userName }) {
                   height: '100%',
                 }}
               >
-                <Typography component="h1" variant="body1" align="center">
+                <Typography component="span" variant="body1" align="center">
                   Likes
                 </Typography>
               </Box>

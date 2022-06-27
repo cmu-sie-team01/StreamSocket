@@ -4,7 +4,7 @@ import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
 import Stack from '@mui/material/Stack';
-import { CssBaseline } from '@mui/material';
+import { Collapse, CssBaseline } from '@mui/material';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
@@ -12,25 +12,58 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import Avatar from '@mui/material/Avatar';
 import { Storage } from 'aws-amplify';
 import { v4 as uuidv4 } from 'uuid';
+import CircularProgress from '@mui/material/CircularProgress';
+import { useState } from 'react';
+import Alert from '@mui/material/Alert';
+import CloseIcon from '@mui/icons-material/Close';
 import BottomBar from './BottomBar';
 
 const Input = styled('input')({
   display: 'none',
 });
 export default function UploadButtons() {
+  const [uploading, setUploaded] = useState(false);
+  const [uploadSuccess, setUploadSuccess] = React.useState();
+
   const onFileChange = async (file) => {
+    setUploaded(true);
     const fileName = uuidv4();
     const result = await Storage.put(`${fileName}.mp4`, file);
     console.log(result);
+
     if (result.key) {
+      setUploaded(false);
+      setUploadSuccess(true);
       localStorage.setItem('video', result.key);
     }
   };
   return (
     <div>
 
+      <Box sx={{ width: '100%' }}>
+        <Collapse in={uploadSuccess}>
+          <Alert
+            action={(
+              <IconButton
+                aria-label="close"
+                color="inherit"
+                size="small"
+                onClick={() => {
+                  setUploadSuccess(false);
+                }}
+              >
+                <CloseIcon fontSize="inherit" />
+              </IconButton>
+              )}
+            sx={{ mb: 2 }}
+          >
+            Video Upload successfully!
+          </Alert>
+        </Collapse>
+      </Box>
       <CssBaseline />
       <Container maxWidth="xs" sx={{ marginTop: '5%' }}>
+
         <Box sx={{
           bgcolor: '#DCDCDC',
           height: '80vh',
@@ -60,6 +93,7 @@ export default function UploadButtons() {
               align="center"
               display="flex"
               justifyContent="center"
+              marginTop="10%"
             >
               Select a Video to upload
             </Typography>
@@ -112,9 +146,15 @@ export default function UploadButtons() {
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="contained-button-file">
                 <Input accept="video/*" id="contained-button-file" multiple type="file" onChange={(e) => onFileChange(e.target.files[0])} />
-                <Button variant="contained" component="span">
-                  Upload
-                </Button>
+                {
+                  uploading ? (
+                    <CircularProgress />
+                  ) : (
+                    <Button variant="contained" component="span">
+                      Upload
+                    </Button>
+                  )
+                }
               </label>
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="icon-button-file">
