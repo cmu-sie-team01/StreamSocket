@@ -13,8 +13,9 @@ import PropTypes from 'prop-types';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import VideoLibraryIcon from '@mui/icons-material/VideoLibrary';
 import { useNavigate } from 'react-router-dom';
+import BottomBar from './BottomBar';
 
-function stringToColor(string) {
+const stringToColor = (string) => {
   let hash = 0;
   let i;
 
@@ -32,7 +33,7 @@ function stringToColor(string) {
   /* eslint-enable no-bitwise */
 
   return color;
-}
+};
 
 function TabPanel(props) {
   const {
@@ -93,7 +94,7 @@ export default function userProfile({ userName }) {
           }}
         >
           <Avatar sx={{
-            width: 90, height: 90, m: 1, bgcolor: stringToColor(userName),
+            width: 90, height: 90, m: 1, bgcolor: () => stringToColor(userName),
           }}
           >
             {userName.charAt(0)}
@@ -208,35 +209,65 @@ export default function userProfile({ userName }) {
           </Box>
           <TabPanel value={value} index={0}>
             Your Videos
-            <Box
-              sx={{
-                width: 300,
-                height: 300,
-                maxHeight: 300,
-              }}
-            >
-              <video controls className="video_card" autoPlay muted webkit-playsinline="true" playsInline>
-                <source src="https://streamsocketvideo.s3.us-west-1.amazonaws.com/video/1.mp4" type="video/mp4" />
-              </video>
-            </Box>
+            <Container maxWidth="xs" sx={{ padding: 0, height: '100vh' }}>
+              <CssBaseline />
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'flex-start',
+                }}
+              >
+
+                <video
+                  style={{
+                    left: 0, height: '20vh', width: '10vw', borderRadius: '12px',
+                  }}
+                  controls
+                  className="video_card"
+                  autoPlay
+                  muted
+                  webkit-playsinline="true"
+                  playsInline
+                >
+                  <source src="https://streamsocketvideo.s3.us-west-1.amazonaws.com/video/1.mp4" type="video/mp4" />
+                </video>
+              </Box>
+            </Container>
 
           </TabPanel>
           <TabPanel value={value} index={1}>
             Your liked Videos
-            <Box
-              sx={{
-                width: 300,
-                height: 300,
-              }}
-            >
-              <video controls className="video_card" autoPlay muted webkit-playsinline="true" playsInline>
-                <source src="https://streamsocketvideo.s3.us-west-1.amazonaws.com/video/3.mp4" type="video/mp4" />
-              </video>
-            </Box>
+            <Container maxWidth="xs" sx={{ padding: 0, height: '100vh' }}>
+              <CssBaseline />
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'flex-start',
+                }}
+              >
+
+                <video
+                  style={{
+                    left: 0, height: '20vh', width: '10vw', borderRadius: '12px',
+                  }}
+                  controls
+                  className="video_card"
+                  autoPlay
+                  muted
+                  webkit-playsinline="true"
+                  playsInline
+                >
+                  <source src="https://streamsocketvideo.s3.us-west-1.amazonaws.com/video/1.mp4" type="video/mp4" />
+                </video>
+              </Box>
+            </Container>
           </TabPanel>
 
         </Box>
       </Container>
+      <BottomBar />
 
     </ThemeProvider>
   );

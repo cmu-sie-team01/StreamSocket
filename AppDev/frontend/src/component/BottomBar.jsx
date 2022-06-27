@@ -20,7 +20,6 @@ export default function LabelBottomNavigation() {
   return (
     <BottomNavigation
       sx={{
-
         height: '7vh', width: '100vw', position: 'absolute', bottom: 0,
       }}
       value={value}
@@ -35,6 +34,8 @@ export default function LabelBottomNavigation() {
       <BottomNavigationAction
         value="discover"
         icon={<ExploreIcon />}
+        component={Link}
+        to="/newhome"
       />
       <BottomNavigationAction
         value="add"
