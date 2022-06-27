@@ -9,6 +9,11 @@ import UserProfile from './component/UserProfile';
 import BottomBar from './component/BottomBar';
 import FollowPage from './pages/FollowPage';
 import NewHomePage from './pages/NewHomePage';
+import VideoUpload from "./pages/viedoupload";
+import { Amplify, Auth } from 'aws-amplify';
+import awsconfig from './aws-exports';
+Amplify.configure(awsconfig);
+Auth.configure(awsconfig)
 
 // eslint-disable-next-line react/prop-types
 function ChildComponent({ userName }) {
@@ -31,7 +36,7 @@ function App() {
         <Route path="signin" element={<SignInTab />} />
         <Route path="userprofile" element={<ChildComponent userName={userName2} />} />
         <Route path="following" element={<FollowPage />} />
-        <Route path="videoupload" element={<NewHomePage />} />
+        <Route path="videoupload" element={<VideoUpload />} />
       </Routes>
       <BottomBar />
     </BrowserRouter>

@@ -17,7 +17,7 @@ export default function () {
       >
 
         <video style={{ left: 0, height: '100%', width: '100%' }} controls className="video_card" autoPlay muted webkit-playsinline="true" playsInline>
-          <source src="https://streamsocketvideo.s3.us-west-1.amazonaws.com/video/1.mp4" type="video/mp4" />
+          <source src="https://streamsocketvideos191545-dev.s3.us-west-1.amazonaws.com/public/5.mp4" type="video/mp4" />
         </video>
       </Box>
     </Container>
