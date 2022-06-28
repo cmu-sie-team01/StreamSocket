@@ -24,8 +24,15 @@ import {
   Link,
 } from 'react-router-dom';
 import BathtubIcon from '@mui/icons-material/Bathtub';
+// import FavoriteIcon from '@mui/icons-material/Favorite';
+// import ReplyIcon from '@mui/icons-material/Reply';
 
-const drawerWidth = 240;
+import Fab from '@mui/material/Fab';
+import CommentIcon from '@mui/icons-material/Comment';
+import Paper from '@mui/material/Paper';
+import VideoBlock from '../component/VideoBlock';
+
+const drawerWidth = 200;
 
 const openedMixin = (theme) => ({
   width: drawerWidth,
@@ -107,6 +114,7 @@ export default function MiniDrawer() {
   if (localStorage.getItem('video')) {
     newVideoSrc = `https://streamsocketvideos191545-dev.s3.us-west-1.amazonaws.com/public/${localStorage.getItem('video')}`;
   }
+
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
@@ -220,21 +228,64 @@ export default function MiniDrawer() {
           ))}
         </List>
       </Drawer>
-      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+      <Box component="main" sx={{ flexGrow: 1, p: 1 }}>
         <DrawerHeader />
-        <video
-          style={{
-            width: '100%', borderRadius: '16px',
-          }}
-          controls
-          className="video_card"
-          autoPlay
-          muted
-          webkit-playsinline="true"
-          playsInline
+        <Box sx={{
+          borderRadius: '16px',
+          position: 'relative',
+          maxWidth: '800px',
+
+        }}
         >
-          <source src="https://streamsocketvideo.s3.us-west-1.amazonaws.com/video/1.mp4" />
-        </video>
+          <Paper
+            elevation={3}
+            style={{
+              borderRadius: '16px',
+            }}
+          >
+            <video
+              style={{
+                width: '90%',
+                borderRadius: '16px',
+                maxWidth: '300px',
+                margin: '5%',
+
+                display: 'inline-block',
+              }}
+              controls
+              className="video_card"
+              autoPlay
+              muted
+              webkit-playsinline="true"
+              playsInline
+            >
+              <source src="https://streamsocketvideo.s3.us-west-1.amazonaws.com/video/1.mp4" />
+            </video>
+            <Fab
+              color="secondary"
+              aria-label="like"
+              sx={{
+                display: 'inline-block',
+              }}
+            >
+              <CommentIcon />
+            </Fab>
+            <Fab
+              color="primary"
+              aria-label="like"
+              sx={{
+                display: 'inline-block',
+              }}
+            >
+              <CommentIcon />
+            </Fab>
+          </Paper>
+
+        </Box>
+
+        <VideoBlock
+          srcIn="https://streamsocketvideo.s3.us-west-1.amazonaws.com/video/2.mp4"
+        />
         <video
           style={{
             width: '100%', borderRadius: '16px',
