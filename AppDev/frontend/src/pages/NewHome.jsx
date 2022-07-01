@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { styled, useTheme } from '@mui/material/styles';
+import { createTheme, styled, useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import MuiDrawer from '@mui/material/Drawer';
 import MuiAppBar from '@mui/material/AppBar';
@@ -31,11 +31,33 @@ import Badge from '@mui/material/Badge';
 import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import AccountCircle from '@mui/icons-material/AccountCircle';
-import { Hidden } from '@mui/material';
+import { Hidden, ThemeProvider } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
 import VideoBlock from '../component/VideoBlock';
 
-const drawerWidth = 200;
-
+const drawerWidth = 240;
+const theme1 = createTheme({
+  palette: {
+    primary: {
+      light: '#2F4F4F',
+      main: '#2F4F4F',
+      dark: '#002884',
+      contrastText: '#fff',
+    },
+    secondary: {
+      light: '#ff7961',
+      main: '#f44336',
+      dark: '#ba000d',
+      contrastText: '#000',
+    },
+    third: {
+      light: '#5F9EA0',
+      main: '#5F9EA0',
+      dark: '#5F9EA0',
+      contrastText: '#000',
+    },
+  },
+});
 const openedMixin = (theme) => ({
   width: drawerWidth,
   transition: theme.transitions.create('width', {
@@ -118,133 +140,85 @@ export default function MiniDrawer() {
   }
 
   return (
-    <Box sx={{ display: 'flex' }}>
-      <CssBaseline />
-      <AppBar
-        position="fixed"
-        open={open}
-        color="primary"
-      >
-        <Toolbar>
-          <Hidden only={['xs']}>
-            <IconButton
-              color="inherit"
-              aria-label="open drawer"
-              onClick={handleDrawerOpen}
-              edge="start"
-              sx={{
-                ...(open && { display: 'none' }),
-              }}
-            >
-              <MenuIcon />
+    <ThemeProvider theme={theme1}>
 
-            </IconButton>
-          </Hidden>
-          <Box sx={{ display: { xs: 'flex', md: 'flex' } }}>
-            <BathtubIcon
-              m={1}
-              size="large"
-            />
-            <Typography
-              variant="h7"
-              noWrap
-              component="div"
-              sx={{
-                marginRight: 5,
-                ...(open && { display: 'none' }),
-              }}
-            >
-              Stream Socket
-            </Typography>
-          </Box>
-          <Box sx={{ flexGrow: 1 }} />
-          <Box sx={{ display: { xs: 'flex', md: 'flex' } }}>
-            <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-              <Badge badgeContent={4} color="error">
-                <MailIcon />
-              </Badge>
-            </IconButton>
-            <IconButton
-              size="large"
-              aria-label="show 17 new notifications"
-              color="inherit"
-            >
-              <Badge badgeContent={17} color="error">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton>
-            <IconButton
-              size="large"
-              edge="end"
-              aria-label="account of current user"
-              aria-haspopup="true"
-              color="inherit"
-              component={Link}
-              to="/signin"
-            >
-              <AccountCircle />
-            </IconButton>
-          </Box>
-        </Toolbar>
-      </AppBar>
-      <Drawer variant="permanent" open={open}>
-        <DrawerHeader>
-          <IconButton onClick={handleDrawerClose}>
-            {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-          </IconButton>
-        </DrawerHeader>
-        <Divider />
-        <List>
-          <ListItem disablePadding sx={{ display: 'block' }}>
-            <ListItemButton
-              sx={{
-                minHeight: 48,
-                justifyContent: open ? 'initial' : 'center',
-                px: 2.5,
-              }}
-              component={Link}
-              to="/"
-            >
-              <ListItemIcon
+      <Box sx={{ display: 'flex' }}>
+        <CssBaseline />
+        <AppBar
+          position="fixed"
+          open={open}
+          color="primary"
+        >
+          <Toolbar>
+            <Hidden only={['xs']}>
+              <IconButton
+                color="inherit"
+                aria-label="open drawer"
+                onClick={handleDrawerOpen}
+                edge="start"
                 sx={{
-                  minWidth: 0,
-                  mr: open ? 3 : 'auto',
-                  justifyContent: 'center',
+                  ...(open && { display: 'none' }),
                 }}
               >
-                <HomeIcon />
-              </ListItemIcon>
-              <ListItemText primary="For you" sx={{ opacity: open ? 1 : 0 }} />
-            </ListItemButton>
-          </ListItem>
+                <MenuIcon />
 
-          <ListItem disablePadding sx={{ display: 'block' }}>
-            <ListItemButton
-              sx={{
-                minHeight: 48,
-                justifyContent: open ? 'initial' : 'center',
-                px: 2.5,
-              }}
-            >
+              </IconButton>
+            </Hidden>
+            <BathtubIcon sx={{ margin: '1%' }} />
 
-              <ListItemIcon
+            <Box sx={{ display: { xs: 'flex', md: 'flex' } }}>
+
+              <Typography
+                variant="h6"
+                noWrap
+                component="div"
                 sx={{
-                  minWidth: 0,
-                  mr: open ? 3 : 'auto',
-                  justifyContent: 'center',
+                  marginRight: 5,
+                  marginLeft: 1,
                 }}
               >
-                <PeopleAltIcon />
-              </ListItemIcon>
-              <ListItemText primary="Follow" sx={{ opacity: open ? 1 : 0 }} />
-            </ListItemButton>
-          </ListItem>
-
-        </List>
-        <Divider />
-        <List>
-          {['user 1', 'User 2', 'User 3'].map((text) => (
-            <ListItem key={text} disablePadding sx={{ display: 'block' }}>
+                Stream Socket
+              </Typography>
+            </Box>
+            <Box sx={{ flexGrow: 1 }} />
+            <Box sx={{ display: { xs: 'flex', md: 'flex' } }}>
+              <IconButton size="large" aria-label="show 4 new mails" color="inherit">
+                <Badge badgeContent={4} color="error">
+                  <MailIcon />
+                </Badge>
+              </IconButton>
+              <IconButton
+                size="large"
+                aria-label="show 17 new notifications"
+                color="inherit"
+              >
+                <Badge badgeContent={17} color="error">
+                  <NotificationsIcon />
+                </Badge>
+              </IconButton>
+              <IconButton
+                size="large"
+                edge="end"
+                aria-label="account of current user"
+                aria-haspopup="true"
+                color="inherit"
+                component={Link}
+                to="/signin"
+              >
+                <AccountCircle />
+              </IconButton>
+            </Box>
+          </Toolbar>
+        </AppBar>
+        <Drawer variant="permanent" open={open}>
+          <DrawerHeader>
+            <IconButton onClick={handleDrawerClose}>
+              {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+            </IconButton>
+          </DrawerHeader>
+          <Divider />
+          <List>
+            <ListItem disablePadding sx={{ display: 'block' }}>
               <ListItemButton
                 sx={{
                   minHeight: 48,
@@ -252,46 +226,118 @@ export default function MiniDrawer() {
                   px: 2.5,
                 }}
                 component={Link}
-                to="/userprofile"
+                to="/newhome"
               >
                 <ListItemIcon
                   sx={{
                     minWidth: 0,
                     mr: open ? 3 : 'auto',
                     justifyContent: 'center',
-
                   }}
-
                 >
-                  <Avatar sx={{
-                    m: 1, bgcolor: deepOrange[500],
-                  }}
-                  >
-                    u
-                  </Avatar>
+                  <HomeIcon />
                 </ListItemIcon>
-                <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
+                <ListItemText primary="For you" sx={{ opacity: open ? 1 : 0 }} />
               </ListItemButton>
             </ListItem>
-          ))}
-        </List>
-      </Drawer>
-      <Box component="main" sx={{ flexGrow: 1, p: 1, m: 1 }}>
-        <DrawerHeader />
-        <VideoBlock
-          srcIn="https://streamsocketvideo.s3.us-west-1.amazonaws.com/video/1.mp4"
-        />
-        <VideoBlock
-          srcIn="https://streamsocketvideo.s3.us-west-1.amazonaws.com/video/3.mp4"
-        />
-        <VideoBlock
-          srcIn="https://streamsocketvideo.s3.us-west-1.amazonaws.com/video/4.mp4"
-        />
-        <VideoBlock
-          srcIn={newVideoSrc}
-        />
 
+            <ListItem disablePadding sx={{ display: 'block' }}>
+              <ListItemButton
+                sx={{
+                  minHeight: 48,
+                  justifyContent: open ? 'initial' : 'center',
+                  px: 2.5,
+                }}
+              >
+
+                <ListItemIcon
+                  sx={{
+                    minWidth: 0,
+                    mr: open ? 3 : 'auto',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <PeopleAltIcon />
+                </ListItemIcon>
+                <ListItemText primary="Follow" sx={{ opacity: open ? 1 : 0 }} />
+              </ListItemButton>
+            </ListItem>
+            <ListItem disablePadding sx={{ display: 'block' }}>
+              <ListItemButton
+                sx={{
+                  minHeight: 48,
+                  justifyContent: open ? 'initial' : 'center',
+                  px: 2.5,
+                }}
+                component={Link}
+                to="/videoupload"
+              >
+
+                <ListItemIcon
+                  sx={{
+                    minWidth: 0,
+                    mr: open ? 3 : 'auto',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <AddIcon />
+                </ListItemIcon>
+                <ListItemText primary="Follow" sx={{ opacity: open ? 1 : 0 }} />
+              </ListItemButton>
+            </ListItem>
+
+          </List>
+          <Divider />
+          <List>
+            {['User 1', 'User 2', 'User 3'].map((text) => (
+              <ListItem key={text} disablePadding sx={{ display: 'block' }}>
+                <ListItemButton
+                  sx={{
+                    minHeight: 48,
+                    justifyContent: open ? 'initial' : 'center',
+                    px: 2.5,
+                  }}
+                  component={Link}
+                  to="/userprofile"
+                >
+                  <ListItemIcon
+                    sx={{
+                      minWidth: 0,
+                      mr: open ? 3 : 'auto',
+                      justifyContent: 'center',
+
+                    }}
+                  >
+                    <Avatar sx={{
+                      m: 1, bgcolor: deepOrange[500],
+                    }}
+                    >
+                      u
+                    </Avatar>
+                  </ListItemIcon>
+                  <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
+                </ListItemButton>
+              </ListItem>
+            ))}
+          </List>
+        </Drawer>
+        <Box component="main" sx={{ flexGrow: 1, p: 1, m: 1 }}>
+          <DrawerHeader />
+          <VideoBlock
+            srcIn="https://streamsocketvideo.s3.us-west-1.amazonaws.com/video/1.mp4"
+          />
+          <VideoBlock
+            srcIn="https://streamsocketvideo.s3.us-west-1.amazonaws.com/video/3.mp4"
+          />
+          <VideoBlock
+            srcIn="https://streamsocketvideo.s3.us-west-1.amazonaws.com/video/4.mp4"
+          />
+          <VideoBlock
+            srcIn={newVideoSrc}
+          />
+
+        </Box>
       </Box>
-    </Box>
+    </ThemeProvider>
   );
 }
