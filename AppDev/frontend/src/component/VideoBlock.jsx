@@ -1,9 +1,8 @@
 import React from 'react';
 import Fab from '@mui/material/Fab';
-import ReplyIcon from '@mui/icons-material/Reply';
 import CommentIcon from '@mui/icons-material/Comment';
-import FavoriteIcon from '@mui/icons-material/Favorite';
 import Box from '@mui/material/Box';
+import Paper from '@mui/material/Paper';
 
 // eslint-disable-next-line react/prop-types
 export default function VideoBlock({ srcIn }) {
@@ -11,60 +10,55 @@ export default function VideoBlock({ srcIn }) {
   return (
     <Box sx={{
       borderRadius: '16px',
-      display: 'flex',
       position: 'relative',
-
+      maxWidth: '800px',
+      marginBottom: '10px',
     }}
     >
-      <video
+      <Paper
+        elevation={3}
         style={{
-          width: '100%', borderRadius: '16px',
-        }}
-        controls
-        className="video_card"
-        autoPlay
-        muted
-        webkit-playsinline="true"
-        playsInline
-      >
-        <source src={srcIn} />
-      </video>
-      <Fab
-        color="primary"
-        disabled
-        aria-label="like"
-        sx={{
-          position: 'absolute',
-          bottom: '8%',
-          right: 16,
+          borderRadius: '16px',
         }}
       >
-        <ReplyIcon />
-      </Fab>
-      <Fab
-        color="primary"
-        disabled
-        aria-label="like"
-        sx={{
-          position: 'absolute',
-          bottom: '20%',
-          right: 16,
-        }}
-      >
-        <CommentIcon />
-      </Fab>
-      <Fab
-        color="primary"
-        disabled
-        aria-label="like"
-        sx={{
-          position: 'absolute',
-          bottom: '32%',
-          right: 16,
-        }}
-      >
-        <FavoriteIcon />
-      </Fab>
+        <video
+          style={{
+            width: '90%',
+            borderRadius: '16px',
+            maxWidth: '300px',
+            margin: '5%',
+
+            display: 'inline-block',
+          }}
+          controls
+          className="video_card"
+          autoPlay
+          muted
+          webkit-playsinline="true"
+          playsInline
+        >
+          <source src={srcIn} />
+        </video>
+        <Fab
+          color="secondary"
+          aria-label="like"
+          sx={{
+            display: 'inline-block',
+          }}
+        >
+          <CommentIcon />
+        </Fab>
+        <Fab
+          color="primary"
+          aria-label="like"
+          sx={{
+            display: 'inline-block',
+          }}
+        >
+          <CommentIcon />
+        </Fab>
+      </Paper>
+
     </Box>
   );
 }

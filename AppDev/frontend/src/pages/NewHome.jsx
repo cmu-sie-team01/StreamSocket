@@ -27,9 +27,6 @@ import BathtubIcon from '@mui/icons-material/Bathtub';
 // import FavoriteIcon from '@mui/icons-material/Favorite';
 // import ReplyIcon from '@mui/icons-material/Reply';
 
-import Fab from '@mui/material/Fab';
-import CommentIcon from '@mui/icons-material/Comment';
-import Paper from '@mui/material/Paper';
 import Badge from '@mui/material/Badge';
 import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
@@ -271,103 +268,21 @@ export default function MiniDrawer() {
           ))}
         </List>
       </Drawer>
-      <Box component="main" sx={{ flexGrow: 1, p: 1 }}>
+      <Box component="main" sx={{ flexGrow: 1, p: 1, m: 1 }}>
         <DrawerHeader />
-        <Box sx={{
-          borderRadius: '16px',
-          position: 'relative',
-          maxWidth: '800px',
-
-        }}
-        >
-          <Paper
-            elevation={3}
-            style={{
-              borderRadius: '16px',
-            }}
-          >
-            <video
-              style={{
-                width: '90%',
-                borderRadius: '16px',
-                maxWidth: '300px',
-                margin: '5%',
-
-                display: 'inline-block',
-              }}
-              controls
-              className="video_card"
-              autoPlay
-              muted
-              webkit-playsinline="true"
-              playsInline
-            >
-              <source src="https://streamsocketvideo.s3.us-west-1.amazonaws.com/video/1.mp4" />
-            </video>
-            <Fab
-              color="secondary"
-              aria-label="like"
-              sx={{
-                display: 'inline-block',
-              }}
-            >
-              <CommentIcon />
-            </Fab>
-            <Fab
-              color="primary"
-              aria-label="like"
-              sx={{
-                display: 'inline-block',
-              }}
-            >
-              <CommentIcon />
-            </Fab>
-          </Paper>
-
-        </Box>
-
         <VideoBlock
-          srcIn="https://streamsocketvideo.s3.us-west-1.amazonaws.com/video/2.mp4"
+          srcIn="https://streamsocketvideo.s3.us-west-1.amazonaws.com/video/1.mp4"
         />
-        <video
-          style={{
-            width: '100%', borderRadius: '16px',
-          }}
-          controls
-          className="video_card"
-          autoPlay
-          muted
-          webkit-playsinline="true"
-          playsInline
-        >
-          <source src="https://streamsocketvideo.s3.us-west-1.amazonaws.com/video/4.mp4" type="video/mp4" />
-        </video>
-        <video
-          style={{
-            width: '100%', borderRadius: '16px',
-          }}
-          controls
-          className="video_card"
-          autoPlay
-          muted
-          webkit-playsinline="true"
-          playsInline
-        >
-          <source src="https://streamsocketvideo.s3.us-west-1.amazonaws.com/video/3.mp4" type="video/mp4" />
-        </video>
-        <video
-          style={{
-            width: '100%', borderRadius: '16px',
-          }}
-          controls
-          className="video_card"
-          autoPlay
-          muted
-          webkit-playsinline="true"
-          playsInline
-        >
-          <source src={newVideoSrc} />
-        </video>
+        <VideoBlock
+          srcIn="https://streamsocketvideo.s3.us-west-1.amazonaws.com/video/3.mp4"
+        />
+        <VideoBlock
+          srcIn="https://streamsocketvideo.s3.us-west-1.amazonaws.com/video/4.mp4"
+        />
+        <VideoBlock
+          srcIn={newVideoSrc}
+        />
+
       </Box>
     </Box>
   );
