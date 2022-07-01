@@ -12,7 +12,8 @@ export default function VideoBlock({ srcIn }) {
       borderRadius: '16px',
       position: 'relative',
       maxWidth: '800px',
-      marginBottom: '10px',
+      margin: 'auto',
+      marginBottom: '1%',
     }}
     >
       <Paper

@@ -31,6 +31,7 @@ import Badge from '@mui/material/Badge';
 import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import AccountCircle from '@mui/icons-material/AccountCircle';
+import { Hidden } from '@mui/material';
 import VideoBlock from '../component/VideoBlock';
 
 const drawerWidth = 200;
@@ -123,21 +124,22 @@ export default function MiniDrawer() {
         position="fixed"
         open={open}
         color="primary"
-
       >
         <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            edge="start"
-            sx={{
-              ...(open && { display: 'none' }),
-            }}
-          >
-            <MenuIcon />
+          <Hidden only={['xs']}>
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              onClick={handleDrawerOpen}
+              edge="start"
+              sx={{
+                ...(open && { display: 'none' }),
+              }}
+            >
+              <MenuIcon />
 
-          </IconButton>
+            </IconButton>
+          </Hidden>
           <Box sx={{ display: { xs: 'flex', md: 'flex' } }}>
             <BathtubIcon
               m={1}
@@ -177,6 +179,8 @@ export default function MiniDrawer() {
               aria-label="account of current user"
               aria-haspopup="true"
               color="inherit"
+              component={Link}
+              to="/signin"
             >
               <AccountCircle />
             </IconButton>
@@ -247,13 +251,17 @@ export default function MiniDrawer() {
                   justifyContent: open ? 'initial' : 'center',
                   px: 2.5,
                 }}
+                component={Link}
+                to="/userprofile"
               >
                 <ListItemIcon
                   sx={{
                     minWidth: 0,
                     mr: open ? 3 : 'auto',
                     justifyContent: 'center',
+
                   }}
+
                 >
                   <Avatar sx={{
                     m: 1, bgcolor: deepOrange[500],
