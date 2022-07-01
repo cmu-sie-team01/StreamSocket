@@ -30,6 +30,10 @@ import BathtubIcon from '@mui/icons-material/Bathtub';
 import Fab from '@mui/material/Fab';
 import CommentIcon from '@mui/icons-material/Comment';
 import Paper from '@mui/material/Paper';
+import Badge from '@mui/material/Badge';
+import MailIcon from '@mui/icons-material/Mail';
+import NotificationsIcon from '@mui/icons-material/Notifications';
+import AccountCircle from '@mui/icons-material/AccountCircle';
 import VideoBlock from '../component/VideoBlock';
 
 const drawerWidth = 200;
@@ -131,16 +135,55 @@ export default function MiniDrawer() {
             onClick={handleDrawerOpen}
             edge="start"
             sx={{
-              marginRight: 5,
               ...(open && { display: 'none' }),
             }}
           >
             <MenuIcon />
+
           </IconButton>
-          <Typography variant="h6" noWrap component="div">
-            <BathtubIcon m={10} />
-            Stream Socket
-          </Typography>
+          <Box sx={{ display: { xs: 'flex', md: 'flex' } }}>
+            <BathtubIcon
+              m={1}
+              size="large"
+            />
+            <Typography
+              variant="h7"
+              noWrap
+              component="div"
+              sx={{
+                marginRight: 5,
+                ...(open && { display: 'none' }),
+              }}
+            >
+              Stream Socket
+            </Typography>
+          </Box>
+          <Box sx={{ flexGrow: 1 }} />
+          <Box sx={{ display: { xs: 'flex', md: 'flex' } }}>
+            <IconButton size="large" aria-label="show 4 new mails" color="inherit">
+              <Badge badgeContent={4} color="error">
+                <MailIcon />
+              </Badge>
+            </IconButton>
+            <IconButton
+              size="large"
+              aria-label="show 17 new notifications"
+              color="inherit"
+            >
+              <Badge badgeContent={17} color="error">
+                <NotificationsIcon />
+              </Badge>
+            </IconButton>
+            <IconButton
+              size="large"
+              edge="end"
+              aria-label="account of current user"
+              aria-haspopup="true"
+              color="inherit"
+            >
+              <AccountCircle />
+            </IconButton>
+          </Box>
         </Toolbar>
       </AppBar>
       <Drawer variant="permanent" open={open}>

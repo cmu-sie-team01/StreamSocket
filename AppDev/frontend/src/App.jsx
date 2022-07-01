@@ -11,6 +11,7 @@ import FollowPage from './pages/FollowPage';
 import NewHome from './pages/NewHome';
 import UploadCard from './component/UploadCard';
 import awsconfig from './aws-exports';
+import Test from './component/Test';
 
 Amplify.configure(awsconfig);
 Auth.configure(awsconfig);
@@ -38,6 +39,7 @@ function App() {
         <Route path="following" element={<FollowPage />} />
         <Route path="videoupload" element={<UploadCard />} />
         <Route path="newhome" element={<NewHome />} />
+        <Route path="test" element={<Test />} />
       </Routes>
     </BrowserRouter>
 
