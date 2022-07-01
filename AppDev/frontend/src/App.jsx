@@ -32,13 +32,14 @@ function App() {
     <BrowserRouter>
       <ThemeProvider theme={theme} />
       <Routes>
-        <Route path="/" element={<HomePage />} />
+        <Route path="/" element={<SignInTab />} />
+        <Route path="/oldhome" element={<HomePage />} />
         <Route path="signup" element={<BasicTabs />} />
         <Route path="signin" element={<SignInTab />} />
         <Route path="userprofile" element={<ChildComponent userName={userName2} />} />
         <Route path="following" element={<FollowPage />} />
         <Route path="videoupload" element={<UploadCard />} />
-        <Route path="newhome" element={<NewHome />} />
+        <Route path="/newhome" element={<NewHome />} />
         <Route path="test" element={<Test />} />
       </Routes>
     </BrowserRouter>

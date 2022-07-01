@@ -16,7 +16,8 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { useState } from 'react';
 import Alert from '@mui/material/Alert';
 import CloseIcon from '@mui/icons-material/Close';
-import BottomBar from './BottomBar';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { Link } from 'react-router-dom';
 
 const Input = styled('input')({
   display: 'none',
@@ -39,8 +40,8 @@ export default function UploadButtons() {
   };
   return (
     <div>
+      <Box sx={{ width: '100%', height: '100%' }}>
 
-      <Box sx={{ width: '100%' }}>
         <Collapse in={uploadSuccess}>
           <Alert
             action={(
@@ -60,13 +61,22 @@ export default function UploadButtons() {
             Video Upload successfully!
           </Alert>
         </Collapse>
+        <Button
+          component={Link}
+          to="/newhome"
+        >
+          <ArrowBackIcon sx={{
+
+          }}
+          />
+        </Button>
       </Box>
       <CssBaseline />
-      <Container maxWidth="xs" sx={{ marginTop: '5%' }}>
+      <Container maxWidth="xs" sx={{ marginTop: '3%' }}>
 
         <Box sx={{
           bgcolor: '#DCDCDC',
-          height: '80vh',
+          height: '85vh',
           borderStyle: 'dashed',
           borderWidth: 3,
           borderRadius: '8px',
@@ -76,7 +86,7 @@ export default function UploadButtons() {
           <Box sx={{
             display: 'block',
             width: '100%',
-            height: '90%',
+            height: '100%',
             alignItems: 'center',
           }}
           >
@@ -168,7 +178,6 @@ export default function UploadButtons() {
           </Box>
         </Box>
       </Container>
-      <BottomBar />
 
     </div>
   );
