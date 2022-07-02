@@ -13,6 +13,8 @@ import { deepOrange } from '@mui/material/colors';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import ReactPlayer from 'react-player';
+import TestCaption from './test.vtt';
 
 const theme = createTheme({
   palette: {
@@ -112,6 +114,7 @@ export default function VideoBlock({ srcIn }) {
                   Follow
                 </Button>
               </Grid>
+
               <Grid item xs={12}>
                 <Box
                   sx={{
@@ -173,22 +176,37 @@ export default function VideoBlock({ srcIn }) {
                   >
                     <ShareIcon />
                   </Fab>
-                  <video
+
+                  <ReactPlayer
                     style={{
                       width: '100%',
                       borderRadius: '16px',
                       maxWidth: '350px',
                       margin: '3%',
                     }}
-                    controls
-                    className="video_card"
-                    autoPlay
-                    muted
                     webkit-playsinline="true"
-                    playsInline
-                  >
-                    <source src={srcIn} />
-                  </video>
+                    playsinline
+                    url="https://download.ted.com/talks/KateDarling_2018S-950k.mp4"
+                    controls
+                    width="100%"
+                    height="500px"
+                    muted
+                    className="react-workout-player"
+                    config={{
+                      file: {
+                        attributes: {
+                          crossOrigin: 'true',
+                        },
+                        tracks: [
+                          {
+                            kind: 'subtitles', src: { TestCaption }, srcLang: 'en', default: true,
+                          },
+                          { kind: 'subtitles', src: 'subs/subtitles.ja.vtt', srcLang: 'ja' },
+                          { kind: 'subtitles', src: 'subs/subtitles.de.vtt', srcLang: 'de' },
+                        ],
+                      },
+                    }}
+                  />
 
                 </Box>
               </Grid>
