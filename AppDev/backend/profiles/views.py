@@ -4,6 +4,7 @@ from rest_framework.views import APIView
 from .serializers import ProfileViewSerializer, FollowingSerializer, FollowerSerializer
 from .models import Profile
 from users.models import User
+from videos.models import Video
 from rest_framework.response import Response
 
 
@@ -39,6 +40,8 @@ class ProfileView(RetrieveAPIView):
 
     def get_object(self):
         profile = Profile.objects.get(user_id=self.request.user.id)
+        profile.videos_upload = Video.objects.filter(author=self.request.user.id)
+        profile.videos_like = User.objects.get(id=self.request.user.id).likes.all()
         return profile
 
 
