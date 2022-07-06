@@ -6,7 +6,6 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import SignInPhone from './SignInPhone';
 import SignInEmail from './SignInEmail';
-import BottomBar from '../component/BottomBar';
 
 function TabPanel(props) {
   const {
@@ -71,7 +70,6 @@ export default function BasicTabs() {
       <TabPanel value={value} index={1}>
         <SignInPhone />
       </TabPanel>
-      <BottomBar />
 
     </Box>
   );

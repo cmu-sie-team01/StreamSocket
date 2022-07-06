@@ -12,8 +12,8 @@ import Tab from '@mui/material/Tab';
 import PropTypes from 'prop-types';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import VideoLibraryIcon from '@mui/icons-material/VideoLibrary';
-import { useNavigate } from 'react-router-dom';
-import BottomBar from './BottomBar';
+import { Link, useNavigate } from 'react-router-dom';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 function TabPanel(props) {
   const {
@@ -54,7 +54,6 @@ function a11yProps(index) {
 export default function userProfile({ userName }) {
   const theme = createTheme();
   const navigate = useNavigate();
-
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event, newValue) => {
@@ -64,6 +63,15 @@ export default function userProfile({ userName }) {
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
+        <Button
+          component={Link}
+          to="/newhome"
+        >
+          <ArrowBackIcon sx={{
+            marginTop: '10px',
+          }}
+          />
+        </Button>
         <CssBaseline />
         <Box
           sx={{
@@ -247,7 +255,6 @@ export default function userProfile({ userName }) {
 
         </Box>
       </Container>
-      <BottomBar />
 
     </ThemeProvider>
   );
