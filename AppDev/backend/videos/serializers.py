@@ -8,6 +8,7 @@ class VideoUploadSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+
 class VideoLikeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Video
