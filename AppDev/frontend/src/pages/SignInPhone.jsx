@@ -50,7 +50,7 @@ export default function SignUpPhone() {
   // count down
 
   const [isPhoneValid, setIsPhoneValid] = useState(false);
-  console.log(isPhoneValid);
+  // console.log(isPhoneValid);
   const [isCodeValid, setIsCodeValid] = useState(false);
   const [isCodeSent, setIsCodeSent] = useState(false);
   const CodevalueRef = useRef(''); // creating a refernce for TextField Component

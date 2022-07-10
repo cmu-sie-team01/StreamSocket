@@ -20,6 +20,8 @@
     "react-router-dom": "^6.3.0",
     "react-s3": "^1.3.1",
     "react-scripts": "5.0.1",
+    "srt-parser-2": "^1.1.7",
+    "subtitles-parser-vtt": "^0.1.0",
     "swiper": "^8.2.4",
     "uuid": "^8.3.2",
     "web-vitals": "^2.1.4"

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { } from 'react';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import { createTheme } from '@mui/material/styles';
@@ -14,8 +14,23 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import ReactPlayer from 'react-player';
-import TestCaption from './test.vtt';
+import SrtParser2 from 'srt-parser-2';
+import TestSub from './test.srt';
 
+let allText = '';
+
+function readTextFile(file) {
+  const rawFile = new XMLHttpRequest();
+  rawFile.open('GET', file, false);
+  rawFile.onreadystatechange = function () {
+    if (rawFile.readyState === 4) {
+      if (rawFile.status === 200 || rawFile.status === 0) {
+        allText = rawFile.responseText;
+      }
+    }
+  };
+  rawFile.send(null);
+}
 const theme = createTheme({
   palette: {
     primary: {
@@ -41,7 +56,47 @@ const theme = createTheme({
 
 // eslint-disable-next-line react/prop-types
 export default function VideoBlock({ srcIn }) {
-  console.log(srcIn);
+  const [Sub, SetSub] = React.useState('');
+  const parser = new SrtParser2();
+  readTextFile(TestSub);
+  const result = parser.fromSrt(allText);
+  result.map((sub) => {
+    let temp = '';
+    temp = sub.endTime.replace(/,/g, '.');
+    let tempSplit = temp.split(':');
+    const endTimeToSeconds = parseFloat(tempSplit[2])
+        + parseFloat(tempSplit[1]) * 60.0 + parseFloat(tempSplit[0]) * 60.0 * 60.0;
+    // eslint-disable-next-line no-param-reassign
+    sub.endTime = endTimeToSeconds;
+    temp = sub.startTime.replace(/,/g, '.');
+    tempSplit = temp.split(':');
+    // eslint-disable-next-line max-len
+    const startTimeToSeconds = parseFloat(tempSplit[2])
+        + parseFloat(tempSplit[1]) * 60.0 + parseFloat(tempSplit[0]) * 60.0 * 60.0;
+    // eslint-disable-next-line no-param-reassign
+    sub.startTime = startTimeToSeconds;
+    return sub;
+  });
+  console.log(result);
+
+  const handleDuration = (duration) => {
+    console.log('onDuration', duration);
+  };
+  const handleProgress = (state) => {
+    const found = result.find((element) => (state.playedSeconds <= element.endTime)
+    && (state.playedSeconds >= element.startTime));
+    if (found) {
+      console.log('onProgress', state, found.text);
+      SetSub(found.text);
+    } else {
+      SetSub('');
+    }
+
+    // We only want to update time slider if we are not currently seeking
+  };
+  const handleSeekChange = (e) => {
+    console.log(parseFloat(e.target.value));
+  };
   return (
     <ThemeProvider theme={theme}>
 
@@ -50,7 +105,7 @@ export default function VideoBlock({ srcIn }) {
         position: 'relative',
         maxWidth: '800px',
         margin: 'auto',
-        marginBottom: '1%',
+        marginBottom: '3%',
       }}
       >
         <Paper
@@ -132,13 +187,13 @@ export default function VideoBlock({ srcIn }) {
                     variant="caption"
                     gutterBottom
                     color="secondary"
-                    aria-label="like"
                     sx={{
                       position: 'absolute',
                       margin: 'auto',
+                      width: '60%',
                     }}
                   >
-                    Caption Display Here
+                    {Sub}
                   </Typography>
                   <Fab
                     color="secondary"
@@ -179,17 +234,19 @@ export default function VideoBlock({ srcIn }) {
 
                   <ReactPlayer
                     style={{
-                      width: '100%',
                       borderRadius: '16px',
-                      maxWidth: '350px',
-                      margin: '3%',
+                      margin: '2%',
                     }}
+                    height="500px"
+                    onProgress={handleProgress}
+                    progressInterval={100}
+                    onSeek={(e) => console.log('onSeek', e)}
+                    onChange={handleSeekChange}
+                    onDuration={handleDuration}
                     webkit-playsinline="true"
                     playsinline
-                    url="https://download.ted.com/talks/KateDarling_2018S-950k.mp4"
+                    url={srcIn}
                     controls
-                    width="100%"
-                    height="500px"
                     muted
                     className="react-workout-player"
                     config={{
@@ -197,13 +254,6 @@ export default function VideoBlock({ srcIn }) {
                         attributes: {
                           crossOrigin: 'true',
                         },
-                        tracks: [
-                          {
-                            kind: 'subtitles', src: { TestCaption }, srcLang: 'en', default: true,
-                          },
-                          { kind: 'subtitles', src: 'subs/subtitles.ja.vtt', srcLang: 'ja' },
-                          { kind: 'subtitles', src: 'subs/subtitles.de.vtt', srcLang: 'de' },
-                        ],
                       },
                     }}
                   />
@@ -212,7 +262,6 @@ export default function VideoBlock({ srcIn }) {
               </Grid>
             </Grid>
           </Box>
-
         </Paper>
       </Box>
     </ThemeProvider>

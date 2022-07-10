@@ -123,7 +123,8 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
   }),
 );
 
-export default function MiniDrawer() {
+// eslint-disable-next-line react/prop-types
+export default function NewHome({ videos }) {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
 
@@ -180,6 +181,7 @@ export default function MiniDrawer() {
                 Stream Socket
               </Typography>
             </Box>
+            <Box sx={{ flexGrow: 1 }} />
             <Box sx={{ flexGrow: 1 }} />
             <Box sx={{ display: { xs: 'flex', md: 'flex' } }}>
               <IconButton size="large" aria-label="show 4 new mails" color="inherit">
@@ -282,7 +284,7 @@ export default function MiniDrawer() {
                 >
                   <AddIcon />
                 </ListItemIcon>
-                <ListItemText primary="Follow" sx={{ opacity: open ? 1 : 0 }} />
+                <ListItemText primary="Upload" sx={{ opacity: open ? 1 : 0 }} />
               </ListItemButton>
             </ListItem>
 
@@ -324,18 +326,24 @@ export default function MiniDrawer() {
         <Box component="main" sx={{ flexGrow: 1, p: 1, m: 1 }}>
           <DrawerHeader />
           <VideoBlock
+            srcIn="https://download.ted.com/talks/KateDarling_2018S-950k.mp4"
+          />
+          <VideoBlock
             srcIn="https://streamsocketvideo.s3.us-west-1.amazonaws.com/video/1.mp4"
           />
           <VideoBlock
             srcIn="https://streamsocketvideo.s3.us-west-1.amazonaws.com/video/3.mp4"
           />
           <VideoBlock
-            srcIn="https://streamsocketvideo.s3.us-west-1.amazonaws.com/video/4.mp4"
-          />
-          <VideoBlock
             srcIn={newVideoSrc}
           />
-
+          {
+            // eslint-disable-next-line react/prop-types
+            videos.map((video) => {
+              console.log(video);
+              return <VideoBlock srcIn={video} />;
+            })
+          }
         </Box>
       </Box>
     </ThemeProvider>

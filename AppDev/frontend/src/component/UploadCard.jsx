@@ -22,19 +22,23 @@ import { Link } from 'react-router-dom';
 const Input = styled('input')({
   display: 'none',
 });
-export default function UploadButtons() {
+// eslint-disable-next-line react/prop-types
+export default function UploadButtons({ setVideos }) {
   const [uploading, setUploaded] = useState(false);
   const [uploadSuccess, setUploadSuccess] = React.useState();
-
   const onFileChange = async (file) => {
     setUploaded(true);
     const fileName = uuidv4();
     const result = await Storage.put(`${fileName}.mp4`, file);
-    console.log(result);
+    // console.log(result);
 
     if (result.key) {
       setUploaded(false);
       setUploadSuccess(true);
+      const re = [];
+      re.push(result.key);
+      re.push(result.key);
+      setVideos(re);
       localStorage.setItem('video', result.key);
     }
   };

@@ -28,6 +28,8 @@ function ChildComponent({ userName }) {
 function App() {
   const theme = createTheme();
   const userName2 = localStorage.getItem('username');
+  const [videos, setVideos] = React.useState([]);
+  console.log(videos);
   return (
     <BrowserRouter>
       <ThemeProvider theme={theme} />
@@ -38,8 +40,8 @@ function App() {
         <Route path="signin" element={<SignInTab />} />
         <Route path="userprofile" element={<ChildComponent userName={userName2} />} />
         <Route path="following" element={<FollowPage />} />
-        <Route path="videoupload" element={<UploadCard />} />
-        <Route path="/newhome" element={<NewHome />} />
+        <Route path="videoupload" element={<UploadCard setVideos={setVideos} />} />
+        <Route path="/newhome" element={<NewHome videos={videos} />} />
         <Route path="test" element={<Test />} />
       </Routes>
     </BrowserRouter>
