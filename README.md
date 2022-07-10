@@ -14,5 +14,7 @@ For English speech transcription we compare two different model architectures: L
 
 Datasets used for training/testing include:
 LibriSpeech: http://www.openslr.org/12/
+
 Timit: https://www.kaggle.com/datasets/mfekadu/darpa-timit-acousticphonetic-continuous-speech
+
 Noisy Speech Database: https://datashare.ed.ac.uk/handle/10283/2791
