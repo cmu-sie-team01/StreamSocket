@@ -1,19 +1,19 @@
-run inference on the Wav2Vec2 model as follows:
+# Run inference on the Wav2Vec2 model as follows:
 
 -> cd to Scripts folder and run ./activate to activate virtual environment
 -> cd ..
 
-With default parameters:
+# With default parameters:
 -> python wav2vec2_inference.py -i <inputfile> -o <outputfile>
 
-With optional arguments:
+# With optional arguments:
 -> python wav2vec2_inference.py -i <inputfile> -o <outputfile> -c char_limit -p periodic_limit
 
-Required inputs:
+# Required inputs:
 <inputfile> -- input audio filepath (wav or flac)
 <outputfile> -- output srt filepath
 
-Optional inputs:
+# Optional inputs:
 char_limit -- character limit per line for captioning
 periodic_limit -- time limit per phrase (in seconds) for captioning
 
