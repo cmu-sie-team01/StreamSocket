@@ -4,10 +4,10 @@ StreamSocket is a video-sharing application that can automatically generate subt
 TODO:[screenshot of UI]
 
 # Front-end
-TODO: list tools used
+We used React to build our application's user interface.
 
 # Back-end
-TODO: list tools used
+We used Django as the web framework to host our application's database.
 
 # Machine Learning
 For English speech transcription we compare two different model architectures: Listen Attend Spell and Wav2Vec2
