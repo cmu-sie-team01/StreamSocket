@@ -30,6 +30,7 @@ char_limit -- character limit per line for captioning
 periodic_limit -- time limit per phrase (in seconds) for captioning
 
 
+
 p232_021.wav can be used as an input audio filepath example for development purposes
 
 transcription_output.srt.txt can be used as the output filepath for development purposes
