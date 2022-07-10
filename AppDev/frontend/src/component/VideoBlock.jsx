@@ -98,7 +98,6 @@ export default function VideoBlock({ srcIn }) {
     console.log(parseFloat(e.target.value));
   };
   // eslint-disable-next-line react/prop-types
-  console.log(typeof srcIn, srcIn.length);
   return (
   // eslint-disable-next-line react/prop-types
     srcIn.length === 0 ? (null)

@@ -149,9 +149,6 @@ export default function NewHome() {
       newVideoSrc = `https://streamsocketvideos191545-dev.s3.us-west-1.amazonaws.com/public/${localStorage.getItem('video')}`;
     }
     const videos = [
-      'https://download.ted.com/talks/KateDarling_2018S-950k.mp4',
-      'https://streamsocketvideo.s3.us-west-1.amazonaws.com/video/1.mp4',
-      'https://streamsocketvideo.s3.us-west-1.amazonaws.com/video/3.mp4',
       newVideoSrc,
     ];
     setTimeout(() => {
@@ -159,7 +156,7 @@ export default function NewHome() {
         // items: refresh.items.concat(Array.from({ length: 4 })),
         items: refresh.items.concat(videos),
       });
-    }, 1500);
+    }, 500);
     console.log(refresh);
   };
   return (
@@ -354,6 +351,7 @@ export default function NewHome() {
             next={fetchMoreData}
             hasMore
             loader={<h4>Loading...</h4>}
+            pullDownToRefreshThreshold={1000}
           >
             {refresh.items.map((src) => (
               <div>
