@@ -349,9 +349,10 @@ export default function NewHome() {
           <InfiniteScroll
             dataLength={refresh.items.length}
             next={fetchMoreData}
-            hasMore
+            hasMore={refresh.items.length !== 10}
             loader={<h4>Loading...</h4>}
             pullDownToRefreshThreshold={1000}
+            endMessage={<h4>No more items</h4>}
           >
             {refresh.items.map((src) => (
               <div>
