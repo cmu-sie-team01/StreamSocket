@@ -1,8 +1,8 @@
 // https://www.npmjs.com/package/srt-parser-2
 
 import React from 'react';
-import SrtParser2 from 'srt-parser-2';
-import TestSub from './test.srt';
+// import SrtParser2 from 'srt-parser-2';
+// import TestSub from './test.srt';
 // input format: 00:00:13.860 --> 00:00:16.280
 // function TimeToSeconds(timeIn) {
 //   const a = timeIn.split('-->'); // split it at the colons
@@ -57,28 +57,28 @@ import TestSub from './test.srt';
 //   );
 // }
 // eslint-disable-next-line no-unused-vars
-let allText = '';
-function readTextFile(file) {
-  const rawFile = new XMLHttpRequest();
-  rawFile.open('GET', file, false);
-  rawFile.onreadystatechange = function () {
-    if (rawFile.readyState === 4) {
-      if (rawFile.status === 200 || rawFile.status === 0) {
-        allText = rawFile.responseText;
-        console.log(allText);
-      }
-    }
-  };
-  rawFile.send(null);
-}
+// let allText = '';
+// function readTextFile(file) {
+//   const rawFile = new XMLHttpRequest();
+//   rawFile.open('GET', file, false);
+//   rawFile.onreadystatechange = function () {
+//     if (rawFile.readyState === 4) {
+//       if (rawFile.status === 200 || rawFile.status === 0) {
+//         allText = rawFile.responseText;
+//         console.log(allText);
+//       }
+//     }
+//   };
+//   rawFile.send(null);
+// }
 export default function Test() {
-  console.log(TestSub);
-  const parser = new SrtParser2();
-  readTextFile(TestSub);
-  const result = parser.fromSrt(allText);
-  console.log(result);
+  // console.log(TestSub);
+  // const parser = new SrtParser2();
+  // readTextFile(TestSub);
+  // const result = parser.fromSrt(allText);
+  // console.log(result);
 
   // const found = result.find((element) => element > 10);
-
+  console.log(Array.from({ length: 20 }));
   return (<div />);
 }

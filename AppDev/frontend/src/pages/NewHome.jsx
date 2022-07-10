@@ -24,15 +24,13 @@ import {
   Link,
 } from 'react-router-dom';
 import BathtubIcon from '@mui/icons-material/Bathtub';
-// import FavoriteIcon from '@mui/icons-material/Favorite';
-// import ReplyIcon from '@mui/icons-material/Reply';
-
 import Badge from '@mui/material/Badge';
 import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import { Hidden, ThemeProvider } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
+import InfiniteScroll from 'react-infinite-scroll-component';
 import VideoBlock from '../component/VideoBlock';
 
 const drawerWidth = 240;
@@ -122,12 +120,20 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
     }),
   }),
 );
+let newVideoSrc = '';
 
 // eslint-disable-next-line react/prop-types
-export default function NewHome({ videos }) {
+export default function NewHome() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
-
+  const [refresh, setRefresh] = React.useState({
+    items: [
+      'https://download.ted.com/talks/KateDarling_2018S-950k.mp4',
+      'https://streamsocketvideo.s3.us-west-1.amazonaws.com/video/1.mp4',
+      'https://streamsocketvideo.s3.us-west-1.amazonaws.com/video/3.mp4',
+      newVideoSrc,
+    ],
+  });
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -135,11 +141,27 @@ export default function NewHome({ videos }) {
   const handleDrawerClose = () => {
     setOpen(false);
   };
-  let newVideoSrc = '';
-  if (localStorage.getItem('video')) {
-    newVideoSrc = `https://streamsocketvideos191545-dev.s3.us-west-1.amazonaws.com/public/${localStorage.getItem('video')}`;
-  }
 
+  const fetchMoreData = () => {
+    // a fake async api call like which sends
+    // 20 more records in 1.5 secs
+    if (localStorage.getItem('video')) {
+      newVideoSrc = `https://streamsocketvideos191545-dev.s3.us-west-1.amazonaws.com/public/${localStorage.getItem('video')}`;
+    }
+    const videos = [
+      'https://download.ted.com/talks/KateDarling_2018S-950k.mp4',
+      'https://streamsocketvideo.s3.us-west-1.amazonaws.com/video/1.mp4',
+      'https://streamsocketvideo.s3.us-west-1.amazonaws.com/video/3.mp4',
+      newVideoSrc,
+    ];
+    setTimeout(() => {
+      setRefresh({
+        // items: refresh.items.concat(Array.from({ length: 4 })),
+        items: refresh.items.concat(videos),
+      });
+    }, 1500);
+    console.log(refresh);
+  };
   return (
     <ThemeProvider theme={theme1}>
 
@@ -250,6 +272,8 @@ export default function NewHome({ videos }) {
                   justifyContent: open ? 'initial' : 'center',
                   px: 2.5,
                 }}
+                component={Link}
+                to="/test"
               >
 
                 <ListItemIcon
@@ -325,25 +349,18 @@ export default function NewHome({ videos }) {
         </Drawer>
         <Box component="main" sx={{ flexGrow: 1, p: 1, m: 1 }}>
           <DrawerHeader />
-          <VideoBlock
-            srcIn="https://download.ted.com/talks/KateDarling_2018S-950k.mp4"
-          />
-          <VideoBlock
-            srcIn="https://streamsocketvideo.s3.us-west-1.amazonaws.com/video/1.mp4"
-          />
-          <VideoBlock
-            srcIn="https://streamsocketvideo.s3.us-west-1.amazonaws.com/video/3.mp4"
-          />
-          <VideoBlock
-            srcIn={newVideoSrc}
-          />
-          {
-            // eslint-disable-next-line react/prop-types
-            videos.map((video) => {
-              console.log(video);
-              return <VideoBlock srcIn={video} />;
-            })
-          }
+          <InfiniteScroll
+            dataLength={refresh.items.length}
+            next={fetchMoreData}
+            hasMore
+            loader={<h4>Loading...</h4>}
+          >
+            {refresh.items.map((src) => (
+              <div>
+                <VideoBlock srcIn={src} />
+              </div>
+            ))}
+          </InfiniteScroll>
         </Box>
       </Box>
     </ThemeProvider>

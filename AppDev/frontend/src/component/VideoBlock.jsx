@@ -77,7 +77,7 @@ export default function VideoBlock({ srcIn }) {
     sub.startTime = startTimeToSeconds;
     return sub;
   });
-  console.log(result);
+  // console.log(result);
 
   const handleDuration = (duration) => {
     console.log('onDuration', duration);
@@ -86,7 +86,7 @@ export default function VideoBlock({ srcIn }) {
     const found = result.find((element) => (state.playedSeconds <= element.endTime)
     && (state.playedSeconds >= element.startTime));
     if (found) {
-      console.log('onProgress', state, found.text);
+      // console.log('onProgress', state, found.text);
       SetSub(found.text);
     } else {
       SetSub('');
@@ -97,174 +97,181 @@ export default function VideoBlock({ srcIn }) {
   const handleSeekChange = (e) => {
     console.log(parseFloat(e.target.value));
   };
+  // eslint-disable-next-line react/prop-types
+  console.log(typeof srcIn, srcIn.length);
   return (
-    <ThemeProvider theme={theme}>
+  // eslint-disable-next-line react/prop-types
+    srcIn.length === 0 ? (null)
+      : (
+        <ThemeProvider theme={theme}>
 
-      <Box sx={{
-        borderRadius: '16px',
-        position: 'relative',
-        maxWidth: '800px',
-        margin: 'auto',
-        marginBottom: '3%',
-      }}
-      >
-        <Paper
-          elevation={3}
-          style={{
+          <Box sx={{
             borderRadius: '16px',
+            position: 'relative',
+            maxWidth: '800px',
+            margin: 'auto',
+            marginBottom: '3%',
           }}
-        >
-          <Box
-            sx={{
-              borderRadius: '16px',
-              position: 'relative',
-              maxWidth: '800px',
-              margin: 'auto',
-              marginBottom: '1%',
-              padding: '2%',
-            }}
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-            textAlign="center"
           >
-            <Grid
-              container
-              spacing={1}
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
+            <Paper
+              elevation={3}
+              style={{
+                borderRadius: '16px',
+              }}
             >
-              <Grid item xs={3}>
-                <Avatar sx={{
-                  bgcolor: deepOrange[500],
+              <Box
+                sx={{
+                  borderRadius: '16px',
+                  position: 'relative',
+                  maxWidth: '800px',
                   margin: 'auto',
+                  marginBottom: '1%',
+                  padding: '2%',
                 }}
-                >
-                  u
-                </Avatar>
-                <Typography variant="caption" display="block" gutterBottom>
-                  UserName
-                </Typography>
-              </Grid>
-              <Grid
-                item
-                xs={5}
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                textAlign="center"
               >
-                <Typography variant="caption" display="block" gutterBottom>
-                  Description here:
-                  sdfajlisj
-                  jskfja...
-                </Typography>
-              </Grid>
-              <Grid
-                item
-                xs={3}
-              >
-                <Button
-                  variant="contained"
-                  disableElevation
-                  size="small"
-                >
-                  Follow
-                </Button>
-              </Grid>
-
-              <Grid item xs={12}>
-                <Box
-                  sx={{
-                    borderRadius: '16px',
-                    position: 'relative',
-                    maxWidth: '300px',
-                    margin: 'auto',
-                  }}
+                <Grid
+                  container
+                  spacing={1}
                   display="flex"
                   justifyContent="center"
                   alignItems="center"
-                  textAlign="center"
                 >
-                  <Typography
-                    variant="caption"
-                    gutterBottom
-                    color="secondary"
-                    sx={{
-                      position: 'absolute',
+                  <Grid item xs={3}>
+                    <Avatar sx={{
+                      bgcolor: deepOrange[500],
                       margin: 'auto',
-                      width: '60%',
                     }}
+                    >
+                      u
+                    </Avatar>
+                    <Typography variant="caption" display="block" gutterBottom>
+                      UserName
+                    </Typography>
+                  </Grid>
+                  <Grid
+                    item
+                    xs={5}
                   >
-                    {Sub}
-                  </Typography>
-                  <Fab
-                    color="secondary"
-                    aria-label="like"
-                    sx={{
-                      position: 'absolute',
-                      bottom: '38%',
-                      right: '0',
-                      margin: '4%',
-                    }}
+                    <Typography variant="caption" display="block" gutterBottom>
+                      Description here:
+                      sdfajlisj
+                      jskfja...
+                    </Typography>
+                  </Grid>
+                  <Grid
+                    item
+                    xs={3}
                   >
-                    <FavoriteIcon />
-                  </Fab>
-                  <Fab
-                    color="primary"
-                    aria-label="like"
-                    sx={{
-                      position: 'absolute',
-                      bottom: '26%',
-                      right: '0',
-                      margin: '4%',
-                    }}
-                  >
-                    <InsertCommentIcon />
-                  </Fab>
-                  <Fab
-                    color="third"
-                    aria-label="like"
-                    sx={{
-                      position: 'absolute',
-                      bottom: '14%',
-                      right: '0',
-                      margin: '4%',
-                    }}
-                  >
-                    <ShareIcon />
-                  </Fab>
+                    <Button
+                      variant="contained"
+                      disableElevation
+                      size="small"
+                    >
+                      Follow
+                    </Button>
+                  </Grid>
 
-                  <ReactPlayer
-                    style={{
-                      borderRadius: '16px',
-                      margin: '2%',
-                    }}
-                    height="500px"
-                    onProgress={handleProgress}
-                    progressInterval={100}
-                    onSeek={(e) => console.log('onSeek', e)}
-                    onChange={handleSeekChange}
-                    onDuration={handleDuration}
-                    webkit-playsinline="true"
-                    playsinline
-                    url={srcIn}
-                    controls
-                    muted
-                    className="react-workout-player"
-                    config={{
-                      file: {
-                        attributes: {
-                          crossOrigin: 'true',
-                        },
-                      },
-                    }}
-                  />
+                  <Grid item xs={12}>
+                    <Box
+                      sx={{
+                        borderRadius: '16px',
+                        position: 'relative',
+                        maxWidth: '300px',
+                        margin: 'auto',
+                      }}
+                      display="flex"
+                      justifyContent="center"
+                      alignItems="center"
+                      textAlign="center"
+                    >
+                      <Typography
+                        variant="caption"
+                        gutterBottom
+                        color="secondary"
+                        sx={{
+                          position: 'absolute',
+                          margin: 'auto',
+                          width: '60%',
+                        }}
+                      >
+                        {Sub}
+                      </Typography>
+                      <Fab
+                        color="secondary"
+                        aria-label="like"
+                        sx={{
+                          position: 'absolute',
+                          bottom: '38%',
+                          right: '0',
+                          margin: '4%',
+                        }}
+                      >
+                        <FavoriteIcon />
+                      </Fab>
+                      <Fab
+                        color="primary"
+                        aria-label="like"
+                        sx={{
+                          position: 'absolute',
+                          bottom: '26%',
+                          right: '0',
+                          margin: '4%',
+                        }}
+                      >
+                        <InsertCommentIcon />
+                      </Fab>
+                      <Fab
+                        color="third"
+                        aria-label="like"
+                        sx={{
+                          position: 'absolute',
+                          bottom: '14%',
+                          right: '0',
+                          margin: '4%',
+                        }}
+                      >
+                        <ShareIcon />
+                      </Fab>
 
-                </Box>
-              </Grid>
-            </Grid>
+                      <ReactPlayer
+                        style={{
+                          borderRadius: '16px',
+                          margin: '1%',
+                        }}
+                        playing
+                        controls
+                        height="500px"
+                        onProgress={handleProgress}
+                        progressInterval={100}
+                        onSeek={(e) => console.log('onSeek', e)}
+                        onChange={handleSeekChange}
+                        onDuration={handleDuration}
+                        webkit-playsinline="true"
+                        playsinline
+                        url={srcIn}
+                        muted
+                        className="react-workout-player"
+                        config={{
+                          file: {
+                            attributes: {
+                              crossOrigin: 'true',
+                            },
+                          },
+                        }}
+                      />
+
+                    </Box>
+                  </Grid>
+                </Grid>
+              </Box>
+            </Paper>
           </Box>
-        </Paper>
-      </Box>
-    </ThemeProvider>
+        </ThemeProvider>
+      )
 
   );
 }
