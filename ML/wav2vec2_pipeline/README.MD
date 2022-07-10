@@ -8,19 +8,19 @@
 
 **With default parameters:**
 
--> python wav2vec2_inference.py -i <inputfile> -o <outputfile>
+-> python wav2vec2_inference.py -i inputfile -o outputfile
 
 
 **With optional arguments:**
 
--> python wav2vec2_inference.py -i <inputfile> -o <outputfile> -c char_limit -p periodic_limit
+-> python wav2vec2_inference.py -i inputfile -o outputfile -c char_limit -p periodic_limit
 
 
 **Required inputs:**
 
-<inputfile> -- input audio filepath (wav or flac)
+inputfile -- input audio filepath (wav or flac)
 
-<outputfile> -- output srt filepath
+outputfile -- output srt filepath
 
 
 **Optional inputs:**
