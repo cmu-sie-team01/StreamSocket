@@ -13,6 +13,7 @@ We used Django as the web framework to host our application's database.
 For English speech transcription we compare two different model architectures: Listen Attend Spell and Wav2Vec2
 
 Datasets used for training/testing include:
+
 LibriSpeech: http://www.openslr.org/12/
 
 Timit: https://www.kaggle.com/datasets/mfekadu/darpa-timit-acousticphonetic-continuous-speech
