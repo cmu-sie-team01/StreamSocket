@@ -109,7 +109,7 @@ export default function VideoBlock({ srcIn }) {
             position: 'relative',
             maxWidth: '800px',
             margin: 'auto',
-            marginBottom: '3%',
+            marginBottom: '1%',
           }}
           >
             <Paper

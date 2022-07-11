@@ -156,13 +156,13 @@ export default function NewHome() {
         // items: refresh.items.concat(Array.from({ length: 4 })),
         items: refresh.items.concat(videos),
       });
-    }, 500);
+    }, 1500);
     console.log(refresh);
   };
   return (
     <ThemeProvider theme={theme1}>
 
-      <Box sx={{ display: 'flex' }}>
+      <Box sx={{ display: 'flex', overflowY: 'scroll' }}>
         <CssBaseline />
         <AppBar
           position="fixed"
@@ -344,7 +344,12 @@ export default function NewHome() {
             ))}
           </List>
         </Drawer>
-        <Box component="main" sx={{ flexGrow: 1, p: 1, m: 1 }}>
+        <Box
+          component="main"
+          sx={{
+            flexGrow: 1, p: 1, m: 1, overflowX: 'scroll', overflowY: 'scroll',
+          }}
+        >
           <DrawerHeader />
           <InfiniteScroll
             dataLength={refresh.items.length}
