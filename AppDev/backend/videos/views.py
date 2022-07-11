@@ -34,8 +34,8 @@ from rest_framework.response import Response
 from django.core.files.storage import default_storage
 
 def create_json_caption(request):
-    path = "C:/Users/10199/Desktop/StreamSocket/ML/english_transcription/wav2vec2_pipeline/wav2vec2_inference.py"
     print(os.getcwd())
+    path = "/Users/hxdai/StreamSocket/ML/english_transcription/wav2vec2_pipeline/wav2vec2_inference.py"
     os.system(f'python {path} -i {request.data["video"]} -o outputfile.srt')
 
     regex = r'(?:\d+)\s(\d+:\d+:\d+,\d+) --> (\d+:\d+:\d+,\d+)\s+(.+?)(?:\n\n|$)'
