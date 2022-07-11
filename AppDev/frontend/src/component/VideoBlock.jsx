@@ -55,35 +55,43 @@ const theme = createTheme({
 });
 
 // eslint-disable-next-line react/prop-types
-export default function VideoBlock({ srcIn }) {
+export default function VideoBlock(props) {
+  // eslint-disable-next-line react/prop-types
+  const { srcIn, srtIn } = props;
+
   const [Sub, SetSub] = React.useState('');
   const parser = new SrtParser2();
   readTextFile(TestSub);
   const result = parser.fromSrt(allText);
-  result.map((sub) => {
-    let temp = '';
-    temp = sub.endTime.replace(/,/g, '.');
-    let tempSplit = temp.split(':');
-    const endTimeToSeconds = parseFloat(tempSplit[2])
-        + parseFloat(tempSplit[1]) * 60.0 + parseFloat(tempSplit[0]) * 60.0 * 60.0;
-    // eslint-disable-next-line no-param-reassign
-    sub.endTime = endTimeToSeconds;
-    temp = sub.startTime.replace(/,/g, '.');
-    tempSplit = temp.split(':');
-    // eslint-disable-next-line max-len
-    const startTimeToSeconds = parseFloat(tempSplit[2])
-        + parseFloat(tempSplit[1]) * 60.0 + parseFloat(tempSplit[0]) * 60.0 * 60.0;
-    // eslint-disable-next-line no-param-reassign
-    sub.startTime = startTimeToSeconds;
-    return sub;
-  });
-  // console.log(result);
+  console.log('333', srtIn);
+
+  if (result.length !== 0) {
+    result.map((sub) => {
+      let temp = '';
+      temp = sub.endTime.replace(/,/g, '.');
+      let tempSplit = temp.split(':');
+      const endTimeToSeconds = parseFloat(tempSplit[2])
+          + parseFloat(tempSplit[1]) * 60.0 + parseFloat(tempSplit[0]) * 60.0 * 60.0;
+      // eslint-disable-next-line no-param-reassign
+      sub.endTime = endTimeToSeconds;
+      temp = sub.startTime.replace(/,/g, '.');
+      tempSplit = temp.split(':');
+      // eslint-disable-next-line max-len
+      const startTimeToSeconds = parseFloat(tempSplit[2])
+          + parseFloat(tempSplit[1]) * 60.0 + parseFloat(tempSplit[0]) * 60.0 * 60.0;
+      // eslint-disable-next-line no-param-reassign
+      sub.startTime = startTimeToSeconds;
+      return sub;
+    });
+    // console.log(result);
+  }
 
   const handleDuration = (duration) => {
     console.log('onDuration', duration);
   };
   const handleProgress = (state) => {
-    const found = result.find((element) => (state.playedSeconds <= element.endTime)
+    // eslint-disable-next-line react/prop-types
+    const found = srtIn.find((element) => (state.playedSeconds <= element.endTime)
     && (state.playedSeconds >= element.startTime));
     if (found) {
       // console.log('onProgress', state, found.text);
