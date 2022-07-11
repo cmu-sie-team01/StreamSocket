@@ -15,6 +15,7 @@ class Video(models.Model):
     likes = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='likes', blank=True)
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
+    caption = models.JSONField(null=True)
 
     def __str__(self):
         return str(self.video)

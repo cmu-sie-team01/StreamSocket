@@ -5,8 +5,7 @@ from .models import Video
 class VideoUploadSerializer(serializers.ModelSerializer):
     class Meta:
         model = Video
-        fields = '__all__'
-
+        fields = ['id', 'video', 'author','likes', 'updated','created','caption']
 
 
 class VideoLikeSerializer(serializers.ModelSerializer):

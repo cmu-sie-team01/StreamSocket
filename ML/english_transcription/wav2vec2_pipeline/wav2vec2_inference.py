@@ -7,6 +7,8 @@ from split_helper import split_phrases, split_segments
 import sys
 import torch
 from transformers import Wav2Vec2ForCTC, Wav2Vec2Tokenizer
+from urllib.request import urlopen, urlretrieve
+import moviepy.editor as mp
 
 def main(argv):
     ### read command line arguments
@@ -50,7 +52,16 @@ def main(argv):
 
     ### load flac or wav file
     try:
-        audio, sr = librosa.load(input_filepath, sr=16000)
+        url = input_filepath
+        video_name = "video.mp4"
+        filename = "audio.wav"
+        urlretrieve(url, video_name)
+
+        audio_detached = mp.VideoFileClip(video_name);
+        audio_detached.audio.write_audiofile(filename)
+
+        audio, sr = librosa.load(filename, sr=16000)
+            # audio, sr = soundfile.read(input_filepath, samplerate=16000)
     except FileNotFoundError:
         print('Unable to find input file path:', input_filepath)
         sys.exit()
@@ -79,7 +90,7 @@ def main(argv):
     transcriptions = []
     # for start, end in segmentLimits:
     for start, end in segmentLimits:
-        split_audio, sr = librosa.load(input_filepath, sr=16000, offset=start, duration=end - start)
+        split_audio, sr = librosa.load(filename, sr=16000, offset=start, duration=end - start)
 
         # https://pypi.org/project/noisereduce/#:~:text=Noise%20reduction%20in%20python%20using,a%20form%20of%20Noise%20Gate.
         ### noisereduce

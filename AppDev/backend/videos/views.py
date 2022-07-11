@@ -18,6 +18,10 @@
 
 # from django.conf import settings
 # from django.core.files.storage import FileSystemStorage
+import os
+import sys
+import re
+import json
 from rest_framework import status
 from rest_framework.generics import CreateAPIView, DestroyAPIView
 from rest_framework.views import APIView
@@ -27,6 +31,27 @@ from .models import Video
 from users.models import User
 from profiles.models import Profile
 from rest_framework.response import Response
+from django.core.files.storage import default_storage
+
+def create_json_caption(request):
+    path = "C:/Users/10199/Desktop/StreamSocket/ML/english_transcription/wav2vec2_pipeline/wav2vec2_inference.py"
+    print(os.getcwd())
+    os.system(f'python {path} -i {request.data["video"]} -o outputfile.srt')
+
+    regex = r'(?:\d+)\s(\d+:\d+:\d+,\d+) --> (\d+:\d+:\d+,\d+)\s+(.+?)(?:\n\n|$)'
+    offset_seconds = lambda ts: sum(
+        howmany * sec for howmany, sec in zip(map(int, ts.replace(',', ':').split(':')), [60 * 60, 60, 1, 1e-3]))
+
+    transcript = [
+        dict(startTime=offset_seconds(startTime), endTime=offset_seconds(endTime), text=' '.join(ref.split())) for
+        startTime, endTime, ref in re.findall(regex, open('outputfile.srt').read(), re.DOTALL)]
+
+    with open('data.json', 'w', encoding='utf-8') as f:
+        json.dump(transcript, f)
+
+    f = open('data.json')
+    data = json.load(f)
+    return data
 
 
 class VideoUploadView(CreateAPIView):
@@ -35,10 +60,23 @@ class VideoUploadView(CreateAPIView):
 
     def create(self, request, *args, **kwargs):
         request.data['author'] = request.user.id
+
+        data = create_json_caption(request)
+
+        request.data['caption'] = data
+        print(data)
+
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
+
+        # os.system(f'python {path} -i {request.data["video"]} -o outputfile.srt')
+
+        # file = default_storage.open('public/storage_test', 'w')
+        # file.write('storage contents')
+        # file.close()
+
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
@@ -72,6 +110,3 @@ class VideoUnlikeView(APIView):
         video.save()
         serializer = VideoLikeSerializer(instance=video)
         return Response(serializer.data)
-
-
-
