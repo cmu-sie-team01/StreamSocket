@@ -126,6 +126,8 @@ let newVideoSrc = '';
 export default function NewHome() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
+  const [srtIn, setSrcIn] = React.useState([]);
+
   const [refresh, setRefresh] = React.useState({
     items: [
       'https://download.ted.com/talks/KateDarling_2018S-950k.mp4',
@@ -134,6 +136,7 @@ export default function NewHome() {
       newVideoSrc,
     ],
   });
+
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -141,8 +144,7 @@ export default function NewHome() {
   const handleDrawerClose = () => {
     setOpen(false);
   };
-
-  const fetchMoreData = () => {
+  const fetchMoreData = async () => {
     // a fake async api call like which sends
     // 20 more records in 1.5 secs
     if (localStorage.getItem('video')) {
@@ -151,6 +153,26 @@ export default function NewHome() {
     const videos = [
       newVideoSrc,
     ];
+
+    // Create Video to backend
+    await fetch('http://127.0.0.1:8000/videos/video/', {
+      method: 'POST',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
+      body: JSON.stringify({
+        video: newVideoSrc,
+      }),
+    })
+      .then((r) => r.json())
+      .then((res) => {
+        console.log('res!!!!', res);
+        setSrcIn(res.caption);
+        console.log(srtIn);
+      });
+
     setTimeout(() => {
       setRefresh({
         // items: refresh.items.concat(Array.from({ length: 4 })),
@@ -361,7 +383,7 @@ export default function NewHome() {
           >
             {refresh.items.map((src) => (
               <div>
-                <VideoBlock srcIn={src} />
+                <VideoBlock srcIn={src} srtIn={srtIn} />
               </div>
             ))}
           </InfiniteScroll>

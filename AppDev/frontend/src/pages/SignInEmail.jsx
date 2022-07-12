@@ -68,7 +68,6 @@ export default function SignInEmail() {
     const data = new FormData(event.currentTarget);
     const email = data.get('email');
     const password = data.get('password');
-    navigate('/newhome');
 
     // initialize username, videos
     localStorage.setItem('username', email);
@@ -111,7 +110,8 @@ export default function SignInEmail() {
         if (res.access) {
           // store userdata to localstorage
           console.log(res);
-          navigate('/userprofile');
+          localStorage.setItem('token', res.access);
+          navigate('/newhome');
         } else {
           setIsPasswordWrong(true);
           console.log('login fail');

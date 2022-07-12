@@ -27,9 +27,9 @@ def split_segments(start, end, periodic_limit):
     l = 0
     while l < segment_length:
         if segment_length - l > periodic_limit:
-            output_arr.append([l, l + periodic_limit])
+            output_arr.append([l + start, l + start + periodic_limit])
             l += periodic_limit
         else:
-            output_arr.append([l, end])
+            output_arr.append([l + start, end])
             break
     return output_arr
