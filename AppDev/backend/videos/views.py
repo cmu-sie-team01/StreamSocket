@@ -33,6 +33,7 @@ from profiles.models import Profile
 from rest_framework.response import Response
 from django.core.files.storage import default_storage
 
+
 def create_json_caption(request):
     print(os.getcwd())
     path = "/Users/hxdai/StreamSocket/ML/english_transcription/wav2vec2_pipeline/wav2vec2_inference.py"
@@ -116,9 +117,9 @@ class RandomVideoView(APIView):
     permission_classes = [IsAuthenticated]
     serializer_class = VideoLikeSerializer
 
-    def get(self,request):
+    def get(self, request):
         randomvideo = Video.objects.order_by('?').first()
         serializer = VideoLikeSerializer(instance=randomvideo)
+        if randomvideo is None:
+            return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
         return Response(serializer.data)
-
-
