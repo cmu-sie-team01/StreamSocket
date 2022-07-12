@@ -110,3 +110,15 @@ class VideoUnlikeView(APIView):
         video.save()
         serializer = VideoLikeSerializer(instance=video)
         return Response(serializer.data)
+
+
+class RandomVideoView(APIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = VideoLikeSerializer
+
+    def get(self,request):
+        randomvideo = Video.objects.order_by('?').first()
+        serializer = VideoLikeSerializer(instance=randomvideo)
+        return Response(serializer.data)
+
+
