@@ -2,10 +2,10 @@ import os
 import re
 import json
 from rest_framework import status
-from rest_framework.generics import CreateAPIView, DestroyAPIView, RetrieveAPIView
+from rest_framework.generics import CreateAPIView, RetrieveDestroyAPIView
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
-from .serializers import VideoUploadSerializer, VideoLikeSerializer
+from .serializers import VideoSerializer
 from .models import Video
 from users.models import User
 from profiles.models import Profile
@@ -38,7 +38,7 @@ def create_json_caption(request):
 
 class VideoUploadView(CreateAPIView):
     permission_classes = [IsAuthenticated]
-    serializer_class = VideoUploadSerializer
+    serializer_class = VideoSerializer
 
     def create(self, request, *args, **kwargs):
         request.data['author'] = request.user.id
@@ -62,45 +62,45 @@ class VideoUploadView(CreateAPIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
-class VideoDeleteView(DestroyAPIView, RetrieveAPIView):
+class VideoDeleteView(RetrieveDestroyAPIView):
     permission_classes = [IsAuthenticated]
-    serializer_class = VideoUploadSerializer
+    serializer_class = VideoSerializer
     queryset = Video.objects.all()
 
 
 class VideoLikeView(APIView):
     permission_classes = [IsAuthenticated]
-    serializer_class = VideoLikeSerializer
+    serializer_class = VideoSerializer
 
     def put(self, request):
         video = Video.objects.get(id=request.data['video_id'])
         user = User.objects.get(id=request.user.id)
         video.likes.add(user)
         video.save()
-        serializer = VideoLikeSerializer(instance=video)
+        serializer = VideoSerializer(instance=video)
         return Response(serializer.data)
 
 
 class VideoUnlikeView(APIView):
     permission_classes = [IsAuthenticated]
-    serializer_class = VideoLikeSerializer
+    serializer_class = VideoSerializer
 
     def put(self, request):
         video = Video.objects.get(id=request.data['video_id'])
         user = User.objects.get(id=request.user.id)
         video.likes.remove(user)
         video.save()
-        serializer = VideoLikeSerializer(instance=video)
+        serializer = VideoSerializer(instance=video)
         return Response(serializer.data)
 
 
 class RandomVideoView(APIView):
     permission_classes = [IsAuthenticated]
-    serializer_class = VideoLikeSerializer
+    serializer_class = VideoSerializer
 
     def get(self, request):
         randomvideo = Video.objects.order_by('?').first()
-        serializer = VideoLikeSerializer(instance=randomvideo)
+        serializer = VideoSerializer(instance=randomvideo)
         if randomvideo is None:
             return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
         return Response(serializer.data)
@@ -108,11 +108,11 @@ class RandomVideoView(APIView):
 
 class InitialVideoView(APIView):
     permission_classes = [IsAuthenticated]
-    serializer_class = VideoLikeSerializer
+    serializer_class = VideoSerializer
 
     def get(self, request):
         randomvideo = Video.objects.order_by('?')[:2]
-        serializer = VideoLikeSerializer(instance=randomvideo, many=True)
+        serializer = VideoSerializer(instance=randomvideo, many=True)
         if randomvideo is None:
             return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
         return Response(serializer.data)
