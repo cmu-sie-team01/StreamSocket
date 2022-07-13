@@ -1,25 +1,4 @@
-# from django.contrib.auth.decorators import login_required
-# from django.views.generic.edit import CreateView
-# from django.urls import reverse_lazy
-#
-# from .models import Document
-#
-#
-# class DocumentCreateView(CreateView):
-#     model = Document
-#     fields = ['upload', ]
-#     success_url = reverse_lazy('home')
-#
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         documents = Document.objects.all()
-#         context['documents'] = documents
-#         return context
-
-# from django.conf import settings
-# from django.core.files.storage import FileSystemStorage
 import os
-import sys
 import re
 import json
 from rest_framework import status
@@ -120,6 +99,18 @@ class RandomVideoView(APIView):
     def get(self, request):
         randomvideo = Video.objects.order_by('?').first()
         serializer = VideoLikeSerializer(instance=randomvideo)
+        if randomvideo is None:
+            return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
+        return Response(serializer.data)
+
+
+class InitialVideoView(APIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = VideoLikeSerializer
+
+    def get(self, request):
+        randomvideo = Video.objects.all()[:2]
+        serializer = VideoLikeSerializer(instance=randomvideo, many=True)
         if randomvideo is None:
             return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
         return Response(serializer.data)

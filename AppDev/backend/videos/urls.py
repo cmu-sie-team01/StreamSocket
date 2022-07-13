@@ -8,6 +8,7 @@ urlpatterns = [
     path('like/', views.VideoLikeView.as_view()),
     path('unlike/', views.VideoUnlikeView.as_view()),
     path('randomvideo/', views.RandomVideoView.as_view()),
+    path('initialvideo/', views.InitialVideoView.as_view()),
 ]
 
 """
