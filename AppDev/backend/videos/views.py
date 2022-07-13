@@ -109,7 +109,7 @@ class InitialVideoView(APIView):
     serializer_class = VideoLikeSerializer
 
     def get(self, request):
-        randomvideo = Video.objects.all()[:2]
+        randomvideo = Video.objects.order_by('?')[:2]
         serializer = VideoLikeSerializer(instance=randomvideo, many=True)
         if randomvideo is None:
             return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
