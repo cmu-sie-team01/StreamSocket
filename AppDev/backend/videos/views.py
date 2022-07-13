@@ -2,7 +2,7 @@ import os
 import re
 import json
 from rest_framework import status
-from rest_framework.generics import CreateAPIView, DestroyAPIView
+from rest_framework.generics import CreateAPIView, DestroyAPIView, RetrieveAPIView
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from .serializers import VideoUploadSerializer, VideoLikeSerializer
@@ -15,8 +15,10 @@ from django.core.files.storage import default_storage
 
 def create_json_caption(request):
     print(os.getcwd())
-    path = "/Users/hxdai/StreamSocket/ML/english_transcription/wav2vec2_pipeline/wav2vec2_inference.py"
-    os.system(f'python {path} -i {request.data["video"]} -o outputfile.srt')
+    path = "../../ML/english_transcription/wav2vec2_pipeline/wav2vec2_inference.py"
+    ret = os.system(f'python {path} -i {request.data["video"]} -o outputfile.srt')
+    if ret != 0:
+        return None
 
     regex = r'(?:\d+)\s(\d+:\d+:\d+,\d+) --> (\d+:\d+:\d+,\d+)\s+(.+?)(?:\n\n|$)'
     offset_seconds = lambda ts: sum(
@@ -60,9 +62,9 @@ class VideoUploadView(CreateAPIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
-class VideoDeleteView(DestroyAPIView):
+class VideoDeleteView(DestroyAPIView, RetrieveAPIView):
     permission_classes = [IsAuthenticated]
-    # serializer_class = VideoUploadSerializer
+    serializer_class = VideoUploadSerializer
     queryset = Video.objects.all()
 
 
