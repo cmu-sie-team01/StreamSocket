@@ -18,6 +18,8 @@ import Alert from '@mui/material/Alert';
 import CloseIcon from '@mui/icons-material/Close';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Link } from 'react-router-dom';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
 
 const Input = styled('input')({
   display: 'none',
@@ -26,22 +28,42 @@ const Input = styled('input')({
 export default function UploadButtons({ setVideos }) {
   const [uploading, setUploaded] = useState(false);
   const [uploadSuccess, setUploadSuccess] = React.useState();
+  const [checked, setChecked] = React.useState(false);
   const onFileChange = async (file) => {
+    // upload to s3
     setUploaded(true);
     const fileName = uuidv4();
     const result = await Storage.put(`${fileName}.mp4`, file);
     // console.log(result);
-
     if (result.key) {
-      setUploaded(false);
-      setUploadSuccess(true);
       const re = [];
-      re.push(result.key);
       re.push(result.key);
       setVideos(re);
       localStorage.setItem('video', result.key);
+      if (checked) {
+        console.log('checked', `https://streamsocketvideos191545-dev.s3.us-west-1.amazonaws.com/public/${result.key}`);
+        // Create Video to backend
+        await fetch('http://127.0.0.1:8000/videos/video/', {
+          method: 'POST',
+          mode: 'cors',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+          body: JSON.stringify({
+            video: `https://streamsocketvideos191545-dev.s3.us-west-1.amazonaws.com/public/${result.key}`,
+          }),
+        }).then((r) => r.json())
+          .then((res) => {
+            localStorage.setItem('videoID', res.id);
+            console.log('res!!!!', res);
+          });
+      }
     }
+    setUploaded(false);
+    setUploadSuccess(true);
   };
+
   return (
     <div>
       <Box sx={{ width: '100%', height: '100%' }}>
@@ -157,6 +179,14 @@ export default function UploadButtons({ setVideos }) {
               marginTop="10%"
               display="flex"
             >
+              {uploading ? (
+                <Typography
+                  color="primary"
+                >
+                  It takes a while to process subtitle
+                </Typography>
+              )
+                : (<div />)}
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="contained-button-file">
                 <Input accept="video/*" id="contained-button-file" multiple type="file" onChange={(e) => onFileChange(e.target.files[0])} />
@@ -176,6 +206,19 @@ export default function UploadButtons({ setVideos }) {
                 <IconButton color="primary" aria-label="upload picture" component="span">
                   <PhotoCamera />
                 </IconButton>
+              </label>
+              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+              <label htmlFor="icon-button-file" color="primary">
+                <Input accept="video/*" id="icon-button-file" type="file" />
+                <FormControlLabel
+                  control={<Checkbox value="addSub" color="primary" onChange={async () => { setChecked(!checked); }} />}
+                  label={(
+                    <Typography color="primary">
+                      Add auto-generated subtitles
+                    </Typography>
+)}
+                />
+
               </label>
             </Stack>
 

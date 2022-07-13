@@ -51,6 +51,7 @@ const theme = createTheme({
       dark: '#f44336',
       contrastText: '#000',
     },
+
   },
 });
 
@@ -63,7 +64,7 @@ export default function VideoBlock(props) {
   const parser = new SrtParser2();
   readTextFile(TestSub);
   const result = parser.fromSrt(allText);
-  console.log('333', srtIn);
+  console.log('333', srcIn, srtIn);
 
   if (result.length !== 0) {
     result.map((sub) => {
@@ -117,13 +118,15 @@ export default function VideoBlock(props) {
             position: 'relative',
             maxWidth: '800px',
             margin: 'auto',
-            marginBottom: '1%',
+            marginBottom: '2%',
           }}
           >
             <Paper
               elevation={3}
               style={{
                 borderRadius: '16px',
+                margin: '1%',
+
               }}
             >
               <Box
@@ -196,16 +199,20 @@ export default function VideoBlock(props) {
                       textAlign="center"
                     >
                       <Typography
-                        variant="caption"
+                        variant="subtitle1"
                         gutterBottom
-                        color="secondary"
+                        color="fourth"
                         sx={{
                           position: 'absolute',
                           margin: 'auto',
                           width: '60%',
+                          color: 'white',
+                          bottom: '17%',
                         }}
                       >
-                        {Sub}
+                        <Box sx={{ opacity: 0.8, bgcolor: '#000000' }}>
+                          {Sub}
+                        </Box>
                       </Typography>
                       <Fab
                         color="secondary"
@@ -215,6 +222,8 @@ export default function VideoBlock(props) {
                           bottom: '38%',
                           right: '0',
                           margin: '4%',
+                          maxHeight: '50px',
+                          maxWidth: '50px',
                         }}
                       >
                         <FavoriteIcon />
@@ -227,7 +236,10 @@ export default function VideoBlock(props) {
                           bottom: '26%',
                           right: '0',
                           margin: '4%',
+                          maxHeight: '50px',
+                          maxWidth: '50px',
                         }}
+
                       >
                         <InsertCommentIcon />
                       </Fab>
@@ -239,6 +251,8 @@ export default function VideoBlock(props) {
                           bottom: '14%',
                           right: '0',
                           margin: '4%',
+                          maxHeight: '50px',
+                          maxWidth: '50px',
                         }}
                       >
                         <ShareIcon />
@@ -249,7 +263,7 @@ export default function VideoBlock(props) {
                           borderRadius: '16px',
                           margin: '1%',
                         }}
-                        playing
+                        playing={false}
                         controls
                         height="500px"
                         onProgress={handleProgress}

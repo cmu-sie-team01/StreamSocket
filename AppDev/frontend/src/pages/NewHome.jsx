@@ -31,6 +31,7 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import { Hidden, ThemeProvider } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import { useEffect, useState } from 'react';
 import VideoBlock from '../component/VideoBlock';
 
 const drawerWidth = 240;
@@ -120,21 +121,14 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
     }),
   }),
 );
-let newVideoSrc = '';
 
 // eslint-disable-next-line react/prop-types
 export default function NewHome() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
-  const [srtIn, setSrcIn] = React.useState([]);
-
+  const [hasmore, setHasmore] = React.useState(true);
   const [refresh, setRefresh] = React.useState({
-    items: [
-      'https://download.ted.com/talks/KateDarling_2018S-950k.mp4',
-      'https://streamsocketvideo.s3.us-west-1.amazonaws.com/video/1.mp4',
-      'https://streamsocketvideo.s3.us-west-1.amazonaws.com/video/3.mp4',
-      newVideoSrc,
-    ],
+    items: [],
   });
 
   const handleDrawerOpen = () => {
@@ -145,45 +139,75 @@ export default function NewHome() {
     setOpen(false);
   };
   const fetchMoreData = async () => {
-    // a fake async api call like which sends
-    // 20 more records in 1.5 secs
-    if (localStorage.getItem('video')) {
-      newVideoSrc = `https://streamsocketvideos191545-dev.s3.us-west-1.amazonaws.com/public/${localStorage.getItem('video')}`;
+    // fetch the update video if exist
+    const videoID = localStorage.getItem('videoID');
+    console.log(videoID);
+    if (videoID) {
+      await fetch(`http://127.0.0.1:8000/videos/video/${videoID}`, {
+        method: 'GET',
+        mode: 'cors',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      })
+        .then((r) => r.json())
+        .then((res) => {
+          console.log(res);
+          setRefresh({
+            items: refresh.items.concat({ src: res.video, caption: res.caption }),
+          });
+        });
     }
-    const videos = [
-      newVideoSrc,
-    ];
+    localStorage.setItem('videoID', '');
 
-    // Create Video to backend
-    await fetch('http://127.0.0.1:8000/videos/video/', {
-      method: 'POST',
+    // fetch one Video to backend
+    await fetch('http://127.0.0.1:8000/videos/randomvideo/', {
+      method: 'GET',
       mode: 'cors',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${localStorage.getItem('token')}`,
       },
-      body: JSON.stringify({
-        video: newVideoSrc,
-      }),
+    })
+      .then((r) => {
+        console.log('????', r);
+        if (r.status === 204) {
+          setHasmore(false);
+        } return r.json();
+      })
+      .then((res) => {
+        console.log('!!!', res);
+        setTimeout(() => {
+          setRefresh({
+            items: refresh.items.concat({ src: res.video, caption: res.caption }),
+          });
+          console.log(refresh.items);
+        }, 1500);
+      });
+  };
+  const [iniVideo, setIniVideo] = useState([]);
+  const fetchIni = async () => {
+    await fetch('http://127.0.0.1:8000/videos/initialvideo/', {
+      method: 'GET',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
     })
       .then((r) => r.json())
       .then((res) => {
-        console.log('res!!!!', res);
-        setSrcIn(res.caption);
-        console.log(srtIn);
+        console.log(res);
+        setIniVideo(iniVideo.concat(res));
       });
-
-    setTimeout(() => {
-      setRefresh({
-        // items: refresh.items.concat(Array.from({ length: 4 })),
-        items: refresh.items.concat(videos),
-      });
-    }, 1500);
-    console.log(refresh);
   };
+  useEffect(() => {
+    fetchIni();
+  }, []);
+
   return (
     <ThemeProvider theme={theme1}>
-
       <Box sx={{ display: 'flex', overflowY: 'scroll' }}>
         <CssBaseline />
         <AppBar
@@ -376,16 +400,24 @@ export default function NewHome() {
           <InfiniteScroll
             dataLength={refresh.items.length}
             next={fetchMoreData}
-            hasMore={refresh.items.length !== 10}
+            hasMore={hasmore}
             loader={<h4>Loading...</h4>}
-            pullDownToRefreshThreshold={1000}
+            pullDownToRefreshThreshold="100px"
             endMessage={<h4>No more items</h4>}
           >
-            {refresh.items.map((src) => (
-              <div>
-                <VideoBlock srcIn={src} srtIn={srtIn} />
-              </div>
-            ))}
+            {
+              iniVideo.map((item) => {
+                console.log(item);
+                return <VideoBlock srcIn={item.video} srtIn={item.caption} />;
+              })
+            }
+            {
+              refresh.items.map((item) => {
+                console.log(item);
+                return <VideoBlock srcIn={item.src} srtIn={item.caption} />;
+              })
+            }
+
           </InfiniteScroll>
         </Box>
       </Box>
