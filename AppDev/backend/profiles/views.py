@@ -11,7 +11,7 @@ from rest_framework.response import Response
 class FollowView(APIView):
     permission_classes = [IsAuthenticated]
 
-    def post(self, request, following):
+    def put(self, request, following):
         my_profile = Profile.objects.get(user_id=request.user.id)
         following_profile = Profile.objects.get(user_id=following)
         following_user = User.objects.get(id=following)
@@ -22,7 +22,11 @@ class FollowView(APIView):
         }
         return Response(data)
 
-    def delete(self, request, following):
+
+class UnfollowView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def put(self, request, following):
         my_profile = Profile.objects.get(user_id=request.user.id)
         following_profile = Profile.objects.get(user_id=following)
         following_user = User.objects.get(id=following)
@@ -32,6 +36,7 @@ class FollowView(APIView):
             'message': 'ok',
         }
         return Response(data)
+
 
 
 class ProfileView(RetrieveAPIView):

@@ -5,8 +5,8 @@ from . import views
 urlpatterns = [
     path('video/', views.VideoUploadView.as_view()),
     path('video/<int:pk>/', views.VideoDeleteView.as_view()),
-    path('like/', views.VideoLikeView.as_view()),
-    path('unlike/', views.VideoUnlikeView.as_view()),
+    path('like/<int:pk>/', views.VideoLikeView.as_view()),
+    path('unlike/<int:pk>/', views.VideoUnlikeView.as_view()),
     path('randomvideo/', views.RandomVideoView.as_view()),
     path('initialvideo/', views.InitialVideoView.as_view()),
 ]

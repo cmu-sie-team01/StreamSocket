@@ -72,8 +72,8 @@ class VideoLikeView(APIView):
     permission_classes = [IsAuthenticated]
     serializer_class = VideoSerializer
 
-    def put(self, request):
-        video = Video.objects.get(id=request.data['video_id'])
+    def put(self, request, pk):
+        video = Video.objects.get(id=pk)
         user = User.objects.get(id=request.user.id)
         video.likes.add(user)
         video.save()
@@ -85,8 +85,8 @@ class VideoUnlikeView(APIView):
     permission_classes = [IsAuthenticated]
     serializer_class = VideoSerializer
 
-    def put(self, request):
-        video = Video.objects.get(id=request.data['video_id'])
+    def put(self, request, pk):
+        video = Video.objects.get(id=pk)
         user = User.objects.get(id=request.user.id)
         video.likes.remove(user)
         video.save()
