@@ -69,7 +69,7 @@ export default function userProfile({ userName }) {
 
   useEffect(() => {
     const fetchIni = async () => {
-      await fetch('http://127.0.0.1:8000/profiles/profile/', {
+      await fetch('http://128.2.25.18:8000/profiles/profile/', {
         method: 'GET',
         mode: 'cors',
         headers: {
@@ -284,7 +284,7 @@ export default function userProfile({ userName }) {
                       webkit-playsinline="true"
                       playsInline
                       onClick={async () => {
-                        await fetch(`http://127.0.0.1:8000/videos/video/${item.id}/`, {
+                        await fetch(`http://128.2.25.18:8000/videos/video/${item.id}/`, {
                           method: 'GET',
                           mode: 'cors',
                           headers: {

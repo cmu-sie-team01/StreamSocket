@@ -113,7 +113,7 @@ export default function VideoBlock(props) {
   };
   // eslint-disable-next-line react/prop-types
   const handleLike = async () => {
-    await fetch(`http://127.0.0.1:8000/videos/like/${idIn}/`, {
+    await fetch(`http://128.2.25.18:8000/videos/like/${idIn}/`, {
       method: 'PUT',
       mode: 'cors',
       headers: {
@@ -126,7 +126,7 @@ export default function VideoBlock(props) {
           setLike(res.likesCount);
           setAnimation(!animation);
         } else if (res.count) {
-          await fetch(`http://127.0.0.1:8000/videos/unlike/${idIn}/`, {
+          await fetch(`http://128.2.25.18:8000/videos/unlike/${idIn}/`, {
             method: 'PUT',
             mode: 'cors',
             headers: {

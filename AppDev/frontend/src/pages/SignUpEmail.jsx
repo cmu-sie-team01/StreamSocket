@@ -66,7 +66,7 @@ export default function SignUpEmail() {
   const [isUsernameValid, setIsUsernameValid] = useState(false);
   const [isEmailExist, setIsEmailExist] = useState(false);
   const ExistEmail = async (email) => {
-    fetch(`http://127.0.0.1:8000/users/emails/${email}`, {
+    fetch(`http://128.2.25.18:8000/users/emails/${email}`, {
       method: 'GET',
       mode: 'cors',
       headers: {
@@ -117,7 +117,7 @@ export default function SignUpEmail() {
       () => {
         console.log(isEmailExist);
         if (!isEmailExist && validEmail(email) && validUserName(username) && validPw(password)) {
-          fetch('http://127.0.0.1:8000/users/user/', {
+          fetch('http://128.2.25.18:8000/users/user/', {
             method: 'POST',
             mode: 'cors',
             headers: {
