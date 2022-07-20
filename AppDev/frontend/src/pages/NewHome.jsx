@@ -130,7 +130,6 @@ export default function NewHome() {
   const [refresh, setRefresh] = React.useState({
     items: [],
   });
-
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -141,7 +140,6 @@ export default function NewHome() {
   const fetchMoreData = async () => {
     // fetch the update video if exist
     const videoID = localStorage.getItem('videoID');
-    console.log(videoID);
     if (videoID) {
       await fetch(`http://127.0.0.1:8000/videos/video/${videoID}`, {
         method: 'GET',
@@ -153,9 +151,13 @@ export default function NewHome() {
       })
         .then((r) => r.json())
         .then((res) => {
-          console.log(res);
           setRefresh({
-            items: refresh.items.concat({ src: res.video, caption: res.caption }),
+            items: refresh.items.concat({
+              src: res.video,
+              caption: res.caption,
+              likes: res.likes,
+              videoID: res.id,
+            }),
           });
         });
     }
@@ -171,38 +173,39 @@ export default function NewHome() {
       },
     })
       .then((r) => {
-        console.log('????', r);
         if (r.status === 204) {
           setHasmore(false);
         } return r.json();
       })
       .then((res) => {
-        console.log('!!!', res);
         setTimeout(() => {
           setRefresh({
-            items: refresh.items.concat({ src: res.video, caption: res.caption }),
+            items: refresh.items.concat({
+              src: res.video,
+              caption: res.caption,
+              likes: res.likes,
+              videoID: res.id,
+            }),
           });
-          console.log(refresh.items);
         }, 1500);
       });
   };
   const [iniVideo, setIniVideo] = useState([]);
-  const fetchIni = async () => {
-    await fetch('http://127.0.0.1:8000/videos/initialvideo/', {
-      method: 'GET',
-      mode: 'cors',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
-    })
-      .then((r) => r.json())
-      .then((res) => {
-        console.log(res);
-        setIniVideo(iniVideo.concat(res));
-      });
-  };
   useEffect(() => {
+    const fetchIni = async () => {
+      await fetch('http://127.0.0.1:8000/videos/initialvideo/', {
+        method: 'GET',
+        mode: 'cors',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      })
+        .then((r) => r.json())
+        .then((res) => {
+          setIniVideo(iniVideo.concat(res));
+        });
+    };
     fetchIni();
   }, []);
 
@@ -232,7 +235,7 @@ export default function NewHome() {
             </Hidden>
             <BathtubIcon sx={{ margin: '1%' }} />
 
-            <Box sx={{ display: { xs: 'flex', md: 'flex' } }}>
+            <Box sx={{ display: { xs: 'flex', md: 'flex', width: '100vw' } }}>
 
               <Typography
                 variant="h6"
@@ -402,20 +405,21 @@ export default function NewHome() {
             next={fetchMoreData}
             hasMore={hasmore}
             loader={<h4>Loading...</h4>}
-            pullDownToRefreshThreshold="100px"
+            pullDownToRefreshThreshold={`${refresh.items.length * 500}px`}
             endMessage={<h4>No more items</h4>}
           >
             {
-              iniVideo.map((item) => {
-                console.log(item);
-                return <VideoBlock srcIn={item.video} srtIn={item.caption} />;
-              })
+              iniVideo.map((item) => (
+                <VideoBlock
+                  srcIn={item.video}
+                  srtIn={item.caption}
+                  likesIn={item.likes}
+                  videoIDIn={item.id}
+                />
+              ))
             }
             {
-              refresh.items.map((item) => {
-                console.log(item);
-                return <VideoBlock srcIn={item.src} srtIn={item.caption} />;
-              })
+              refresh.items.map((item) => <VideoBlock srcIn={item.src} srtIn={item.caption} />)
             }
 
           </InfiniteScroll>

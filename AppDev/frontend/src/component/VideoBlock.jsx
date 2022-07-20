@@ -58,13 +58,18 @@ const theme = createTheme({
 // eslint-disable-next-line react/prop-types
 export default function VideoBlock(props) {
   // eslint-disable-next-line react/prop-types
-  const { srcIn, srtIn } = props;
+  const {
+    // eslint-disable-next-line react/prop-types
+    srcIn, srtIn, likesIn, videoIDIn,
+  } = props;
 
   const [Sub, SetSub] = React.useState('');
+  // eslint-disable-next-line react/prop-types
+  const [like, setLike] = React.useState(likesIn ? likesIn.length : 0);
+  const [likeActive, setLikeActive] = React.useState(false);
   const parser = new SrtParser2();
   readTextFile(TestSub);
   const result = parser.fromSrt(allText);
-  console.log('333', srcIn, srtIn);
 
   if (result.length !== 0) {
     result.map((sub) => {
@@ -84,7 +89,6 @@ export default function VideoBlock(props) {
       sub.startTime = startTimeToSeconds;
       return sub;
     });
-    // console.log(result);
   }
 
   const handleDuration = (duration) => {
@@ -107,6 +111,25 @@ export default function VideoBlock(props) {
     console.log(parseFloat(e.target.value));
   };
   // eslint-disable-next-line react/prop-types
+  const handleLike = async () => {
+    await fetch(`http://127.0.0.1:8000/videos/video/${videoIDIn}`, {
+      method: 'GET',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
+    });
+    if (!likeActive) {
+      const newLike = like + 1;
+      setLike(newLike);
+      setLikeActive(!likeActive);
+    } else if (likeActive) {
+      const newLike = like - 1;
+      setLike(newLike);
+      setLikeActive(!likeActive);
+    }
+  };
   return (
   // eslint-disable-next-line react/prop-types
     srcIn.length === 0 ? (null)
@@ -214,50 +237,86 @@ export default function VideoBlock(props) {
                           {Sub}
                         </Box>
                       </Typography>
-                      <Fab
-                        color="secondary"
-                        aria-label="like"
-                        sx={{
-                          position: 'absolute',
-                          bottom: '38%',
-                          right: '0',
-                          margin: '4%',
-                          maxHeight: '50px',
-                          maxWidth: '50px',
-                        }}
+                      <Box sx={{
+                        position: 'absolute',
+                        bottom: '38%',
+                        right: '0',
+                        margin: '4%',
+                      }}
                       >
-                        <FavoriteIcon />
-                      </Fab>
-                      <Fab
-                        color="primary"
-                        aria-label="like"
-                        sx={{
-                          position: 'absolute',
-                          bottom: '26%',
-                          right: '0',
-                          margin: '4%',
-                          maxHeight: '50px',
-                          maxWidth: '50px',
-                        }}
+                        <Fab
+                          color="secondary"
+                          aria-label="like"
+                          sx={{
+                            maxHeight: '40px',
+                            maxWidth: '40px',
+                          }}
+                        >
+                          <FavoriteIcon onClick={handleLike} />
+                        </Fab>
+                        <Typography
+                          variant="caption"
+                          color="red"
+                          sx={{
+                            display: 'block',
+                          }}
+                        >
+                          {like}
+                        </Typography>
+                      </Box>
+                      <Box sx={{
+                        position: 'absolute',
+                        bottom: '26%',
+                        right: '0',
+                        margin: '4%',
+                      }}
+                      >
+                        <Fab
+                          color="primary"
+                          aria-label="like"
+                          sx={{
+                            maxHeight: '40px',
+                            maxWidth: '40px',
+                          }}
+                        >
+                          <InsertCommentIcon />
+                        </Fab>
+                        <Typography
+                          variant="caption"
+                          sx={{
+                            display: 'block',
+                          }}
+                        >
+                          12356
+                        </Typography>
+                      </Box>
 
+                      <Box sx={{
+                        position: 'absolute',
+                        bottom: '14%',
+                        right: '0',
+                        margin: '4%',
+                      }}
                       >
-                        <InsertCommentIcon />
-                      </Fab>
-                      <Fab
-                        color="third"
-                        aria-label="like"
-                        sx={{
-                          position: 'absolute',
-                          bottom: '14%',
-                          right: '0',
-                          margin: '4%',
-                          maxHeight: '50px',
-                          maxWidth: '50px',
-                        }}
-                      >
-                        <ShareIcon />
-                      </Fab>
-
+                        <Fab
+                          color="third"
+                          aria-label="like"
+                          sx={{
+                            maxHeight: '40px',
+                            maxWidth: '40px',
+                          }}
+                        >
+                          <ShareIcon />
+                        </Fab>
+                        <Typography
+                          variant="caption"
+                          sx={{
+                            display: 'block',
+                          }}
+                        >
+                          12356
+                        </Typography>
+                      </Box>
                       <ReactPlayer
                         style={{
                           borderRadius: '16px',
