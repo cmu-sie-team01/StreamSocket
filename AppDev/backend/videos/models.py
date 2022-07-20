@@ -13,7 +13,7 @@ class Video(models.Model):
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     video = models.URLField(unique=True)
     likes = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='likes', blank=True)
-    likesCount = models.BigIntegerField()
+    likesCount = models.BigIntegerField(default=0)
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
     caption = models.JSONField(null=True)
