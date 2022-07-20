@@ -7,3 +7,6 @@ class VideoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Video
         fields = ['author', 'video', 'likesCount', 'updated', 'created', 'caption']
+        extra_kwargs = {
+            'likesCount': {'read_only': True},
+        }
