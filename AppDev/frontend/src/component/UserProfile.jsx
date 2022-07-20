@@ -14,6 +14,11 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import VideoLibraryIcon from '@mui/icons-material/VideoLibrary';
 import { Link, useNavigate } from 'react-router-dom';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { useState, useEffect } from 'react';
+import {
+  Dialog, DialogActions, DialogContent,
+} from '@mui/material';
+import VideoBlock from './VideoBlock';
 
 function TabPanel(props) {
   const {
@@ -54,10 +59,38 @@ function a11yProps(index) {
 export default function userProfile({ userName }) {
   const theme = createTheme();
   const navigate = useNavigate();
-  const [value, setValue] = React.useState(0);
-
+  const [value, setValue] = useState(0);
+  const [username, setName] = useState(0);
+  const [likeVideos, setLikeVideos] = useState([]);
+  const [uploadVideos, setUploadVideos] = useState([]);
   const handleChange = (event, newValue) => {
     setValue(newValue);
+  };
+
+  useEffect(() => {
+    const fetchIni = async () => {
+      await fetch('http://127.0.0.1:8000/profiles/profile/', {
+        method: 'GET',
+        mode: 'cors',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      })
+        .then((r) => r.json())
+        .then((res) => {
+          console.log(res);
+          setName(res.user.username);
+          setLikeVideos(likeVideos.concat(res.videos_like));
+          setUploadVideos(uploadVideos.concat(res.videos_upload));
+        });
+    };
+    fetchIni();
+  }, []);
+  const [selectedVideo, setSelectVideo] = useState(null);
+  const [open, setOpen] = React.useState(false);
+  const handleClose = () => {
+    setOpen(false);
   };
 
   return (
@@ -73,9 +106,35 @@ export default function userProfile({ userName }) {
           />
         </Button>
         <CssBaseline />
+
+        <Dialog
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+          PaperProps={{
+            style: { borderRadius: 20 },
+          }}
+        >
+
+          <DialogContent>
+            {selectedVideo ? (
+              <VideoBlock
+                srcIn={selectedVideo.video}
+                srtIn={selectedVideo.caption}
+                likesIn={selectedVideo.likesCount}
+                idIn={selectedVideo.id}
+              />
+            ) : null}
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose}>Dismiss</Button>
+          </DialogActions>
+        </Dialog>
+
         <Box
           sx={{
-            marginTop: 8,
+            marginTop: 3,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
@@ -108,6 +167,9 @@ export default function userProfile({ userName }) {
               >
                 <Typography component="span" variant="body1" align="center">
                   0
+                  <span>
+                    {(username)}
+                  </span>
                 </Typography>
               </Box>
             </Grid>
@@ -197,29 +259,52 @@ export default function userProfile({ userName }) {
           </Box>
           <TabPanel value={value} index={0}>
             Your Videos
-            <Container maxWidth="xs" sx={{ padding: 0, height: '100vh' }}>
+            <Container
+              maxWidth="xs"
+              sx={{
+                left: '0px',
+                padding: 0,
+              }}
+            >
               <CssBaseline />
               <Box
                 sx={{
                   display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'flex-start',
                 }}
               >
+                {
+                  uploadVideos.map((item) => (
+                    <video
+                      style={{
+                        height: '20vh', width: '20vw', borderRadius: '12px', display: 'flex', margin: '1%',
+                      }}
+                      className="video_card"
+                      autoPlay
+                      muted
+                      webkit-playsinline="true"
+                      playsInline
+                      onClick={async () => {
+                        await fetch(`http://127.0.0.1:8000/videos/video/${item.id}/`, {
+                          method: 'GET',
+                          mode: 'cors',
+                          headers: {
+                            'Content-Type': 'application/json',
+                            Authorization: `Bearer ${localStorage.getItem('token')}`,
+                          },
+                        }).then((r) => r.json())
+                          .then((res) => {
+                            console.log(res);
+                            setSelectVideo(res);
+                            setOpen(true);
+                            console.log(selectedVideo);
+                          });
+                      }}
+                    >
+                      <source src={item.video} type="video/mp4" />
+                    </video>
+                  ))
+                }
 
-                <video
-                  style={{
-                    left: 0, height: '20vh', width: '10vw', borderRadius: '12px',
-                  }}
-                  controls
-                  className="video_card"
-                  autoPlay
-                  muted
-                  webkit-playsinline="true"
-                  playsInline
-                >
-                  <source src="https://streamsocketvideo.s3.us-west-1.amazonaws.com/video/1.mp4" type="video/mp4" />
-                </video>
               </Box>
             </Container>
 
@@ -231,24 +316,25 @@ export default function userProfile({ userName }) {
               <Box
                 sx={{
                   display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'flex-start',
                 }}
               >
+                {
+                  likeVideos.map((item) => (
+                    <video
+                      style={{
+                        height: '20vh', width: '20vw', borderRadius: '16px', display: 'flex', margin: '1%',
+                      }}
+                      className="video_card"
+                      autoPlay
+                      muted
+                      webkit-playsinline="true"
+                      playsInline
 
-                <video
-                  style={{
-                    left: 0, height: '20vh', width: '10vw', borderRadius: '12px',
-                  }}
-                  controls
-                  className="video_card"
-                  autoPlay
-                  muted
-                  webkit-playsinline="true"
-                  playsInline
-                >
-                  <source src="https://streamsocketvideo.s3.us-west-1.amazonaws.com/video/1.mp4" type="video/mp4" />
-                </video>
+                    >
+                      <source src={item.video} type="video/mp4" />
+                    </video>
+                  ))
+                }
               </Box>
             </Container>
           </TabPanel>

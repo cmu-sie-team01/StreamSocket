@@ -5,6 +5,7 @@ import { createTheme } from '@mui/material/styles';
 import Grid from '@mui/material/Grid';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import Fab from '@mui/material/Fab';
+import { motion } from 'framer-motion';
 
 import InsertCommentIcon from '@mui/icons-material/InsertComment';
 import ShareIcon from '@mui/icons-material/Share';
@@ -60,13 +61,13 @@ export default function VideoBlock(props) {
   // eslint-disable-next-line react/prop-types
   const {
     // eslint-disable-next-line react/prop-types
-    srcIn, srtIn, likesIn, videoIDIn,
+    srcIn, srtIn, likesIn, idIn, userIDIn,
   } = props;
-
+  console.log(userIDIn);
   const [Sub, SetSub] = React.useState('');
   // eslint-disable-next-line react/prop-types
-  const [like, setLike] = React.useState(likesIn ? likesIn.length : 0);
-  const [likeActive, setLikeActive] = React.useState(false);
+  const [like, setLike] = React.useState(likesIn !== 0 ? likesIn : 0);
+  const [animation, setAnimation] = React.useState(false);
   const parser = new SrtParser2();
   readTextFile(TestSub);
   const result = parser.fromSrt(allText);
@@ -112,23 +113,38 @@ export default function VideoBlock(props) {
   };
   // eslint-disable-next-line react/prop-types
   const handleLike = async () => {
-    await fetch(`http://127.0.0.1:8000/videos/video/${videoIDIn}`, {
-      method: 'GET',
+    await fetch(`http://127.0.0.1:8000/videos/like/${idIn}/`, {
+      method: 'PUT',
       mode: 'cors',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${localStorage.getItem('token')}`,
       },
-    });
-    if (!likeActive) {
-      const newLike = like + 1;
-      setLike(newLike);
-      setLikeActive(!likeActive);
-    } else if (likeActive) {
-      const newLike = like - 1;
-      setLike(newLike);
-      setLikeActive(!likeActive);
-    }
+    }).then((r) => r.json())
+      .then(async (res) => {
+        if (res.likesCount) {
+          setLike(res.likesCount);
+          setAnimation(!animation);
+        } else if (res.count) {
+          await fetch(`http://127.0.0.1:8000/videos/unlike/${idIn}/`, {
+            method: 'PUT',
+            mode: 'cors',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+          }).then((r2) => r2.json())
+            .then((res2) => {
+              if (res2.likesCount) {
+                setLike(res2.likesCount);
+                setAnimation(!animation);
+              } else if (res2.count) {
+                setAnimation(!animation);
+              }
+            });
+        }
+      });
+    setAnimation(!animation);
   };
   return (
   // eslint-disable-next-line react/prop-types
@@ -237,6 +253,7 @@ export default function VideoBlock(props) {
                           {Sub}
                         </Box>
                       </Typography>
+
                       <Box sx={{
                         position: 'absolute',
                         bottom: '38%',
@@ -244,16 +261,37 @@ export default function VideoBlock(props) {
                         margin: '4%',
                       }}
                       >
-                        <Fab
-                          color="secondary"
-                          aria-label="like"
-                          sx={{
-                            maxHeight: '40px',
-                            maxWidth: '40px',
-                          }}
-                        >
-                          <FavoriteIcon onClick={handleLike} />
-                        </Fab>
+                        {animation ? (
+                          <motion.div
+                            animate={{
+                              scale: [1, 2, 2, 1, 1],
+                              rotate: [0, 0, 270, 270, 0],
+                              borderRadius: ['20%', '20%', '50%', '50%', '20%'],
+                            }}
+                          >
+                            <Fab
+                              color="secondary"
+                              aria-label="like"
+                              sx={{
+                                maxHeight: '40px',
+                                maxWidth: '40px',
+                              }}
+                            >
+                              <FavoriteIcon onClick={handleLike} />
+                            </Fab>
+                          </motion.div>
+                        ) : (
+                          <Fab
+                            color="secondary"
+                            aria-label="like"
+                            sx={{
+                              maxHeight: '40px',
+                              maxWidth: '40px',
+                            }}
+                          >
+                            <FavoriteIcon onClick={handleLike} />
+                          </Fab>
+                        )}
                         <Typography
                           variant="caption"
                           color="red"
@@ -263,6 +301,7 @@ export default function VideoBlock(props) {
                         >
                           {like}
                         </Typography>
+
                       </Box>
                       <Box sx={{
                         position: 'absolute',

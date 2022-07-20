@@ -140,7 +140,9 @@ export default function NewHome() {
   const fetchMoreData = async () => {
     // fetch the update video if exist
     const videoID = localStorage.getItem('videoID');
+
     if (videoID) {
+      console.log(videoID);
       await fetch(`http://127.0.0.1:8000/videos/video/${videoID}`, {
         method: 'GET',
         mode: 'cors',
@@ -155,8 +157,9 @@ export default function NewHome() {
             items: refresh.items.concat({
               src: res.video,
               caption: res.caption,
-              likes: res.likes,
-              videoID: res.id,
+              likesCount: res.likesCount,
+              id: res.id,
+              uid: res.author,
             }),
           });
         });
@@ -178,13 +181,16 @@ export default function NewHome() {
         } return r.json();
       })
       .then((res) => {
+        console.log(res);
+
         setTimeout(() => {
           setRefresh({
             items: refresh.items.concat({
               src: res.video,
               caption: res.caption,
-              likes: res.likes,
-              videoID: res.id,
+              likesCount: res.likesCount,
+              id: res.id,
+              uid: res.author,
             }),
           });
         }, 1500);
@@ -413,13 +419,22 @@ export default function NewHome() {
                 <VideoBlock
                   srcIn={item.video}
                   srtIn={item.caption}
-                  likesIn={item.likes}
-                  videoIDIn={item.id}
+                  likesIn={item.likesCount}
+                  idIn={item.id}
+                  userIDIn={item.uid}
                 />
               ))
             }
             {
-              refresh.items.map((item) => <VideoBlock srcIn={item.src} srtIn={item.caption} />)
+              refresh.items.map((item) => (
+                <VideoBlock
+                  srcIn={item.src}
+                  srtIn={item.caption}
+                  likesIn={item.likesCount}
+                  idIn={item.id}
+                  userIDIn={item.uid}
+                />
+              ))
             }
 
           </InfiniteScroll>

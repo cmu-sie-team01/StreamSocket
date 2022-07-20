@@ -12,6 +12,7 @@ import NewHome from './pages/NewHome';
 import UploadCard from './component/UploadCard';
 import awsconfig from './aws-exports';
 import Test from './component/Test';
+import SingleVideo from './pages/SingleVideo';
 
 Amplify.configure(awsconfig);
 Auth.configure(awsconfig);
@@ -43,6 +44,7 @@ function App() {
         <Route path="videoupload" element={<UploadCard setVideos={setVideos} />} />
         <Route path="/newhome" element={<NewHome videos={videos} />} />
         <Route path="test" element={<Test />} />
+        <Route path="singlevideo" element={<SingleVideo />} />
       </Routes>
     </BrowserRouter>
 

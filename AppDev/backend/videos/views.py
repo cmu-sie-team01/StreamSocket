@@ -78,7 +78,8 @@ class VideoLikeView(APIView):
 
         if user in video.likes.all():
             data = {
-                f'the user {user.id} has already liked the video {video.id}'
+                'text': f'the user {user.id} has already liked the video {video.id}',
+                'count':f'{video.likesCount}'
             }
             return Response(data)
 
@@ -99,7 +100,8 @@ class VideoUnlikeView(APIView):
 
         if user not in video.likes.all():
             data = {
-                f'the user {user.id} has not liked the video {video.id} yet'
+                'text': f'the user {user.id} has not liked the video {video.id} yet',
+                'count':f'{video.likesCount}'
             }
             return Response(data)
 
