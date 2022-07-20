@@ -75,7 +75,15 @@ class VideoLikeView(APIView):
     def put(self, request, pk):
         video = Video.objects.get(id=pk)
         user = User.objects.get(id=request.user.id)
+
+        if user in video.likes.all():
+            data = {
+                f'the user {user.id} has already liked the video {video.id}'
+            }
+            return Response(data)
+
         video.likes.add(user)
+        video.likesCount += 1
         video.save()
         serializer = VideoSerializer(instance=video)
         return Response(serializer.data)
@@ -88,7 +96,15 @@ class VideoUnlikeView(APIView):
     def put(self, request, pk):
         video = Video.objects.get(id=pk)
         user = User.objects.get(id=request.user.id)
+
+        if user not in video.likes.all():
+            data = {
+                f'the user {user.id} has not liked the video {video.id} yet'
+            }
+            return Response(data)
+
         video.likes.remove(user)
+        video.likesCount -= 1
         video.save()
         serializer = VideoSerializer(instance=video)
         return Response(serializer.data)
