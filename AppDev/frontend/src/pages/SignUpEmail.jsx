@@ -131,7 +131,7 @@ export default function SignUpEmail() {
             .then((res) => {
               if (res) {
                 console.log(res);
-                navigate('/userprofile');
+                navigate('/newhome');
               }
             });
         }
