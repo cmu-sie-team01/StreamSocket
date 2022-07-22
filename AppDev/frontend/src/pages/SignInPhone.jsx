@@ -80,7 +80,7 @@ export default function SignUpPhone() {
     const data = new FormData(event.currentTarget);
     validate(data);
     const phone = data.get('phone');
-    // fetch(`http://127.0.0.1:8000/users/mobiles/${phone}`, {
+    // fetch(`http://128.2.25.18:8000/users/mobiles/${phone}`, {
     //   method: 'GET',
     //   mode: 'cors',
     //   headers: {
@@ -98,7 +98,7 @@ export default function SignUpPhone() {
     if (ValidatePhone(phone)) {
       setIsCodeSent(true);
     }
-    fetch(`http://127.0.0.1:8000/users/verifications/${phone}/`, {
+    fetch(`http://128.2.25.18:8000/users/verifications/${phone}/`, {
       method: 'GET',
       mode: 'cors',
       headers: {
@@ -126,7 +126,7 @@ export default function SignUpPhone() {
         username: PhoneValueRef.current.value, password: CodevalueRef.current.value,
       }));
       // validate is xwcode correct
-      fetch('http://127.0.0.1:8000/users/token/', {
+      fetch('http://128.2.25.18:8000/users/token/', {
         method: 'POST',
         mode: 'cors',
         headers: {

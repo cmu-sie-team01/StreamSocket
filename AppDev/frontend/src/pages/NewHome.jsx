@@ -143,7 +143,7 @@ export default function NewHome() {
 
     if (videoID) {
       console.log(videoID);
-      await fetch(`http://127.0.0.1:8000/videos/video/${videoID}`, {
+      await fetch(`http://128.2.25.18:8000/videos/video/${videoID}`, {
         method: 'GET',
         mode: 'cors',
         headers: {
@@ -167,7 +167,7 @@ export default function NewHome() {
     localStorage.setItem('videoID', '');
 
     // fetch one Video to backend
-    await fetch('http://127.0.0.1:8000/videos/randomvideo/', {
+    await fetch('http://128.2.25.18:8000/videos/randomvideo/', {
       method: 'GET',
       mode: 'cors',
       headers: {
@@ -199,7 +199,7 @@ export default function NewHome() {
   const [iniVideo, setIniVideo] = useState([]);
   useEffect(() => {
     const fetchIni = async () => {
-      await fetch('http://127.0.0.1:8000/videos/initialvideo/', {
+      await fetch('http://128.2.25.18:8000/videos/initialvideo/', {
         method: 'GET',
         mode: 'cors',
         headers: {

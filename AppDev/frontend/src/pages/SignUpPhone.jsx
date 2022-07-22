@@ -93,7 +93,7 @@ export default function SignUpPhone() {
     });
     if (ValidatePhone(phone)) {
       console.log('code sent');
-      fetch(`http://127.0.0.1:8000/users/verifications/${phone}/`, {
+      fetch(`http://128.2.25.18:8000/users/verifications/${phone}/`, {
         method: 'GET',
         mode: 'cors',
         headers: {
@@ -117,7 +117,7 @@ export default function SignUpPhone() {
       console.log('req', JSON.stringify({
         mobile: PhoneValueRef.current.value, verification: CodevalueRef.current.value,
       }));
-      fetch('http://127.0.0.1:8000/users/user/', {
+      fetch('http://128.2.25.18:8000/users/user/', {
         method: 'POST',
         mode: 'cors',
         headers: {
