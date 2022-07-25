@@ -13,6 +13,7 @@ import UploadCard from './component/UploadCard';
 import awsconfig from './aws-exports';
 import Test from './component/Test';
 import SingleVideo from './pages/SingleVideo';
+import Page404 from './pages/Page404';
 
 Amplify.configure(awsconfig);
 Auth.configure(awsconfig);
@@ -31,6 +32,7 @@ function App() {
   const userName2 = localStorage.getItem('username');
   const [videos, setVideos] = React.useState([]);
   console.log(videos);
+
   return (
     <BrowserRouter>
       <ThemeProvider theme={theme} />
@@ -45,6 +47,8 @@ function App() {
         <Route path="/newhome" element={<NewHome videos={videos} />} />
         <Route path="test" element={<Test />} />
         <Route path="singlevideo" element={<SingleVideo />} />
+        <Route path="*" exact element={<Page404 />} />
+
       </Routes>
     </BrowserRouter>
 

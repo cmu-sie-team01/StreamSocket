@@ -24,15 +24,16 @@ import {
   Link,
 } from 'react-router-dom';
 import BathtubIcon from '@mui/icons-material/Bathtub';
-import Badge from '@mui/material/Badge';
-import MailIcon from '@mui/icons-material/Mail';
-import NotificationsIcon from '@mui/icons-material/Notifications';
-import AccountCircle from '@mui/icons-material/AccountCircle';
+
 import { Hidden, ThemeProvider } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { useEffect, useState } from 'react';
 import VideoBlock from '../component/VideoBlock';
+import ProfileMenu from '../component/ProfileMenu';
+import Notification from '../component/Notification';
+import DirectMsg from '../component/DirectMsg';
+import Page404 from './Page404';
 
 const drawerWidth = 240;
 const theme1 = createTheme({
@@ -216,159 +217,65 @@ export default function NewHome() {
   }, []);
 
   return (
+
     <ThemeProvider theme={theme1}>
-      <Box sx={{ display: 'flex', overflowY: 'scroll' }}>
-        <CssBaseline />
-        <AppBar
-          position="fixed"
-          open={open}
-          color="primary"
-        >
-          <Toolbar>
-            <Hidden only={['xs']}>
-              <IconButton
-                color="inherit"
-                aria-label="open drawer"
-                onClick={handleDrawerOpen}
-                edge="start"
-                sx={{
-                  ...(open && { display: 'none' }),
-                }}
-              >
-                <MenuIcon />
-
-              </IconButton>
-            </Hidden>
-            <BathtubIcon sx={{ margin: '1%' }} />
-
-            <Box sx={{ display: { xs: 'flex', md: 'flex', width: '100vw' } }}>
-
-              <Typography
-                variant="h6"
-                noWrap
-                component="div"
-                sx={{
-                  marginRight: 5,
-                  marginLeft: 1,
-                }}
-              >
-                Stream Socket
-              </Typography>
-            </Box>
-            <Box sx={{ flexGrow: 1 }} />
-            <Box sx={{ flexGrow: 1 }} />
-            <Box sx={{ display: { xs: 'flex', md: 'flex' } }}>
-              <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-                <Badge badgeContent={4} color="error">
-                  <MailIcon />
-                </Badge>
-              </IconButton>
-              <IconButton
-                size="large"
-                aria-label="show 17 new notifications"
-                color="inherit"
-              >
-                <Badge badgeContent={17} color="error">
-                  <NotificationsIcon />
-                </Badge>
-              </IconButton>
-              <IconButton
-                size="large"
-                edge="end"
-                aria-label="account of current user"
-                aria-haspopup="true"
-                color="inherit"
-                component={Link}
-                to="/signin"
-              >
-                <AccountCircle />
-              </IconButton>
-            </Box>
-          </Toolbar>
-        </AppBar>
-        <Drawer variant="permanent" open={open}>
-          <DrawerHeader>
-            <IconButton onClick={handleDrawerClose}>
-              {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-            </IconButton>
-          </DrawerHeader>
-          <Divider />
-          <List>
-            <ListItem disablePadding sx={{ display: 'block' }}>
-              <ListItemButton
-                sx={{
-                  minHeight: 48,
-                  justifyContent: open ? 'initial' : 'center',
-                  px: 2.5,
-                }}
-                component={Link}
-                to="/newhome"
-              >
-                <ListItemIcon
+      {localStorage.getItem('token') ? (
+        <Box sx={{ display: 'flex', overflowY: 'scroll' }}>
+          <CssBaseline />
+          <AppBar
+            position="fixed"
+            open={open}
+            color="primary"
+          >
+            <Toolbar>
+              <Hidden only={['xs']}>
+                <IconButton
+                  color="inherit"
+                  aria-label="open drawer"
+                  onClick={handleDrawerOpen}
+                  edge="start"
                   sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : 'auto',
-                    justifyContent: 'center',
+                    ...(open && { display: 'none' }),
                   }}
                 >
-                  <HomeIcon />
-                </ListItemIcon>
-                <ListItemText primary="For you" sx={{ opacity: open ? 1 : 0 }} />
-              </ListItemButton>
-            </ListItem>
+                  <MenuIcon />
 
-            <ListItem disablePadding sx={{ display: 'block' }}>
-              <ListItemButton
-                sx={{
-                  minHeight: 48,
-                  justifyContent: open ? 'initial' : 'center',
-                  px: 2.5,
-                }}
-                component={Link}
-                to="/test"
-              >
+                </IconButton>
+              </Hidden>
+              <BathtubIcon sx={{ margin: '1%' }} />
 
-                <ListItemIcon
+              <Box sx={{ display: { xs: 'flex', md: 'flex', width: '100vw' } }}>
+
+                <Typography
+                  variant="h6"
+                  noWrap
+                  component="div"
                   sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : 'auto',
-                    justifyContent: 'center',
+                    marginRight: 5,
+                    marginLeft: 1,
                   }}
                 >
-                  <PeopleAltIcon />
-                </ListItemIcon>
-                <ListItemText primary="Follow" sx={{ opacity: open ? 1 : 0 }} />
-              </ListItemButton>
-            </ListItem>
-            <ListItem disablePadding sx={{ display: 'block' }}>
-              <ListItemButton
-                sx={{
-                  minHeight: 48,
-                  justifyContent: open ? 'initial' : 'center',
-                  px: 2.5,
-                }}
-                component={Link}
-                to="/videoupload"
-              >
-
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : 'auto',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <AddIcon />
-                </ListItemIcon>
-                <ListItemText primary="Upload" sx={{ opacity: open ? 1 : 0 }} />
-              </ListItemButton>
-            </ListItem>
-
-          </List>
-          <Divider />
-          <List>
-            {['User 1', 'User 2', 'User 3'].map((text) => (
-              <ListItem key={text} disablePadding sx={{ display: 'block' }}>
+                  Stream Socket
+                </Typography>
+              </Box>
+              <Box sx={{ flexGrow: 1 }} />
+              <Box sx={{ flexGrow: 1 }} />
+              <Box sx={{ display: { xs: 'flex', md: 'flex' } }}>
+                <DirectMsg />
+                <Notification />
+                <ProfileMenu />
+              </Box>
+            </Toolbar>
+          </AppBar>
+          <Drawer variant="permanent" open={open}>
+            <DrawerHeader>
+              <IconButton onClick={handleDrawerClose}>
+                {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+              </IconButton>
+            </DrawerHeader>
+            <Divider />
+            <List>
+              <ListItem disablePadding sx={{ display: 'block' }}>
                 <ListItemButton
                   sx={{
                     minHeight: 48,
@@ -376,45 +283,119 @@ export default function NewHome() {
                     px: 2.5,
                   }}
                   component={Link}
-                  to="/userprofile"
+                  to="/newhome"
                 >
                   <ListItemIcon
                     sx={{
                       minWidth: 0,
                       mr: open ? 3 : 'auto',
                       justifyContent: 'center',
-
                     }}
                   >
-                    <Avatar sx={{
-                      m: 1, bgcolor: deepOrange[500],
-                    }}
-                    >
-                      u
-                    </Avatar>
+                    <HomeIcon />
                   </ListItemIcon>
-                  <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
+                  <ListItemText primary="For you" sx={{ opacity: open ? 1 : 0 }} />
                 </ListItemButton>
               </ListItem>
-            ))}
-          </List>
-        </Drawer>
-        <Box
-          component="main"
-          sx={{
-            flexGrow: 1, p: 1, m: 1, overflowX: 'scroll', overflowY: 'scroll',
-          }}
-        >
-          <DrawerHeader />
-          <InfiniteScroll
-            dataLength={refresh.items.length}
-            next={fetchMoreData}
-            hasMore={hasmore}
-            loader={<h4>Loading...</h4>}
-            pullDownToRefreshThreshold={`${refresh.items.length * 500}px`}
-            endMessage={<h4>No more items</h4>}
+
+              <ListItem disablePadding sx={{ display: 'block' }}>
+                <ListItemButton
+                  sx={{
+                    minHeight: 48,
+                    justifyContent: open ? 'initial' : 'center',
+                    px: 2.5,
+                  }}
+                  component={Link}
+                  to="/test"
+                >
+
+                  <ListItemIcon
+                    sx={{
+                      minWidth: 0,
+                      mr: open ? 3 : 'auto',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <PeopleAltIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Follow" sx={{ opacity: open ? 1 : 0 }} />
+                </ListItemButton>
+              </ListItem>
+              <ListItem disablePadding sx={{ display: 'block' }}>
+                <ListItemButton
+                  sx={{
+                    minHeight: 48,
+                    justifyContent: open ? 'initial' : 'center',
+                    px: 2.5,
+                  }}
+                  component={Link}
+                  to="/videoupload"
+                >
+
+                  <ListItemIcon
+                    sx={{
+                      minWidth: 0,
+                      mr: open ? 3 : 'auto',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <AddIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Upload" sx={{ opacity: open ? 1 : 0 }} />
+                </ListItemButton>
+              </ListItem>
+
+            </List>
+            <Divider />
+            <List>
+              {['User 1', 'User 2', 'User 3'].map((text) => (
+                <ListItem key={text} disablePadding sx={{ display: 'block' }}>
+                  <ListItemButton
+                    sx={{
+                      minHeight: 48,
+                      justifyContent: open ? 'initial' : 'center',
+                      px: 2.5,
+                    }}
+                    component={Link}
+                    to="/userprofile"
+                  >
+                    <ListItemIcon
+                      sx={{
+                        minWidth: 0,
+                        mr: open ? 3 : 'auto',
+                        justifyContent: 'center',
+
+                      }}
+                    >
+                      <Avatar sx={{
+                        m: 1, bgcolor: deepOrange[500],
+                      }}
+                      >
+                        u
+                      </Avatar>
+                    </ListItemIcon>
+                    <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
+                  </ListItemButton>
+                </ListItem>
+              ))}
+            </List>
+          </Drawer>
+          <Box
+            component="main"
+            sx={{
+              flexGrow: 1, p: 1, m: 1, overflowX: 'scroll', overflowY: 'scroll',
+            }}
           >
-            {
+            <DrawerHeader />
+            <InfiniteScroll
+              dataLength={refresh.items.length}
+              next={fetchMoreData}
+              hasMore={hasmore}
+              loader={<h4>Loading...</h4>}
+              pullDownToRefreshThreshold={`${refresh.items.length * 500}px`}
+              endMessage={<h4>No more items</h4>}
+            >
+              {
               iniVideo.map((item) => (
                 <VideoBlock
                   srcIn={item.video}
@@ -425,7 +406,7 @@ export default function NewHome() {
                 />
               ))
             }
-            {
+              {
               refresh.items.map((item) => (
                 <VideoBlock
                   srcIn={item.src}
@@ -437,9 +418,10 @@ export default function NewHome() {
               ))
             }
 
-          </InfiniteScroll>
+            </InfiniteScroll>
+          </Box>
         </Box>
-      </Box>
+      ) : <Page404 />}
     </ThemeProvider>
   );
 }

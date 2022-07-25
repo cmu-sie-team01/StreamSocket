@@ -262,56 +262,62 @@ export default function userProfile({ userName }) {
             <Container
               maxWidth="xs"
               sx={{
-                left: '0px',
                 padding: 0,
+                width: '100%',
+                paddingTop: '20px',
               }}
+              component={Box}
             >
               <CssBaseline />
-              <Box
+              <Grid
+                container
+                spacing={0}
                 sx={{
                   display: 'flex',
                 }}
               >
                 {
                   uploadVideos.map((item) => (
-                    <video
-                      style={{
-                        height: '20vh', width: '20vw', borderRadius: '12px', display: 'flex', margin: '1%',
-                      }}
-                      className="video_card"
-                      autoPlay
-                      muted
-                      webkit-playsinline="true"
-                      playsInline
-                      onClick={async () => {
-                        await fetch(`http://128.2.25.18:8000/videos/video/${item.id}/`, {
-                          method: 'GET',
-                          mode: 'cors',
-                          headers: {
-                            'Content-Type': 'application/json',
-                            Authorization: `Bearer ${localStorage.getItem('token')}`,
-                          },
-                        }).then((r) => r.json())
-                          .then((res) => {
-                            console.log(res);
-                            setSelectVideo(res);
-                            setOpen(true);
-                            console.log(selectedVideo);
-                          });
-                      }}
-                    >
-                      <source src={item.video} type="video/mp4" />
-                    </video>
+                    <Grid xs={3} margin="2%">
+                      <video
+                        style={{
+                          height: '20vh', maxWidth: '20vw', borderRadius: '12px', display: 'flex', backgroundColor: 'black',
+                        }}
+                        className="video_card"
+                        autoPlay
+                        muted
+                        webkit-playsinline="true"
+                        playsInline
+                        onClick={async () => {
+                          await fetch(`http://128.2.25.18:8000/videos/video/${item.id}/`, {
+                            method: 'GET',
+                            mode: 'cors',
+                            headers: {
+                              'Content-Type': 'application/json',
+                              Authorization: `Bearer ${localStorage.getItem('token')}`,
+                            },
+                          }).then((r) => r.json())
+                            .then((res) => {
+                              console.log(res);
+                              setSelectVideo(res);
+                              setOpen(true);
+                              console.log(selectedVideo);
+                            });
+                        }}
+                      >
+                        <source src={item.video} type="video/mp4" />
+                      </video>
+                    </Grid>
                   ))
                 }
 
-              </Box>
+              </Grid>
             </Container>
 
           </TabPanel>
           <TabPanel value={value} index={1}>
             Your liked Videos
-            <Container maxWidth="xs" sx={{ padding: 0, height: '100vh' }}>
+            <Container maxWidth="xs" sx={{ padding: 0, height: '100vh', width: '100vw' }}>
               <CssBaseline />
               <Box
                 sx={{
