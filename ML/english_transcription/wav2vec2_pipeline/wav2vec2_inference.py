@@ -9,6 +9,7 @@ import torch
 from transformers import Wav2Vec2ForCTC, Wav2Vec2Tokenizer
 from urllib.request import urlopen, urlretrieve
 import moviepy.editor as mp
+import pyroomacoustics.denoise as denoise
 
 def main(argv):
     ### read command line arguments
@@ -92,9 +93,9 @@ def main(argv):
     for start, end in segmentLimits:
         split_audio, sr = librosa.load(filename, sr=16000, offset=start, duration=end - start)
 
-        # https://pypi.org/project/noisereduce/#:~:text=Noise%20reduction%20in%20python%20using,a%20form%20of%20Noise%20Gate.
-        ### noisereduce
-        noise_reduced = nr.reduce_noise(y=split_audio, sr=sr)
+        # https://pyroomacoustics.readthedocs.io/en/pypi-release/pyroomacoustics.denoise.spectral_subtraction.html
+        ### spectral subtraction
+        noise_reduced = denoise.spectral_subtraction.apply_spectral_sub(y, nfft=512, db_reduc=25, lookback=12, beta=30, alpha=1)
 
         ### run model
         input_values = tokenizer(noise_reduced, return_tensors="pt").input_values
