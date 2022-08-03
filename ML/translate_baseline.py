@@ -2,6 +2,8 @@ from transformers import pipeline
 import librosa
 import noisereduce as nr
 from transformers import MBartForConditionalGeneration, MBart50TokenizerFast
+import pyroomacoustics.denoise as denoise
+import sys
 
 
 MAPPING = {
@@ -53,7 +55,7 @@ def transcribe(filepath):
     y, sr = librosa.load(filepath, sr=16000)
 
     ### noisereduce
-    noise_reduce = nr.reduce_noise(y=y, sr=sr)
+    noise_reduce = denoise.spectral_subtraction.apply_spectral_sub(y, nfft=512, db_reduc=25, lookback=12, beta=30, alpha=1)
 
     ### https://huggingface.co/facebook/wav2vec2-xls-r-2b-22-to-16
     asr = pipeline("automatic-speech-recognition", model="facebook/wav2vec2-xls-r-2b-22-to-16", feature_extractor="facebook/wav2vec2-xls-r-2b-22-to-16")
@@ -75,7 +77,7 @@ def audio_to_eng_text(filepath):
     y, sr = librosa.load(filepath, sr=16000)
 
     ### noisereduce
-    noise_reduce = nr.reduce_noise(y=y, sr=sr)
+    noise_reduce = denoise.spectral_subtraction.apply_spectral_sub(y, nfft=512, db_reduc=25, lookback=12, beta=30, alpha=1)
 
     ### https://huggingface.co/facebook/wav2vec2-xls-r-2b-21-to-en
     asr = pipeline("automatic-speech-recognition", model="facebook/wav2vec2-xls-r-2b-21-to-en", feature_extractor="facebook/wav2vec2-xls-r-2b-21-to-en")
@@ -107,6 +109,56 @@ def text_translate(input_str, src_lang='en_XX', output_lang='es_XX'):
     translated = tokenizer.batch_decode(generated_tokens, skip_special_tokens=True)[0]
     return translated
 
+def translate_srt(src_filepath, output_filepath, src_lang='en_XX', output_lang='es_XX'):
+    ### translate between srt files ###
+    
+    ### https://huggingface.co/facebook/mbart-large-50-many-to-many-mmt
+    model = MBartForConditionalGeneration.from_pretrained("facebook/mbart-large-50-many-to-many-mmt")
+    tokenizer = MBart50TokenizerFast.from_pretrained("facebook/mbart-large-50-many-to-many-mmt")
+    tokenizer.src_lang = src_lang
+
+    ### read transcriptions from input srt file
+    # https://docs.fileformat.com/video/srt/
+    try:
+        with open(src_filepath, 'r') as f:
+            ### list of each line in input file without newline characters
+            lines = [line.rstrip() for line in f]
+
+    except FileNotFoundError:
+        print('Unable to find output file path:', output_filepath)
+        sys.exit()
+    
+    ### write transcriptions into output srt file
+    i = 1
+    time_format = False
+    try:
+        with open(output_filepath, 'w') as f:
+            for line in lines:
+                ### indexing lines come first
+                if str(i) == line:
+                    ### extra newline between different indices
+                    if i != 1:
+                        f.write('\n')
+                    f.write(line)
+                    f.write('\n')
+                    time_format = True
+                    i += 1
+                ### timestamp lines come next
+                elif time_format == True:
+                    f.write(line)
+                    f.write('\n')
+                    time_format = False
+                ### transcription lines come after -- these are translated
+                else:
+                    tokenized_input = tokenizer(line, return_tensors="pt")
+                    generated_tokens = model.generate(**tokenized_input, forced_bos_token_id=tokenizer.lang_code_to_id[output_lang])
+                    translated_line = tokenizer.batch_decode(generated_tokens, skip_special_tokens=True)[0]
+                    f.write(translated_line)
+                    f.write('\n')
+    except FileNotFoundError:
+        print('Unable to find output file path:', output_filepath)
+        sys.exit()
+
 # filepath = '001-LaMar-MGH.wav'
 # print(transcribe(filepath))
-# print(text_translate('When the sunlight strikes raindrops in the air, they act as a prism and form a rainbow.', output_lang='ta_IN'))
+# print(text_translate('When the sunlight strikes raindrops in the air, they act as a prism and form a rainbow.', output_lang='es_XX'))
