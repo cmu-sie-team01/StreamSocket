@@ -2,7 +2,6 @@ from pyAudioAnalysis import audioSegmentation as aS
 from convert_time_format import convert_time_format
 import getopt
 import librosa
-import noisereduce as nr
 from split_helper import split_phrases, split_segments
 import sys
 import torch
@@ -10,18 +9,19 @@ from transformers import Wav2Vec2ForCTC, Wav2Vec2Tokenizer, pipeline
 from transformers import MBartForConditionalGeneration, MBart50TokenizerFast
 from urllib.request import urlopen, urlretrieve
 import moviepy.editor as mp
+import pyroomacoustics.denoise as denoise
 
 def main(argv):
     ### read command line arguments
     try:
         opts, args = getopt.getopt(argv,"hi:o:c:p",["ifile=","ofile=","char_limit=", "periodic_limit="])
     except getopt.GetoptError:
-        print('python wav2vec2_inference.py -i <inputfile> -o <outputfile> -c char_limit -p periodic_limit')
+        print('python xlsr_inference.py -i <inputfile> -o <outputfile> -c char_limit -p periodic_limit')
         sys.exit(2)
     input_filepath, output_filepath, char_limit, periodic_limit = '', '', 40, 4
     for opt, arg in opts:
         if opt == '-h':
-            print('Usage: python wav2vec2_inference.py -i <inputfile> -o <outputfile> -c char_limit -p periodic_limit')
+            print('Usage: python xlsr_inference.py -i <inputfile> -o <outputfile> -c char_limit -p periodic_limit')
             sys.exit()
         ### input audio filepath (wav or flac)
         elif opt in ("-i", "--ifile"):
@@ -114,10 +114,10 @@ def main(argv):
     for start, end in segmentLimits:
         split_audio, sr = librosa.load(filename, sr=16000, offset=start, duration=end - start)
 
-        # https://pypi.org/project/noisereduce/#:~:text=Noise%20reduction%20in%20python%20using,a%20form%20of%20Noise%20Gate.
-        ### noisereduce
-        noise_reduced = nr.reduce_noise(y=split_audio, sr=sr)
-
+        # https://pyroomacoustics.readthedocs.io/en/pypi-release/pyroomacoustics.denoise.spectral_subtraction.html
+        ### spectral subtraction
+        noise_reduced = denoise.spectral_subtraction.apply_spectral_sub(y, nfft=512, db_reduc=25, lookback=12, beta=30, alpha=1)
+        
         ### run model
         t = asr(noise_reduced, forced_bos_token_id=forced_bos_token_id)['text']
 
