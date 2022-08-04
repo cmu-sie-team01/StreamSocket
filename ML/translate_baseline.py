@@ -1,6 +1,5 @@
 from transformers import pipeline
 import librosa
-import noisereduce as nr
 from transformers import MBartForConditionalGeneration, MBart50TokenizerFast
 import pyroomacoustics.denoise as denoise
 import sys
@@ -57,12 +56,15 @@ def transcribe(filepath):
     ### noisereduce
     noise_reduce = denoise.spectral_subtraction.apply_spectral_sub(y, nfft=512, db_reduc=25, lookback=12, beta=30, alpha=1)
 
+    tokenizer = MBart50TokenizerFast.from_pretrained("facebook/mbart-large-50-many-to-many-mmt")
+
+    ### select correct `forced_bos_token_id`
+    forced_bos_token_id = MAPPING["ar"]
+
     ### https://huggingface.co/facebook/wav2vec2-xls-r-2b-22-to-16
     asr = pipeline("automatic-speech-recognition", model="facebook/wav2vec2-xls-r-2b-22-to-16", feature_extractor="facebook/wav2vec2-xls-r-2b-22-to-16")
 
-    ### select correct `forced_bos_token_id`
-    forced_bos_token_id = MAPPING["en"]
-    translation = asr(noise_reduce, forced_bos_token_id=forced_bos_token_id)
+    translation = asr(noise_reduce, forced_bos_token_id=tokenizer.lang_code_to_id['ar_AR'])
     return translation['text']
 
 def audio_to_eng_text(filepath):
@@ -159,6 +161,6 @@ def translate_srt(src_filepath, output_filepath, src_lang='en_XX', output_lang='
         print('Unable to find output file path:', output_filepath)
         sys.exit()
 
-# filepath = '001-LaMar-MGH.wav'
+# filepath = 'p232_021.wav'
 # print(transcribe(filepath))
 # print(text_translate('When the sunlight strikes raindrops in the air, they act as a prism and form a rainbow.', output_lang='es_XX'))
