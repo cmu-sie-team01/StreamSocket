@@ -36,15 +36,6 @@ def main(argv):
         elif opt in ("-p", "--periodic_limit"):
             periodic_limit = arg
 
-    # ### input audio filepath (wav or flac)
-    # input_filepath = 'noisy_testset_wav\p257_023.wav'
-    # ### output srt filepath
-    # output_filepath = 'transcription_output.srt.txt'
-    # ### character limit per line for captioning
-    # char_limit = 40
-    # ### time limit per phrase (in seconds) for captioning
-    # periodic_limit = 4
-
     ### check to make sure input and output files are valid
     if input_filepath == '':
         raise FileNotFoundError('No file provided as input. Please use -i <inputfile> as part of command-line arguments')
@@ -58,41 +49,18 @@ def main(argv):
         filename = "audio.wav"
         urlretrieve(url, video_name)
 
-        audio_detached = mp.VideoFileClip(video_name);
+        audio_detached = mp.VideoFileClip(video_name)
+        # audio_detached = mp.VideoFileClip(url)
         audio_detached.audio.write_audiofile(filename)
 
         audio, sr = librosa.load(filename, sr=16000)
-            # audio, sr = soundfile.read(input_filepath, samplerate=16000)
+        # audio, sr = soundfile.read(input_filepath, samplerate=16000)
     except FileNotFoundError:
         print('Unable to find input file path:', input_filepath)
         sys.exit()
 
-
-    ### language mapping ###
-    MAPPING = {
-        "de": 250003,
-        "en": 250004, 
-        "tr": 250023,
-        "fa": 250029,
-        "sv": 250042,
-        "mn": 250037,
-        "zh": 250025,
-        "cy": 250007,
-        "ca": 250005,
-        "sl": 250052,
-        "et": 250006,
-        "id": 250032,
-        "ar": 250001,
-        "ta": 250044,
-        "lv": 250017,
-        "ja": 250012,
-    }
-
     ### load pipeline with model and feature extractor
-    asr = pipeline("automatic-speech-recognition", model="facebook/wav2vec2-xls-r-2b-22-to-16", feature_extractor="facebook/wav2vec2-xls-r-2b-22-to-16")
-
-    # select correct `forced_bos_token_id`
-    forced_bos_token_id = MAPPING["en"]
+    asr = pipeline("automatic-speech-recognition", model="facebook/wav2vec2-xls-r-2b-21-to-en", feature_extractor="facebook/wav2vec2-xls-r-2b-21-to-en")
 
     # https://github.com/tyiannak/pyAudioAnalysis/blob/944f1d777bc96717d2793f257c3b36b1acf1713a/pyAudioAnalysis/audioSegmentation.py#L670
     ### segment limits
@@ -106,7 +74,6 @@ def main(argv):
         else:
             periodic_split += split_segments(start, end, periodic_limit)
     segmentLimits = periodic_split
-    # print("segmentLimits:", segmentLimits)
 
     ### process each segment
     transcriptions = []
@@ -116,19 +83,13 @@ def main(argv):
 
         # https://pyroomacoustics.readthedocs.io/en/pypi-release/pyroomacoustics.denoise.spectral_subtraction.html
         ### spectral subtraction
-        noise_reduced = denoise.spectral_subtraction.apply_spectral_sub(y, nfft=512, db_reduc=25, lookback=12, beta=30, alpha=1)
+        noise_reduced = denoise.spectral_subtraction.apply_spectral_sub(split_audio, nfft=512, db_reduc=25, lookback=12, beta=30, alpha=1)
         
         ### run model
-        t = asr(noise_reduced, forced_bos_token_id=forced_bos_token_id)['text']
+        t = asr(noise_reduced)['text']
 
-        # # https://stackoverflow.com/questions/54587178/python-capitalize-first-character-of-words-in-a-string-except-one-word
-        # ### lowercase all letters except for I
-        # t = " ".join([word.lower() if word.lower() != 'i' else word for word in t.split()])
-        # ### capitalize
-        # t = t.capitalize()
-
-        # print("transcription:", t)
-        transcriptions.append(t)
+        if len(t) > 0:
+            transcriptions.append(t)
 
     ### write transcriptions into output srt file
     # https://docs.fileformat.com/video/srt/

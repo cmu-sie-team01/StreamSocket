@@ -2,7 +2,6 @@ from pyAudioAnalysis import audioSegmentation as aS
 from convert_time_format import convert_time_format
 import getopt
 import librosa
-import noisereduce as nr
 from split_helper import split_phrases, split_segments
 import sys
 import torch
@@ -36,15 +35,6 @@ def main(argv):
         elif opt in ("-p", "--periodic_limit"):
             periodic_limit = arg
 
-    # ### input audio filepath (wav or flac)
-    # input_filepath = 'noisy_testset_wav\p257_023.wav'
-    # ### output srt filepath
-    # output_filepath = 'transcription_output.srt.txt'
-    # ### character limit per line for captioning
-    # char_limit = 40
-    # ### time limit per phrase (in seconds) for captioning
-    # periodic_limit = 4
-
     ### check to make sure input and output files are valid
     if input_filepath == '':
         raise FileNotFoundError('No file provided as input. Please use -i <inputfile> as part of command-line arguments')
@@ -58,7 +48,8 @@ def main(argv):
         filename = "audio.wav"
         urlretrieve(url, video_name)
 
-        audio_detached = mp.VideoFileClip(video_name);
+        audio_detached = mp.VideoFileClip(video_name)
+        # audio_detached = mp.VideoFileClip(url)
         audio_detached.audio.write_audiofile(filename)
 
         audio, sr = librosa.load(filename, sr=16000)
@@ -85,7 +76,6 @@ def main(argv):
         else:
             periodic_split += split_segments(start, end, periodic_limit)
     segmentLimits = periodic_split
-    # print("segmentLimits:", segmentLimits)
 
     ### process each segment
     transcriptions = []
@@ -95,7 +85,7 @@ def main(argv):
 
         # https://pyroomacoustics.readthedocs.io/en/pypi-release/pyroomacoustics.denoise.spectral_subtraction.html
         ### spectral subtraction
-        noise_reduced = denoise.spectral_subtraction.apply_spectral_sub(y, nfft=512, db_reduc=25, lookback=12, beta=30, alpha=1)
+        noise_reduced = denoise.spectral_subtraction.apply_spectral_sub(split_audio, nfft=512, db_reduc=25, lookback=12, beta=30, alpha=1)
 
         ### run model
         input_values = tokenizer(noise_reduced, return_tensors="pt").input_values
@@ -109,8 +99,8 @@ def main(argv):
         ### capitalize
         t = t.capitalize()
 
-        # print("transcription:", t)
-        transcriptions.append(t)
+        if len(t) > 0:
+            transcriptions.append(t)
 
     ### write transcriptions into output srt file
     # https://docs.fileformat.com/video/srt/
