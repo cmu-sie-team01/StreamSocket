@@ -9,6 +9,7 @@ urlpatterns = [
     path('unlike/<int:pk>/', views.VideoUnlikeView.as_view()),
     path('randomvideo/', views.RandomVideoView.as_view()),
     path('initialvideo/', views.InitialVideoView.as_view()),
+    path('caption/<int:pk>/', views.CaptionView.as_view()),
 ]
 
 """

@@ -16,7 +16,9 @@ from django.core.files.storage import default_storage
 def create_json_caption(request):
     print(os.getcwd())
     path = "../../ML/english_transcription/wav2vec2_pipeline/wav2vec2_inference.py"
-    ret = os.system(f'python {path} -i {request.data["video"]} -o outputfile.srt')
+    outputfile = request.data["video"][71:107]
+    print(outputfile)
+    ret = os.system(f'python {path} -i {request.data["video"]} -o temp/{outputfile}.srt')
     if ret != 0:
         return None
 
@@ -26,13 +28,17 @@ def create_json_caption(request):
 
     transcript = [
         dict(startTime=offset_seconds(startTime), endTime=offset_seconds(endTime), text=' '.join(ref.split())) for
-        startTime, endTime, ref in re.findall(regex, open('outputfile.srt').read(), re.DOTALL)]
+        startTime, endTime, ref in re.findall(regex, open(f'temp/{outputfile}.srt').read(), re.DOTALL)]
 
-    with open('data.json', 'w', encoding='utf-8') as f:
+    with open(f'temp/{outputfile}.json', 'w', encoding='utf-8') as f:
         json.dump(transcript, f)
 
-    f = open('data.json')
+    f = open(f'temp/{outputfile}.json')
     data = json.load(f)
+    os.remove(f'temp/{outputfile}.json')
+    os.remove(f'temp/{outputfile}.mp4')
+    os.remove(f'temp/{outputfile}.srt')
+    os.remove(f'temp/{outputfile}.wav')
     return data
 
 
@@ -43,10 +49,9 @@ class VideoUploadView(CreateAPIView):
     def create(self, request, *args, **kwargs):
         request.data['author'] = request.user.id
 
-        data = create_json_caption(request)
-
-        request.data['caption'] = data
-        print(data)
+        # data = create_json_caption(request)
+        # request.data['caption'] = data
+        # print(data)
 
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -58,6 +63,12 @@ class VideoUploadView(CreateAPIView):
         # file = default_storage.open('public/storage_test', 'w')
         # file.write('storage contents')
         # file.close()
+        data = create_json_caption(request)
+        video = Video.objects.get(video = request.data['video'])
+        video.caption = data
+        video.captionChinese = data
+        video.captionSpanish = data
+        video.save()
 
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
@@ -134,3 +145,14 @@ class InitialVideoView(APIView):
         if randomvideo is None:
             return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
         return Response(serializer.data)
+
+class CaptionView(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request, pk):
+        try:
+            video = Video.objects.get(id=pk)
+        except:
+            return Response({'video doesn\'t exist'})
+        if video.caption is None:
+            return Response({'captions are generating'})
+        return Response(video.caption)

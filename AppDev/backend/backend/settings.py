@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-*vs36c23w!&8alu3q3xcs@@lv#tym*r0(7v4+n67@$^8av-nm*
 DEBUG = True
 
 # Allow anyone to access the site
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '128.2.25.18']
 
 # Application definition
 
@@ -131,6 +131,8 @@ AUTH_USER_MODEL = 'users.User'
 CORS_ORIGIN_WHITELIST = (
      'http://127.0.0.1:8080',
      'http://localhost:8080',
+     'http://128.2.25.18:8080',
+     'http://streamsocket.andrew.cmu.edu:8080'
 )
 
 REST_FRAMEWORK = {

@@ -53,11 +53,12 @@ def main(argv):
     ### load flac or wav file
     try:
         url = input_filepath
-        video_name = "video.mp4"
-        filename = "audio.wav"
+        name = output_filepath[5:41]
+        video_name = f"temp/{name}.mp4"
+        filename = f"temp/{name}.wav"
         urlretrieve(url, video_name)
 
-        audio_detached = mp.VideoFileClip(video_name);
+        audio_detached = mp.VideoFileClip(video_name)
         audio_detached.audio.write_audiofile(filename)
 
         audio, sr = librosa.load(filename, sr=16000)
