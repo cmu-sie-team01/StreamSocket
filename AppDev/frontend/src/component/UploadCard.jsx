@@ -43,7 +43,7 @@ export default function UploadButtons({ setVideos }) {
       if (checked) {
         console.log('checked', `https://streamsocketvideos191545-dev.s3.us-west-1.amazonaws.com/public/${result.key}`);
         // Create Video to backend
-        await fetch('http://128.2.25.18:8000/videos/video/', {
+        fetch('http://128.2.25.18:8000/videos/video/', {
           method: 'POST',
           mode: 'cors',
           headers: {
@@ -53,11 +53,7 @@ export default function UploadButtons({ setVideos }) {
           body: JSON.stringify({
             video: `https://streamsocketvideos191545-dev.s3.us-west-1.amazonaws.com/public/${result.key}`,
           }),
-        }).then((r) => r.json())
-          .then((res) => {
-            localStorage.setItem('videoID', res.id);
-            console.log('res!!!!', res);
-          });
+        });
       }
     }
     setUploaded(false);

@@ -14,25 +14,9 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import ReactPlayer from 'react-player';
-import SrtParser2 from 'srt-parser-2';
 import Alert from '@mui/material/Alert';
-import TestSub from './test.srt';
 import LanguageSelection from './LanguageSelection';
 
-let allText = '';
-
-function readTextFile(file) {
-  const rawFile = new XMLHttpRequest();
-  rawFile.open('GET', file, false);
-  rawFile.onreadystatechange = function () {
-    if (rawFile.readyState === 4) {
-      if (rawFile.status === 200 || rawFile.status === 0) {
-        allText = rawFile.responseText;
-      }
-    }
-  };
-  rawFile.send(null);
-}
 const theme = createTheme({
   palette: {
     primary: {
@@ -67,49 +51,46 @@ export default function VideoBlock(props) {
   // eslint-disable-next-line react/prop-types
   const {
     // eslint-disable-next-line react/prop-types
-    srcIn, srtIn, likesIn, idIn, userIDIn, isProcessed, isHomeVideo,
+    srcIn, srtIn, srtCn, srtSp, likesIn, idIn, userIDIn, isProcessed, isHomeVideo,
   } = props;
   console.log(userIDIn, isProcessed, isHomeVideo);
   const [Sub, SetSub] = React.useState('');
   // eslint-disable-next-line react/prop-types
   const [like, setLike] = React.useState(likesIn !== 0 ? likesIn : 0);
   const [animation, setAnimation] = React.useState(false);
-  const parser = new SrtParser2();
-  readTextFile(TestSub);
-  const result = parser.fromSrt(allText);
-
-  if (result.length !== 0) {
-    result.map((sub) => {
-      let temp = '';
-      temp = sub.endTime.replace(/,/g, '.');
-      let tempSplit = temp.split(':');
-      const endTimeToSeconds = parseFloat(tempSplit[2])
-          + parseFloat(tempSplit[1]) * 60.0 + parseFloat(tempSplit[0]) * 60.0 * 60.0;
-      // eslint-disable-next-line no-param-reassign
-      sub.endTime = endTimeToSeconds;
-      temp = sub.startTime.replace(/,/g, '.');
-      tempSplit = temp.split(':');
-      // eslint-disable-next-line max-len
-      const startTimeToSeconds = parseFloat(tempSplit[2])
-          + parseFloat(tempSplit[1]) * 60.0 + parseFloat(tempSplit[0]) * 60.0 * 60.0;
-      // eslint-disable-next-line no-param-reassign
-      sub.startTime = startTimeToSeconds;
-      return sub;
-    });
-  }
+  const [currentLanguage, setCurrentLanguage] = React.useState('English');
+  const changeSubLanguage = (language) => {
+    if (language === 'Chinese') {
+      setCurrentLanguage('Chinese');
+    } else if (language === 'English') {
+      setCurrentLanguage('English');
+    } else if (language === 'Spanish') {
+      setCurrentLanguage('Spanish');
+    }
+  };
 
   const handleDuration = (duration) => {
     console.log('onDuration', duration);
   };
   const handleProgress = (state) => {
-    // eslint-disable-next-line react/prop-types
-    const found = srtIn.find((element) => (state.playedSeconds <= element.endTime)
-    && (state.playedSeconds >= element.startTime));
-    if (found) {
-      // console.log('onProgress', state, found.text);
-      SetSub(found.text);
-    } else {
-      SetSub('');
+    let currSubL = srtIn;
+    if (currentLanguage === 'English') {
+      currSubL = srtIn;
+    } else if (currentLanguage === 'Chinese') {
+      currSubL = srtCn;
+    } else if (currentLanguage === 'Spanish') {
+      currSubL = srtSp;
+    }
+    if (currSubL) { // eslint-disable-next-line react/prop-types
+      const found = currSubL.find((element) => (
+        state.playedSeconds <= element.endTime)
+          && (state.playedSeconds >= element.startTime));
+      if (found) {
+        // console.log('onProgress', state, found.text);
+        SetSub(found.text);
+      } else {
+        SetSub('');
+      }
     }
 
     // We only want to update time slider if we are not currently seeking
@@ -414,7 +395,7 @@ export default function VideoBlock(props) {
                             maxWidth: '40px',
                           }}
                         >
-                          <LanguageSelection />
+                          <LanguageSelection changeSubLanguage={changeSubLanguage} />
                         </Fab>
                       </Box>
                       <ReactPlayer

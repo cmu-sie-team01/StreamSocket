@@ -63,6 +63,7 @@ export default function userProfile({ userName }) {
   const [username, setName] = useState(0);
   const [likeVideos, setLikeVideos] = useState([]);
   const [uploadVideos, setUploadVideos] = useState([]);
+  const [IsProcessed, SetIsProcessed] = useState(false);
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -79,7 +80,6 @@ export default function userProfile({ userName }) {
       })
         .then((r) => r.json())
         .then((res) => {
-          console.log(res);
           setName(res.user.username);
           setLikeVideos(likeVideos.concat(res.videos_like));
           setUploadVideos(uploadVideos.concat(res.videos_upload));
@@ -122,9 +122,11 @@ export default function userProfile({ userName }) {
               <VideoBlock
                 srcIn={selectedVideo.video}
                 srtIn={selectedVideo.caption}
+                srtCn={selectedVideo.captionChinese}
+                srtSp={selectedVideo.captionSpanish}
                 likesIn={selectedVideo.likesCount}
                 idIn={selectedVideo.id}
-                isProcessed={false}
+                isProcessed={IsProcessed}
                 isHomeVideo={false}
               />
             ) : null}
@@ -300,6 +302,11 @@ export default function userProfile({ userName }) {
                             },
                           }).then((r) => r.json())
                             .then((res) => {
+                              if (res.caption) {
+                                SetIsProcessed(true);
+                              } else {
+                                SetIsProcessed(false);
+                              }
                               setSelectVideo(res);
                               setOpen(true);
                             });

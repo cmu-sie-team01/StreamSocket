@@ -7,49 +7,37 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import FormControl from '@mui/material/FormControl';
-import FormControlLabel from '@mui/material/FormControlLabel';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
-import Switch from '@mui/material/Switch';
 import TranslateIcon from '@mui/icons-material/Translate';
 
-export default function LanguageSelection() {
+// eslint-disable-next-line react/prop-types
+export default function LanguageSelection(props) {
   const [open, setOpen] = React.useState(false);
-  const [fullWidth, setFullWidth] = React.useState(true);
-  const [maxWidth, setMaxWidth] = React.useState('sm');
-  const languages = ['English', '中文', 'Español'];
+  const languages = ['English', 'Chinese', 'Spanish'];
   const handleClickOpen = () => {
     setOpen(true);
   };
-
+  const handleLanguageChange = (event) => {
+    // eslint-disable-next-line react/prop-types,react/destructuring-assignment
+    props.changeSubLanguage(event.target.value);
+  };
   const handleClose = () => {
     setOpen(false);
-  };
-
-  const handleMaxWidthChange = (event) => {
-    setMaxWidth(
-      // @ts-expect-error autofill of arbitrary value is not handled.
-      event.target.value,
-    );
-  };
-
-  const handleFullWidthChange = (event) => {
-    setFullWidth(event.target.checked);
   };
 
   return (
     <>
       <TranslateIcon variant="outlined" onClick={handleClickOpen}>switch language</TranslateIcon>
       <Dialog
-        maxWidth={maxWidth}
         open={open}
         onClose={handleClose}
       >
         <DialogTitle>Switch Language For Subtitle</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Select the language of subtitle
+            If the video is still processing, you will not see the captions.
           </DialogContentText>
           <Box
             noValidate
@@ -65,30 +53,22 @@ export default function LanguageSelection() {
               <InputLabel htmlFor="max-width">Languages</InputLabel>
               <Select
                 autoFocus
-                value={maxWidth}
-                onChange={handleMaxWidthChange}
                 label="Languages"
                 inputProps={{
                   name: 'max-width',
                   id: 'max-width',
                 }}
+                onChange={handleLanguageChange}
               >
                 {
-                  languages.map((l) => <MenuItem key={l} value={l}>{l}</MenuItem>)
+                  languages.map((l) => <MenuItem value={l}>{l}</MenuItem>)
                 }
               </Select>
             </FormControl>
-            <FormControlLabel
-              sx={{ mt: 1 }}
-              control={
-                <Switch checked={fullWidth} onChange={handleFullWidthChange} />
-                  }
-              label="Set it to default"
-            />
           </Box>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Close</Button>
+          <Button onClick={handleClose}>Done</Button>
         </DialogActions>
       </Dialog>
     </>

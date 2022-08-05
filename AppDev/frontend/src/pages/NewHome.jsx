@@ -138,12 +138,12 @@ export default function NewHome() {
   const handleDrawerClose = () => {
     setOpen(false);
   };
+
   const fetchMoreData = async () => {
     // fetch the update video if exist
     const videoID = localStorage.getItem('videoID');
 
     if (videoID) {
-      console.log(videoID);
       await fetch(`http://128.2.25.18:8000/videos/video/${videoID}`, {
         method: 'GET',
         mode: 'cors',
@@ -158,6 +158,8 @@ export default function NewHome() {
             items: refresh.items.concat({
               src: res.video,
               caption: res.caption,
+              captionChinese: res.captionChinese,
+              captionSpanish: res.captionSpanish,
               likesCount: res.likesCount,
               id: res.id,
               uid: res.author,
@@ -182,8 +184,6 @@ export default function NewHome() {
         } return r.json();
       })
       .then((res) => {
-        console.log(res);
-
         setTimeout(() => {
           setRefresh({
             items: refresh.items.concat({
@@ -401,6 +401,8 @@ export default function NewHome() {
                   key={item}
                   srcIn={item.video}
                   srtIn={item.caption}
+                  srtCn={item.captionChinese}
+                  srtSp={item.captionSpanish}
                   likesIn={item.likesCount}
                   idIn={item.id}
                   userIDIn={item.uid}
@@ -415,6 +417,8 @@ export default function NewHome() {
                   key={item}
                   srcIn={item.src}
                   srtIn={item.caption}
+                  srtCn={item.captionChinese}
+                  srtSp={item.captionSpanish}
                   likesIn={item.likesCount}
                   idIn={item.id}
                   userIDIn={item.uid}
