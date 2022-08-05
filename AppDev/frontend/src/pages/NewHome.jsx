@@ -392,28 +392,34 @@ export default function NewHome() {
               next={fetchMoreData}
               hasMore={hasmore}
               loader={<h4>Loading...</h4>}
-              pullDownToRefreshThreshold={`${refresh.items.length * 500}px`}
+              pullDownToRefreshThreshold={`${refresh.items.length * 800}px`}
               endMessage={<h4>No more items</h4>}
             >
               {
               iniVideo.map((item) => (
                 <VideoBlock
+                  key={item}
                   srcIn={item.video}
                   srtIn={item.caption}
                   likesIn={item.likesCount}
                   idIn={item.id}
                   userIDIn={item.uid}
+                  isProcessed
+                  isHomeVideo
                 />
               ))
             }
               {
               refresh.items.map((item) => (
                 <VideoBlock
+                  key={item}
                   srcIn={item.src}
                   srtIn={item.caption}
                   likesIn={item.likesCount}
                   idIn={item.id}
                   userIDIn={item.uid}
+                  isProcessed
+                  isHomeVideo
                 />
               ))
             }

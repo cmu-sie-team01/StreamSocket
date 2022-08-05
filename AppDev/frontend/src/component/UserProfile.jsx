@@ -113,7 +113,7 @@ export default function userProfile({ userName }) {
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
           PaperProps={{
-            style: { borderRadius: 20 },
+            style: { borderRadius: 20, height: '100vh' },
           }}
         >
 
@@ -124,6 +124,8 @@ export default function userProfile({ userName }) {
                 srtIn={selectedVideo.caption}
                 likesIn={selectedVideo.likesCount}
                 idIn={selectedVideo.id}
+                isProcessed={false}
+                isHomeVideo={false}
               />
             ) : null}
           </DialogContent>
@@ -264,7 +266,7 @@ export default function userProfile({ userName }) {
               sx={{
                 padding: 0,
                 width: '100%',
-                paddingTop: '20px',
+                paddingTop: '10px',
               }}
               component={Box}
             >
@@ -298,10 +300,8 @@ export default function userProfile({ userName }) {
                             },
                           }).then((r) => r.json())
                             .then((res) => {
-                              console.log(res);
                               setSelectVideo(res);
                               setOpen(true);
-                              console.log(selectedVideo);
                             });
                         }}
                       >
@@ -326,19 +326,26 @@ export default function userProfile({ userName }) {
               >
                 {
                   likeVideos.map((item) => (
-                    <video
-                      style={{
-                        height: '20vh', width: '20vw', borderRadius: '16px', display: 'flex', margin: '1%',
+                    <Box
+                      sx={{
+                        height: '500px',
+                        width: '100%',
                       }}
-                      className="video_card"
-                      autoPlay
-                      muted
-                      webkit-playsinline="true"
-                      playsInline
-
                     >
-                      <source src={item.video} type="video/mp4" />
-                    </video>
+                      <video
+                        style={{
+                          height: '20vh', width: '20vw', borderRadius: '16px', display: 'flex', margin: '1%',
+                        }}
+                        className="video_card"
+                        autoPlay
+                        muted
+                        webkit-playsinline="true"
+                        playsInline
+                      >
+                        <source src={item.video} type="video/mp4" />
+                      </video>
+                    </Box>
+
                   ))
                 }
               </Box>

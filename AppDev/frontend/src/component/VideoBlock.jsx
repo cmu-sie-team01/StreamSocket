@@ -6,17 +6,18 @@ import Grid from '@mui/material/Grid';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import Fab from '@mui/material/Fab';
 import { motion } from 'framer-motion';
-
 import InsertCommentIcon from '@mui/icons-material/InsertComment';
 import ShareIcon from '@mui/icons-material/Share';
-import { ThemeProvider } from '@mui/material';
+import { LinearProgress, ThemeProvider } from '@mui/material';
 import { deepOrange } from '@mui/material/colors';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import ReactPlayer from 'react-player';
 import SrtParser2 from 'srt-parser-2';
+import Alert from '@mui/material/Alert';
 import TestSub from './test.srt';
+import LanguageSelection from './LanguageSelection';
 
 let allText = '';
 
@@ -38,7 +39,7 @@ const theme = createTheme({
       light: '#757ce8',
       main: '#3f50b5',
       dark: '#002884',
-      contrastText: '#fff',
+      contrastText: '#000',
     },
     secondary: {
       light: '#ff7961',
@@ -52,7 +53,12 @@ const theme = createTheme({
       dark: '#f44336',
       contrastText: '#000',
     },
-
+    forth: {
+      light: '#CD853F',
+      main: '#CD853F',
+      dark: '#2F4F4F',
+      contrastText: '#000',
+    },
   },
 });
 
@@ -61,9 +67,9 @@ export default function VideoBlock(props) {
   // eslint-disable-next-line react/prop-types
   const {
     // eslint-disable-next-line react/prop-types
-    srcIn, srtIn, likesIn, idIn, userIDIn,
+    srcIn, srtIn, likesIn, idIn, userIDIn, isProcessed, isHomeVideo,
   } = props;
-  console.log(userIDIn);
+  console.log(userIDIn, isProcessed, isHomeVideo);
   const [Sub, SetSub] = React.useState('');
   // eslint-disable-next-line react/prop-types
   const [like, setLike] = React.useState(likesIn !== 0 ? likesIn : 0);
@@ -151,7 +157,43 @@ export default function VideoBlock(props) {
     srcIn.length === 0 ? (null)
       : (
         <ThemeProvider theme={theme}>
+          {
+            // eslint-disable-next-line no-nested-ternary
+            isProcessed ? (
+              isHomeVideo ? null
+                : (
+                  <Alert severity="success">
+                    Captions and translations were generated!
+                  </Alert>
+                )
+            )
+              : (
+                <Box
+                  sx={{
+                    width: '100%',
+                    marginBottom: '3%',
+                  }}
+                  component={Grid}
+                  container
+                  spacing={0}
+                  direction="column"
+                  alignItems="center"
+                  justifyContent="center"
+                >
+                  <Grid item xs={12} />
+                  <Grid item xs={12}>
 
+                    <Alert severity="info">
+                      We are generating the captions and translations for you now
+                      <Box sx={{ width: '100%', marginTop: '3%' }}>
+                        <LinearProgress />
+                      </Box>
+                    </Alert>
+
+                  </Grid>
+                </Box>
+              )
+          }
           <Box sx={{
             borderRadius: '16px',
             position: 'relative',
@@ -219,6 +261,7 @@ export default function VideoBlock(props) {
                       variant="contained"
                       disableElevation
                       size="small"
+                      style={{ maxWidth: '30px' }}
                     >
                       Follow
                     </Button>
@@ -355,6 +398,24 @@ export default function VideoBlock(props) {
                         >
                           12356
                         </Typography>
+                      </Box>
+                      <Box sx={{
+                        position: 'absolute',
+                        bottom: '52.5%',
+                        right: '0',
+                        margin: '4%',
+                      }}
+                      >
+                        <Fab
+                          color="forth"
+                          aria-label="like"
+                          sx={{
+                            maxHeight: '40px',
+                            maxWidth: '40px',
+                          }}
+                        >
+                          <LanguageSelection />
+                        </Fab>
                       </Box>
                       <ReactPlayer
                         style={{
