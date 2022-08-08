@@ -15,14 +15,14 @@ from urllib.request import urlopen, urlretrieve
 def main(argv):
     ### read command line arguments
     try:
-        opts, args = getopt.getopt(argv,"hi:o:c:p",["ifile=","ofile=","char_limit=", "periodic_limit="])
+        opts, args = getopt.getopt(argv,"hi:o:c:p",["ifile=","ofile=","char_limit=", "periodic_limit=", "transcription_asr=", "translation_model=", "translation_tokenizer="])
     except getopt.GetoptError:
-        print('python xlsr_inference.py -i <inputfile> -o <outputfile> -c char_limit -p periodic_limit')
+        print('python xlsr_inf_all_langs.py -i <inputfile> -o <outputfile> -c char_limit -p periodic_limit -a transcription_asr -m translation_model -t translation_tokenizer')
         sys.exit(2)
     input_filepath, output_filepath, char_limit, periodic_limit = '', '', 40, 4
     for opt, arg in opts:
         if opt == '-h':
-            print('Usage: python xlsr_inference.py -i <inputfile> -o <outputfile> -c char_limit -p periodic_limit')
+            print('Usage: python xlsr_inf_all_langs.py -i <inputfile> -o <outputfile> -c char_limit -p periodic_limit -a transcription_asr -m translation_model -t translation_tokenizer')
             sys.exit()
         ### input audio filepath (wav or flac)
         elif opt in ("-i", "--ifile"):
@@ -36,6 +36,12 @@ def main(argv):
         ### time limit per phrase (in seconds) for captioning
         elif opt in ("-p", "--periodic_limit"):
             periodic_limit = arg
+        elif opt in ("-a", "--transcription_asr"):
+            transcription_asr = arg
+        elif opt in ("-m", "--translation_model"):
+            translation_model = arg
+        elif opt in ("-t", "--translation_tokenizer"):
+            translation_tokenizer = arg
 
     ### check to make sure input and output files are valid
     if input_filepath == '':
@@ -48,10 +54,10 @@ def main(argv):
         url = input_filepath
         video_name = "video.mp4"
         filename = "audio.wav"
-        urlretrieve(url, video_name)
+        # urlretrieve(url, video_name)
 
-        audio_detached = mp.VideoFileClip(video_name)
-        # audio_detached = mp.VideoFileClip(url)
+        # audio_detached = mp.VideoFileClip(video_name)
+        audio_detached = mp.VideoFileClip(url)
         audio_detached.audio.write_audiofile(filename)
 
         audio, sr = librosa.load(filename, sr=16000)
@@ -61,7 +67,8 @@ def main(argv):
         sys.exit()
 
     ### load pipeline with model and feature extractor
-    asr = pipeline("automatic-speech-recognition", model="facebook/wav2vec2-xls-r-2b-21-to-en", feature_extractor="facebook/wav2vec2-xls-r-2b-21-to-en")
+    # asr = pipeline("automatic-speech-recognition", model="facebook/wav2vec2-xls-r-1b-21-to-en", feature_extractor="facebook/wav2vec2-xls-r-1b-21-to-en")
+    asr = transcription_asr
 
     # https://github.com/tyiannak/pyAudioAnalysis/blob/944f1d777bc96717d2793f257c3b36b1acf1713a/pyAudioAnalysis/audioSegmentation.py#L670
     ### segment limits
@@ -91,7 +98,7 @@ def main(argv):
         ### run model
         t = asr(noise_reduced)['text']
 
-        if len(t) > 0:
+        if len(t) > 0 and 'de de' not in t:
             transcriptions_nsfw.append(t)
             ### filter profanity for sfw users
             t_censored = profanity.censor(t, '-')
@@ -101,17 +108,21 @@ def main(argv):
     # https://docs.fileformat.com/video/srt/
 
     ### language list
-    lang_list = ['ar_AR', 'cs_CZ', 'de_DE', 'en_XX', 'es_XX', 'et_EE', 'fi_FI', 'fr_XX', 
-    'gu_IN', 'hi_IN', 'it_IT', 'ja_XX', 'kk_KZ', 'ko_KR', 'lt_LT', 'lv_LV', 'my_MM', 
-    'ne_NP', 'nl_XX', 'ro_RO', 'ru_RU', 'si_LK', 'tr_TR', 'vi_VN', 'zh_CN', 'af_ZA', 
-    'az_AZ', 'bn_IN', 'fa_IR', 'he_IL', 'hr_HR', 'id_ID', 'ka_GE', 'km_KH', 'mk_MK',
-    'ml_IN', 'mn_MN', 'mr_IN', 'pl_PL', 'ps_AF', 'pt_XX', 'sv_SE', 'sw_KE', 'ta_IN', 'te_IN',
-    'th_TH', 'tl_XX', 'uk_UA', 'ur_PK', 'xh_ZA', 'gl_ES', 'sl_SI']
+    # lang_list = ['ar_AR', 'cs_CZ', 'de_DE', 'en_XX', 'es_XX', 'et_EE', 'fi_FI', 'fr_XX', 
+    # 'gu_IN', 'hi_IN', 'it_IT', 'ja_XX', 'kk_KZ', 'ko_KR', 'lt_LT', 'lv_LV', 'my_MM', 
+    # 'ne_NP', 'nl_XX', 'ro_RO', 'ru_RU', 'si_LK', 'tr_TR', 'vi_VN', 'zh_CN', 'af_ZA', 
+    # 'az_AZ', 'bn_IN', 'fa_IR', 'he_IL', 'hr_HR', 'id_ID', 'ka_GE', 'km_KH', 'mk_MK',
+    # 'ml_IN', 'mn_MN', 'mr_IN', 'pl_PL', 'ps_AF', 'pt_XX', 'sv_SE', 'sw_KE', 'ta_IN', 'te_IN',
+    # 'th_TH', 'tl_XX', 'uk_UA', 'ur_PK', 'xh_ZA', 'gl_ES', 'sl_SI']
+
+    lang_list = ['en_XX', 'es_XX', 'zh_CN']
 
     ### text translation model
     ### https://huggingface.co/facebook/mbart-large-50-many-to-many-mmt
-    model = MBartForConditionalGeneration.from_pretrained("facebook/mbart-large-50-many-to-many-mmt")
-    tokenizer = MBart50TokenizerFast.from_pretrained("facebook/mbart-large-50-many-to-many-mmt")
+    # model = MBartForConditionalGeneration.from_pretrained("facebook/mbart-large-50-many-to-many-mmt", )
+    # tokenizer = MBart50TokenizerFast.from_pretrained("facebook/mbart-large-50-many-to-many-mmt")
+    model = translation_model
+    tokenizer = translation_tokenizer
     tokenizer.src_lang = 'en_XX'
 
     nsfw = True
