@@ -22,8 +22,7 @@ import Avatar from '@mui/material/Avatar';
 import {
   Link,
 } from 'react-router-dom';
-import BathtubIcon from '@mui/icons-material/Bathtub';
-
+import CameraIcon from '@mui/icons-material/Camera';
 import { Hidden, ThemeProvider } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import InfiniteScroll from 'react-infinite-scroll-component';
@@ -245,7 +244,7 @@ export default function NewHome() {
 
                 </IconButton>
               </Hidden>
-              <BathtubIcon sx={{ margin: '1%' }} />
+              <CameraIcon sx={{ margin: '1%' }} />
 
               <Box sx={{ display: { xs: 'flex', md: 'flex', width: '100vw' } }}>
 
@@ -309,7 +308,7 @@ export default function NewHome() {
                     px: 2.5,
                   }}
                   component={Link}
-                  to="/test"
+                  to="/newhome"
                 >
 
                   <ListItemIcon

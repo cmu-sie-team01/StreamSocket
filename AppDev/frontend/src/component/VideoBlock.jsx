@@ -142,6 +142,7 @@ export default function VideoBlock(props) {
       : (
         <ThemeProvider theme={theme}>
           {
+
             // eslint-disable-next-line no-nested-ternary
             isProcessed ? (
               isHomeVideo ? null
@@ -152,6 +153,7 @@ export default function VideoBlock(props) {
                 )
             )
               : (
+
                 <Box
                   sx={{
                     width: '100%',
@@ -246,6 +248,9 @@ export default function VideoBlock(props) {
                       disableElevation
                       size="small"
                       style={{ maxWidth: '30px' }}
+                      onClick={() => {
+                        alert('The feature is still under construction');
+                      }}
                     >
                       Follow
                     </Button>
