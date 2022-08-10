@@ -3,24 +3,10 @@ import Badge from '@mui/material/Badge';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import IconButton from '@mui/material/IconButton';
 import Button from '@mui/material/Button';
-import Draggable from 'react-draggable';
 
 import {
   Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle,
 } from '@mui/material';
-import Paper from '@mui/material/Paper';
-
-function PaperComponent(props) {
-  return (
-    <Draggable
-      handle="#draggable-dialog-title"
-      cancel={'[class*="MuiDialogContent-root"]'}
-    >
-      {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-      <Paper {...props} />
-    </Draggable>
-  );
-}
 
 export default function Notification() {
   const [open, setOpen] = React.useState(false);
@@ -50,7 +36,6 @@ export default function Notification() {
         <Dialog
           open={open}
           onClose={handleClose}
-          PaperComponent={PaperComponent}
           aria-labelledby="draggable-dialog-title"
         >
           <DialogTitle style={{ cursor: 'move' }} id="draggable-dialog-title">
