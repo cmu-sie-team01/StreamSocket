@@ -7,7 +7,6 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import Fab from '@mui/material/Fab';
 import { motion } from 'framer-motion';
 import InsertCommentIcon from '@mui/icons-material/InsertComment';
-import ShareIcon from '@mui/icons-material/Share';
 import { LinearProgress, ThemeProvider } from '@mui/material';
 import { deepOrange } from '@mui/material/colors';
 import Avatar from '@mui/material/Avatar';
@@ -16,6 +15,8 @@ import Typography from '@mui/material/Typography';
 import ReactPlayer from 'react-player';
 import Alert from '@mui/material/Alert';
 import LanguageSelection from './LanguageSelection';
+import ShareComp from './ShareComp';
+import Comment from './Comment';
 
 const theme = createTheme({
   palette: {
@@ -58,6 +59,7 @@ export default function VideoBlock(props) {
   // eslint-disable-next-line react/prop-types
   const [like, setLike] = React.useState(likesIn !== 0 ? likesIn : 0);
   const [animation, setAnimation] = React.useState(false);
+  const [isCommentOpen, SetCommentOpen] = React.useState(false);
   const [currentLanguage, setCurrentLanguage] = React.useState('English');
   const changeSubLanguage = (language) => {
     if (language === 'Chinese') {
@@ -133,6 +135,7 @@ export default function VideoBlock(props) {
       });
     setAnimation(!animation);
   };
+
   return (
   // eslint-disable-next-line react/prop-types
     srcIn.length === 0 ? (null)
@@ -212,6 +215,7 @@ export default function VideoBlock(props) {
                   justifyContent="center"
                   alignItems="center"
                 >
+
                   <Grid item xs={3}>
                     <Avatar sx={{
                       bgcolor: deepOrange[500],
@@ -221,7 +225,7 @@ export default function VideoBlock(props) {
                       u
                     </Avatar>
                     <Typography variant="caption" display="block" gutterBottom>
-                      UserName
+                      User
                     </Typography>
                   </Grid>
                   <Grid
@@ -229,9 +233,8 @@ export default function VideoBlock(props) {
                     xs={5}
                   >
                     <Typography variant="caption" display="block" gutterBottom>
-                      Description here:
-                      sdfajlisj
-                      jskfja...
+                      Description:
+                      Test Video
                     </Typography>
                   </Grid>
                   <Grid
@@ -342,7 +345,10 @@ export default function VideoBlock(props) {
                             maxWidth: '40px',
                           }}
                         >
-                          <InsertCommentIcon />
+                          <InsertCommentIcon onClick={() => {
+                            SetCommentOpen(!isCommentOpen);
+                          }}
+                          />
                         </Fab>
                         <Typography
                           variant="caption"
@@ -350,7 +356,7 @@ export default function VideoBlock(props) {
                             display: 'block',
                           }}
                         >
-                          12356
+                          2
                         </Typography>
                       </Box>
 
@@ -369,7 +375,8 @@ export default function VideoBlock(props) {
                             maxWidth: '40px',
                           }}
                         >
-                          <ShareIcon />
+                          <ShareComp />
+
                         </Fab>
                         <Typography
                           variant="caption"
@@ -377,7 +384,7 @@ export default function VideoBlock(props) {
                             display: 'block',
                           }}
                         >
-                          12356
+                          0
                         </Typography>
                       </Box>
                       <Box sx={{
@@ -427,6 +434,12 @@ export default function VideoBlock(props) {
 
                     </Box>
                   </Grid>
+                  <Grid item xs={12}>
+                    {
+                      isCommentOpen ? <Comment /> : null
+                    }
+                  </Grid>
+
                 </Grid>
               </Box>
             </Paper>

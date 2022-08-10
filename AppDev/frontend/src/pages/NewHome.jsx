@@ -19,7 +19,6 @@ import ListItemText from '@mui/material/ListItemText';
 import HomeIcon from '@mui/icons-material/Home';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import Avatar from '@mui/material/Avatar';
-import { deepOrange } from '@mui/material/colors';
 import {
   Link,
 } from 'react-router-dom';
@@ -35,6 +34,10 @@ import Notification from '../component/Notification';
 import DirectMsg from '../component/DirectMsg';
 import Page404 from './Page404';
 
+const randomColor = () => {
+  const randomColor1 = Math.floor(Math.random() * 16777215).toString(16);
+  return `#${randomColor1}`;
+};
 const drawerWidth = 240;
 const theme1 = createTheme({
   palette: {
@@ -348,7 +351,8 @@ export default function NewHome() {
             </List>
             <Divider />
             <List>
-              {['User 1', 'User 2', 'User 3'].map((text) => (
+
+              {['User 1', 'C', '3'].map((text) => (
                 <ListItem key={text} disablePadding sx={{ display: 'block' }}>
                   <ListItemButton
                     sx={{
@@ -368,10 +372,10 @@ export default function NewHome() {
                       }}
                     >
                       <Avatar sx={{
-                        m: 1, bgcolor: deepOrange[500],
+                        m: 1, bgcolor: randomColor(),
                       }}
                       >
-                        u
+                        {text[0]}
                       </Avatar>
                     </ListItemIcon>
                     <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
